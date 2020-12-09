@@ -1,0 +1,20 @@
+.el-menu-item:focus,
+.el-menu-item:hover {
+    background-color: #fbfbfb !important;
+}
+
+.el-menu.el-menu--horizontal {
+    border-bottom: solid 0px !important;
+}
+
+.el-menu-item {
+    height: 37px !important;
+    line-height: 50px !important;
+    font-size: 16px !important;
+    padding: 0 !important;
+    margin: 0 15px !important;
+}
+
+div.mainContent>ul>li:first-child {
+    margin-left: 50px !important;
+}
