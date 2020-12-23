@@ -3,7 +3,7 @@ import path from 'path'
 import fs from 'fs'
 import { FILE_STATUS } from "@shared/constants";
 import { promisify } from 'util'
-import { getMime } from './common'
+import getMime from '../helper/mime'
 import electron from 'electron';
 
 const readdir = promisify(fs.readdir);
@@ -23,6 +23,11 @@ export default class ServerManager {
       this._server.close();
       this._server = undefined;
     }
+  }
+
+  restart() {
+    this.stop();
+    this.start();
   }
 
   start() {
@@ -47,6 +52,7 @@ export default class ServerManager {
       var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
       if (!task) {
         _this._error(res, "no Found this id")
+        return;
       }
       _this._readFiles(req, res, task)
     })
@@ -58,7 +64,7 @@ export default class ServerManager {
     var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
     var port = this._app.configManager.getSystemConfig('port', "9090");
     this._server.listen(port, address, () => {
-      console.log('server on ' + address + ':' + port)
+      global.vue.$msg.success(`服务启动成功：http://${address}:${port}`);
     })
   }
 
@@ -81,24 +87,28 @@ export default class ServerManager {
         // 如果是文件，就直接找到这个文件发出去
         filePath = task.path;
       } else {
-        var paramPath = req.url.replace('/' + task.id, '');
+        var paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
         filePath = path.join(task.path, paramPath);
+        filePath = filePath.split('?')[0];
       }
       const stats = await stat(filePath);
       if (stats.isFile()) {
-        var mime = getMime(path.extname(filePath))
+        var mime = getMime(filePath);
         res.statusCode = 200;
         res.setHeader('Content-Type', mime);
+        res.setHeader('Access-Control-Allow-Origin', "*")
         fs.createReadStream(filePath).pipe(res);//以流的方式来读取文件
       } else if (stats.isDirectory()) {//如果是文件夹，拿到文件列表
         //将readdir方法也promise化
         const files = await readdir(filePath);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Access-Control-Allow-Origin', "*")
         res.end(files.join(','));//返回所有的文件名
       }
     } catch (error) {
       console.log(error)
+      console.log(`${filePath} is not a directory or file.`)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
       res.end(`${filePath} is not a directory or file.`)

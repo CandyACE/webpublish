@@ -1,6 +1,21 @@
 <template>
   <div class="title-bar">
-    <div class="options"></div>
+    <ul class="window-menu">
+      <li @click="handleOptions">
+        <ts-icon
+          name="menu-preference"
+          width="12"
+          height="12"
+          v-show="!optionsVisible"
+        />
+        <ts-icon
+          name="arrow-up"
+          width="12"
+          height="12"
+          v-show="optionsVisible"
+        />
+      </li>
+    </ul>
     <div class="title-bar-dragger">
       <div class="title-text">快速发布工具</div>
     </div>
@@ -23,9 +38,12 @@ import "@/components/Icons/win-minimize";
 import "@/components/Icons/win-maximize";
 import "@/components/Icons/win-close";
 import "@/components/Icons/task-restart";
+import "@/components/Icons/menu-preference";
+import "@/components/Icons/arrow-up";
 
 export default {
   name: "ts-title-bar",
+  props: ["optionsVisible"],
   computed: {
     win: function () {
       return this.$electron.remote.getCurrentWindow();
@@ -48,6 +66,9 @@ export default {
     handleClose: function () {
       this.win.close();
     },
+    handleOptions: function () {
+      this.$parent.setOptionsVisible();
+    },
   },
 };
 </script>
@@ -57,7 +78,7 @@ export default {
   font-size: 14px;
   font-family: "Segoe UI Regular";
   padding-top: 5px;
-  padding-left: calc(50% - 10px);
+  padding-left: calc(50% - 20px);
   color: rgb(133, 132, 132);
 }
 .title-bar {
@@ -70,7 +91,8 @@ export default {
   height: 27px;
   z-index: 5000;
 }
-.title-bar:hover .window-actions {
+.title-bar:hover .window-actions,
+.title-bar:hover .window-menu {
   opacity: 1;
 }
 .title-bar .title-bar-dragger {
@@ -79,7 +101,8 @@ export default {
   -webkit-app-region: drag;
   -webkit-user-select: none;
 }
-.title-bar .window-actions {
+.title-bar .window-actions,
+.title-bar .window-menu {
   opacity: 0.4;
   transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
   list-style: none;
@@ -87,7 +110,8 @@ export default {
   margin: 0;
   z-index: 5100;
 }
-.title-bar .window-actions > li {
+.title-bar .window-actions > li,
+.title-bar .window-menu > li {
   display: inline-block;
   padding: 3px 10px;
   margin: 0;
@@ -102,6 +126,9 @@ export default {
 
 .title-bar .window-actions > li.win-close-btn:hover {
   color: #fff;
-  background-color: #fd0007;
+  background-color: #f56c6c;
+}
+.title-bar .window-menu > li:hover {
+  background-color: #eee;
 }
 </style>

@@ -17,10 +17,6 @@ if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
-var application = new Application()
-Vue.prototype.application = application;
-global.application = application;
-
 Vue.use(ElementUI)
 Vue.component('ts-icon', Icon)
 
@@ -29,8 +25,16 @@ Vue.use(Msg, ElementUI.Message, {
   offset: 30,
 })
 
+var application = new Application()
+Vue.prototype.application = application;
+global.application = application;
+
+var packageJson = require('../../package.json');
+var version = packageJson.version;
+global.version = version;
+
 /* eslint-disable no-new */
-new Vue({
+global.vue = new Vue({
   components: { App },
   router,
   template: '<App/>'

@@ -3,7 +3,7 @@
 process.env.BABEL_ENV = 'renderer'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const { dependencies, version, author } = require('../package.json')
 const webpack = require('webpack')
 
 const MinifyPlugin = require("babel-minify-webpack-plugin")
@@ -11,6 +11,21 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+
+function getTime() {
+  let now = new Date()
+  let m = now.getMonth() + 1
+  m = m < 10 ? '0' + m : m
+  let d = now.getDate()
+  d = d < 10 ? '0' + d : d
+  let h = now.getHours()
+  h = h < 10 ? '0' + h : h
+  let min = now.getMinutes()
+  min = min < 10 ? '0' + min : min
+  let s = now.getSeconds()
+  s = s < 10 ? '0' + s : s
+  return `${now.getFullYear()}-${m}-${d} ${h}:${min}:${s}`
+}
 
 /**
  * List of node_modules to include in webpack bundle
@@ -124,7 +139,12 @@ let rendererConfig = {
         : false
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      __VERSION__: JSON.stringify(version),
+      __TIME__: JSON.stringify(getTime()),
+      __AUTHOR__: JSON.stringify(author)
+    })
   ],
   output: {
     filename: '[name].js',

@@ -18,7 +18,7 @@ export default class ConfigManager {
                 listen: true,
                 tasks: [],
                 port: 9090,
-                address: '127.0.0.1'
+                address: '127.0.0.1',
             }
         })
     }

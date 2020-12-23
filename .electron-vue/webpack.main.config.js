@@ -3,10 +3,25 @@
 process.env.BABEL_ENV = 'main'
 
 const path = require('path')
-const { dependencies } = require('../package.json')
+const { dependencies, version, author } = require('../package.json')
 const webpack = require('webpack')
 
 const MinifyPlugin = require("babel-minify-webpack-plugin")
+
+function getTime() {
+  let now = new Date()
+  let m = now.getMonth() + 1
+  m = m < 10 ? '0' + m : m
+  let d = now.getDate()
+  d = d < 10 ? '0' + d : d
+  let h = now.getHours()
+  h = h < 10 ? '0' + h : h
+  let min = now.getMinutes()
+  min = min < 10 ? '0' + min : min
+  let s = now.getSeconds()
+  s = s < 10 ? '0' + s : s
+  return `${now.getFullYear()}-${m}-${d} ${h}:${min}:${s}`
+}
 
 let mainConfig = {
   entry: {
@@ -38,7 +53,12 @@ let mainConfig = {
     path: path.join(__dirname, '../dist/electron')
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      __VERSION__: JSON.stringify(version),
+      __TIME__: JSON.stringify(getTime()),
+      __AUTHOR__: JSON.stringify(author)
+    })
   ],
   resolve: {
     alias: {
