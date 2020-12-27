@@ -7,9 +7,16 @@
         ></span
       >
     </div>
-    <div class="newVersion" v-else-if="state === stateType.download">
+    <el-progress
+      class="newVersion"
+      :text-inside="true"
+      :stroke-width="17"
+      v-else-if="state === stateType.download"
+      :percentage="progress"
+    ></el-progress>
+    <!-- <div class="newVersion" v-else-if="state !== stateType.download">
       正在下载...{{ progress }}%
-    </div>
+    </div> -->
     <div v-else-if="state === stateType.error"></div>
   </transition>
 </template>
@@ -66,10 +73,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.el-progress-bar__outer {
+  border-radius: 0 !important;
+  background-color: #3a3e63;
+}
+
+.el-progress-bar__inner {
+  border-radius: 0 !important;
+}
+
 .newVersion {
   background-color: blanchedalmond;
-  position: absolute;
+  position: absolute !important;
   bottom: 0px;
   width: 100%;
   text-align: center;
