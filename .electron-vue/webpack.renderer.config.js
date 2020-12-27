@@ -3,7 +3,7 @@
 process.env.BABEL_ENV = 'renderer'
 
 const path = require('path')
-const { dependencies, version, author } = require('../package.json')
+const { dependencies, version, author, build } = require('../package.json')
 const webpack = require('webpack')
 
 const MinifyPlugin = require("babel-minify-webpack-plugin")
@@ -143,7 +143,8 @@ let rendererConfig = {
     new webpack.DefinePlugin({
       __VERSION__: JSON.stringify(version),
       __TIME__: JSON.stringify(getTime()),
-      __AUTHOR__: JSON.stringify(author)
+      __AUTHOR__: JSON.stringify(author),
+      __UPDATEURL__: JSON.stringify(build.publish[0].url)
     })
   ],
   output: {

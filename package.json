@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "0.0.5",
+  "version": "0.1.1",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": null,
@@ -22,12 +22,15 @@
     "directories": {
       "output": "build"
     },
+    "publish": [{
+      "provider": "generic",
+      "url": "http://oss.tangweitian.cn/update/webpublish"
+    }],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "x": 410,
           "y": 150,
           "type": "link",
@@ -62,7 +65,8 @@
     "pump": "^3.0.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "electron-updater": "^4.3.5"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

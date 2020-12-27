@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+import Update from './core/update'
 
 /**
  * Set `__static` path to static files in production
@@ -35,6 +36,8 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  global.update = new Update(mainWindow);
 }
 
 app.on('ready', createWindow)
@@ -63,10 +66,10 @@ app.on('activate', () => {
 import { autoUpdater } from 'electron-updater'
 
 autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
+ autoUpdater.quitAndInstall()
 })
 
 app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+ if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
- */
+*/

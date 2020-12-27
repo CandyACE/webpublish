@@ -29,10 +29,6 @@ var application = new Application()
 Vue.prototype.application = application;
 global.application = application;
 
-var packageJson = require('../../package.json');
-var version = packageJson.version;
-global.version = version;
-
 /* eslint-disable no-new */
 global.vue = new Vue({
   components: { App },

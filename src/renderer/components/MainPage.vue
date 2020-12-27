@@ -80,10 +80,9 @@
       </div>
     </transition>
     <transition name="el-zoom-in-top">
-      <div class="optionsDiv" v-show="optionsVisible">
-        <options-page />
-      </div>
+      <options-page class="optionsDiv" v-show="optionsVisible" />
     </transition>
+      <ts-update />
   </div>
 </template>
 
@@ -94,11 +93,13 @@ import { guid } from "@shared/twtools";
 import path from "path";
 import { create } from "domain";
 import optionsPageVue from "./options/optionsPage.vue";
+import updateVue from "./Update/update.vue";
 
 export default {
   name: "main-page",
   components: {
     [optionsPageVue.name]: optionsPageVue,
+    [updateVue.name]: updateVue,
   },
   props: ["optionsVisible"],
   data() {
@@ -275,7 +276,7 @@ export default {
 .ts-main {
   position: absolute;
   top: 28px;
-  height: calc(100% - 35px);
+  height: calc(100% - 28px);
   width: 100%;
 }
 
