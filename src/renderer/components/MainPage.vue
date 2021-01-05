@@ -10,7 +10,7 @@
           <div>将文件夹或文件拖拽到此处添加</div>
         </el-card>
         <el-scrollbar style="height: 100%; top: 20px">
-          <div v-if="taskList.length > 0">
+          <div v-show="taskList.length > 0">
             <el-card
               class="taskCard"
               v-for="task in taskList"
@@ -55,7 +55,9 @@
                 </el-row>
                 <el-row>
                   <el-col :span="21">
-                    <div class="filepath">{{ task.path }}</div>
+                    <el-tooltip :content="task.path" placement="bottom">
+                      <div class="filepath">{{ task.path }}</div>
+                    </el-tooltip>
                   </el-col>
                   <el-col :span="3">
                     <el-popconfirm
@@ -82,7 +84,7 @@
     <transition name="el-zoom-in-top">
       <options-page class="optionsDiv" v-show="optionsVisible" />
     </transition>
-      <ts-update />
+    <ts-update />
   </div>
 </template>
 
@@ -220,6 +222,7 @@ export default {
   font-weight: bold;
   line-height: 28px;
   margin-left: 5px;
+  pointer-events: none;
 }
 
 .filepath {
@@ -230,6 +233,7 @@ export default {
   width: calc(100% - 20px);
   line-height: 26px;
   margin-left: 5px;
+  cursor: default;
 }
 
 .el-scrollbar__wrap {
@@ -259,6 +263,8 @@ export default {
 .taskCard {
   margin: 10px;
   height: 125px;
+  width: 310px;
+  float: left;
 }
 
 .mainTop {

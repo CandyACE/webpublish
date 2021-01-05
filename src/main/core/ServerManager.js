@@ -37,7 +37,7 @@ export default class ServerManager {
       this._server = undefined;
     }
 
-    this._server = new http.createServer(function (req, res) {
+    this._server = new http.createServer(async function (req, res) {
       if (!req.url) {
         _this._error(res, 'error url')
         return;

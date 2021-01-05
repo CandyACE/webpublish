@@ -18,6 +18,7 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+// Vue.use(ElementUI.Popover)
 Vue.component('ts-icon', Icon)
 
 Vue.use(Msg, ElementUI.Message, {
