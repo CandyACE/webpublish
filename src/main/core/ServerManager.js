@@ -61,10 +61,10 @@ export default class ServerManager {
       electron.remote.dialog.showErrorBox('端口占用', port + " 端口被占用")
     })
 
-    var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
+    // var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
     var port = this._app.configManager.getSystemConfig('port', "9090");
-    this._server.listen(port, address, () => {
-      global.vue.$msg.success(`服务启动成功：http://${address}:${port}`);
+    this._server.listen(port, () => {
+      global.vue.$msg.success(`服务启动成功，端口：${port}`);
     })
   }
 
