@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import Update from './core/update'
+import EventListener from './EventListener'
 
 /**
  * Set `__static` path to static files in production
@@ -21,10 +22,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     height: 700,
     useContentSize: true,
-    width: 320,
+    width: 330,
     frame: false,
     minHeight: 500,
-    minWidth: 300,
+    minWidth: 330,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
@@ -38,6 +39,7 @@ function createWindow() {
   })
 
   global.update = new Update(mainWindow);
+  new EventListener();
 }
 
 app.on('ready', createWindow)

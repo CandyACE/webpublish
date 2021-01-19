@@ -4,6 +4,10 @@
       <span
         >获取到新版本<el-link type="primary" @click="update"
           >立刻更新！</el-link
+        >
+        或者
+        <el-link type="primary" @click="openChangedUrl"
+          >查看更新日志</el-link
         ></span
       >
     </div>
@@ -23,6 +27,7 @@
 
 <script>
 import updateType from "../../../main/helper/updateType";
+import { shell } from "electron";
 
 export default {
   name: "ts-update",
@@ -41,7 +46,7 @@ export default {
           break;
         case updateType.Progress:
           this.state = this.stateType.download;
-          this.progress = data.percent;
+          this.progress = data.percent.toFixed(2);
           break;
         default:
           break;
@@ -54,6 +59,15 @@ export default {
     update() {
       console.log(1);
       this.$electron.ipcRenderer.send(updateType.update);
+    },
+    openChangedUrl() {
+      try {
+        shell.openExternal(
+          "https://gitee.com/tstwt/webpublish/blob/main/CHANGED.md"
+        );
+      } catch (error) {
+        console.warn(error);
+      }
     },
   },
   data() {

@@ -25,17 +25,19 @@
                     <div id="fileTile">{{ task.path.split("\\").pop() }}</div>
                   </el-col>
                   <el-col :span="3">
-                    <div>
+                    <div style="cursor: pointer">
                       <el-tag
                         v-if="task.type == 'directory'"
                         type="success"
                         size="medium"
+                        @click="showFile(task)"
                         ><i class="el-icon-folder-opened"
                       /></el-tag>
                       <el-tag
                         v-else-if="task.type == 'file'"
                         type="info"
                         size="medium"
+                        @click="showFile(task)"
                         ><i class="el-icon-document"
                       /></el-tag>
                       <el-tag v-else type="danger" size="medium">未知</el-tag>
@@ -44,18 +46,30 @@
                 </el-row>
                 <el-row>
                   <el-col :span="24">
-                    <el-input readonly size="mini" :value="createUrl(task)">
-                      <el-button
-                        slot="append"
-                        icon="el-icon-document-copy"
-                        @click="copy(task)"
-                      ></el-button>
-                    </el-input>
+                    <div class="urlDiv">
+                      <el-input
+                        readonly
+                        size="mini"
+                        v-for="(item, index) in networkInterfaces"
+                        :key="index"
+                        :value="createUrl(task, item)"
+                        style="margin-bottom: 5px"
+                      >
+                        <el-button
+                          slot="append"
+                          icon="el-icon-document-copy"
+                          @click="copy(task, item)"
+                        ></el-button>
+                      </el-input>
+                    </div>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="21">
-                    <el-tooltip :content="task.path" placement="bottom">
+                    <el-tooltip placement="bottom">
+                      <div slot="content" style="max-width: 290px">
+                        {{ task.path }}
+                      </div>
                       <div class="filepath">{{ task.path }}</div>
                     </el-tooltip>
                   </el-col>
@@ -96,6 +110,8 @@ import path from "path";
 import { create } from "domain";
 import optionsPageVue from "./options/optionsPage.vue";
 import updateVue from "./Update/update.vue";
+import { remote } from "electron";
+import os from "os";
 
 export default {
   name: "main-page",
@@ -113,7 +129,24 @@ export default {
       taskList: this.application.taskManager.taskList,
     };
   },
-  computed: {},
+  computed: {
+    networkInterfaces: function () {
+      const _net = Object.values(os.networkInterfaces());
+      var temp = [];
+      _net.forEach((element1) => {
+        element1.forEach((element2) => {
+          if (
+            element2.family !== undefined &&
+            element2.family.toUpperCase() === "IPV4"
+          ) {
+            temp.push(element2);
+          }
+        });
+      });
+      console.log("networkInterfaces", temp);
+      return temp;
+    },
+  },
   mounted() {
     console.log(this.taskList);
     var _this = this;
@@ -176,6 +209,9 @@ export default {
     global.application.exit();
   },
   methods: {
+    showFile(task) {
+      remote.shell.showItemInFolder(task.path);
+    },
     /**
      *
      */
@@ -190,17 +226,14 @@ export default {
       return result;
     },
 
-    copy(task) {
-      var path = this.createUrl(task);
+    copy(task, element) {
+      var path = this.createUrl(task, element);
       this.$electron.clipboard.writeText(path);
       this.$msg.success("复制成功！");
     },
 
-    createUrl(task) {
-      var address = this.application.configManager.getSystemConfig(
-        "address",
-        "127.0.0.1"
-      );
+    createUrl(task, element) {
+      var address = element.address;
       var port = this.application.configManager.getSystemConfig("port", "9090");
       return (
         `http://${address}:${port}/${task.id}/` +
@@ -216,7 +249,7 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 #fileTile {
   font-size: 17px;
   font-weight: bold;
@@ -262,7 +295,8 @@ export default {
 
 .taskCard {
   margin: 10px;
-  height: 125px;
+  // height: 125px;
+  height: auto;
   width: 310px;
   float: left;
 }
@@ -297,5 +331,16 @@ export default {
 
 .hide {
   display: none;
+}
+
+.urlDiv {
+  transition: max-height 0.5s;
+  max-height: 29px;
+  overflow: hidden;
+
+  &:hover {
+    max-height: 200px;
+    overflow-x: auto;
+  }
 }
 </style>

@@ -24,6 +24,11 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="常规" name="default">
           <el-form ref="form" :model="options" label-width="80px" size="mini">
+            <el-form-item label="启动选项">
+              <el-checkbox v-model="options.default.autoStart"
+                >开机自启动</el-checkbox
+              >
+            </el-form-item>
             <el-form-item label="端口号">
               <el-input-number
                 v-model="options.default.port"
@@ -43,6 +48,10 @@ export default {
       "port",
       "9090"
     );
+    const autoStart = global.application.configManager.getSystemConfig(
+      "autoStart",
+      false
+    );
     return {
       version: __VERSION__,
       author: __AUTHOR__,
@@ -51,6 +60,7 @@ export default {
       options: {
         default: {
           port: port,
+          autoStart: autoStart,
         },
       },
     };
@@ -61,6 +71,14 @@ export default {
       global.application.configManager.setSystemConfig({
         port: this.options.default.port,
       });
+      // 开机自启
+      global.application.configManager.setSystemConfig({
+        autoStart: this.options.default.autoStart,
+      });
+      this.$electron.ipcRenderer.send(
+        "Config:SetAutoStart",
+        this.options.default.autoStart
+      );
 
       // 重启服务
       global.application.serverManager.stop();
@@ -103,7 +121,7 @@ export default {
       margin: 5px;
       color: black;
 
-      span{
+      span {
         color: gray;
       }
     }

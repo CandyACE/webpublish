@@ -19,6 +19,11 @@ export default class ConfigManager {
                 tasks: [],
                 port: 9090,
                 address: '127.0.0.1',
+                autoStart: false,
+                api: {
+                    enabled: false,
+                    port: 9080
+                }
             }
         })
     }
