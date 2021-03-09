@@ -9,87 +9,104 @@
         >
           <div>将文件夹或文件拖拽到此处添加</div>
         </el-card>
-        <el-scrollbar style="height: 100%; top: 20px">
+        <el-scrollbar style="height: calc(100% - 20px); top: 20px">
           <div v-show="taskList.length > 0">
-            <el-card
-              class="taskCard"
+            <div
               v-for="task in taskList"
               :id="task.path"
               :key="task.id"
-              shadow="hover"
-              :body-style="{ padding: '10px' }"
+              class="taskCardParent"
             >
-              <div>
-                <el-row>
-                  <el-col :span="21">
-                    <div id="fileTile">{{ task.path.split("\\").pop() }}</div>
-                  </el-col>
-                  <el-col :span="3">
-                    <div style="cursor: pointer">
-                      <el-tag
-                        v-if="task.type == 'directory'"
-                        type="success"
-                        size="medium"
-                        @click="showFile(task)"
-                        ><i class="el-icon-folder-opened"
-                      /></el-tag>
-                      <el-tag
-                        v-else-if="task.type == 'file'"
-                        type="info"
-                        size="medium"
-                        @click="showFile(task)"
-                        ><i class="el-icon-document"
-                      /></el-tag>
-                      <el-tag v-else type="danger" size="medium">未知</el-tag>
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
-                    <div class="urlDiv">
-                      <el-input
-                        readonly
-                        size="mini"
-                        v-for="(item, index) in networkInterfaces"
-                        :key="index"
-                        :value="createUrl(task, item)"
-                        style="margin-bottom: 5px"
+              <el-card
+                class="taskCard"
+                shadow="hover"
+                :body-style="{ padding: '10px' }"
+              >
+                <div>
+                  <el-row>
+                    <el-col :span="21">
+                      <span
+                        id="fileTile"
+                        @dblclick="editName(task)"
+                        v-if="!task.editing"
                       >
-                        <el-button
-                          slot="append"
-                          icon="el-icon-document-copy"
-                          @click="copy(task, item)"
-                        ></el-button>
-                      </el-input>
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="21">
-                    <el-tooltip placement="bottom">
+                        {{ getName(task) }}
+                      </span>
+                      <el-input
+                        v-else
+                        size="mini"
+                        @blur="saveName(task)"
+                        v-model="task.name"
+                        style="max-width: 100px"
+                      ></el-input>
+                    </el-col>
+                    <el-col :span="3">
+                      <div style="cursor: pointer">
+                        <el-tag
+                          v-if="task.type == 'directory'"
+                          type="success"
+                          size="medium"
+                          @click="showFile(task)"
+                          ><i class="el-icon-folder-opened"
+                        /></el-tag>
+                        <el-tag
+                          v-else-if="task.type == 'file'"
+                          type="info"
+                          size="medium"
+                          @click="showFile(task)"
+                          ><i class="el-icon-document"
+                        /></el-tag>
+                        <el-tag v-else type="danger" size="medium">未知</el-tag>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <div class="urlDiv">
+                        <el-input
+                          readonly
+                          size="mini"
+                          v-for="(item, index) in networkInterfaces"
+                          :key="index"
+                          :value="createUrl(task, item)"
+                          style="margin-bottom: 5px"
+                        >
+                          <el-button
+                            slot="append"
+                            icon="el-icon-document-copy"
+                            @click="copy(task, item)"
+                          ></el-button>
+                        </el-input>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="21">
+                      <!-- <el-tooltip placement="bottom"> -->
                       <div slot="content" style="max-width: 290px">
                         {{ task.path }}
                       </div>
                       <div class="filepath">{{ task.path }}</div>
-                    </el-tooltip>
-                  </el-col>
-                  <el-col :span="3">
-                    <el-popconfirm
-                      title="确定移除发布此数据？"
-                      @onConfirm="removeTask(task)"
-                    >
-                      <el-button
-                        type="danger"
-                        circle
-                        size="mini"
-                        icon="el-icon-delete"
-                        slot="reference"
-                      ></el-button>
-                    </el-popconfirm>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-card>
+                      <!-- </el-tooltip> -->
+                    </el-col>
+                    <el-col :span="3">
+                      <el-popconfirm
+                        title="确定移除发布此数据？"
+                        @onConfirm="removeTask(task)"
+                      >
+                        <el-button
+                          type="danger"
+                          circle
+                          size="mini"
+                          icon="el-icon-delete"
+                          slot="reference"
+                        ></el-button>
+                      </el-popconfirm>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-card>
+            </div>
           </div>
           <div></div>
         </el-scrollbar>
@@ -189,6 +206,7 @@ export default {
       var stat = this.isFileOrDirectory(obj);
       this.application.taskManager.addTask({
         id: guid(),
+        name: obj.path.split("\\").pop(),
         path: obj.path,
         enable: true,
         type: stat,
@@ -244,6 +262,23 @@ export default {
     removeTask(task) {
       this.application.taskManager.removeTask(task);
     },
+
+    editName(task) {
+      let index = this.taskList.indexOf(task);
+      task.editing = true;
+      this.application.taskManager.setTask(index, task);
+      this.$set(task, "name", task.name);
+    },
+
+    saveName(task) {
+      let index = this.taskList.indexOf(task);
+      task.editing = false;
+      this.application.taskManager.setTask(index, task);
+    },
+
+    getName(task) {
+      return task.name || task.path.split("\\").pop();
+    },
   },
 };
 </script>
@@ -293,12 +328,30 @@ export default {
   }
 }
 
-.taskCard {
+.taskCardParent {
+  width: 310px;
+  height: 135px;
+  float: left;
   margin: 10px;
+  z-index: 1;
+  position: relative;
+  perspective: 150;
+  -webkit-perspective: 150;
+
+  &:hover {
+    z-index: 2;
+  }
+}
+
+.taskCard {
+  // margin: 10px;
   // height: 125px;
   height: auto;
   width: 310px;
-  float: left;
+
+  &:hover {
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
 }
 
 .mainTop {

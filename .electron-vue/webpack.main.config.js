@@ -3,7 +3,7 @@
 process.env.BABEL_ENV = 'main'
 
 const path = require('path')
-const { dependencies, version, author, build } = require('../package.json')
+const { dependencies, version, author, build, hostUpdateUrl } = require('../package.json')
 const webpack = require('webpack')
 
 const MinifyPlugin = require("babel-minify-webpack-plugin")
@@ -58,7 +58,8 @@ let mainConfig = {
       __VERSION__: JSON.stringify(version),
       __TIME__: JSON.stringify(getTime()),
       __AUTHOR__: JSON.stringify(author),
-      __UPDATEURL__: JSON.stringify(build.publish[0].url)
+      __UPDATEURL__: JSON.stringify(build.publish[0].url),
+      __HOSTURL__: JSON.stringify(hostUpdateUrl)
     })
   ],
   resolve: {
