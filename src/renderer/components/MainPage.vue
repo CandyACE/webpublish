@@ -24,20 +24,17 @@
               >
                 <div>
                   <el-row>
-                    <el-col :span="21">
-                      <span
-                        id="fileTile"
-                        @dblclick="editName(task)"
-                        v-if="!task.editing"
-                      >
+                    <el-col :span="21" @dblclick.native="editName(task)">
+                      <span id="fileTile" v-if="!task.editing">
                         {{ getName(task) }}
                       </span>
                       <el-input
+                        ref="fileTileEditor"
                         v-else
                         size="mini"
                         @blur="saveName(task)"
                         v-model="task.name"
-                        style="max-width: 100px"
+                        style="width: 235px"
                       ></el-input>
                     </el-col>
                     <el-col :span="3">
@@ -70,6 +67,7 @@
                           :key="index"
                           :value="createUrl(task, item)"
                           style="margin-bottom: 5px"
+                          @focus="copy(task, item)"
                         >
                           <el-button
                             slot="append"
@@ -156,7 +154,11 @@ export default {
             element2.family !== undefined &&
             element2.family.toUpperCase() === "IPV4"
           ) {
-            temp.push(element2);
+            if (element2.address === "127.0.0.1") {
+              temp.unshift(element2);
+            } else {
+              temp.push(element2);
+            }
           }
         });
       });
@@ -264,10 +266,11 @@ export default {
     },
 
     editName(task) {
-      let index = this.taskList.indexOf(task);
       task.editing = true;
-      this.application.taskManager.setTask(index, task);
-      this.$set(task, "name", task.name);
+      this.$nextTick(() => {
+        this.$refs.fileTileEditor[0].focus();
+        this.$refs.fileTileEditor[0].select();
+      });
     },
 
     saveName(task) {
@@ -350,7 +353,7 @@ export default {
   width: 310px;
 
   &:hover {
-    transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.02, 1.02, 1.02);
   }
 }
 
@@ -380,6 +383,7 @@ export default {
   background-color: rgb(251, 251, 251);
   width: 100%;
   height: 100%;
+  z-index: 9999999;
 }
 
 .hide {

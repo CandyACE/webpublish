@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from 'electron'
+import electron from 'electron'
 import Update from './core/update'
 import EventListener from './EventListener'
+import path from 'path'
 
 /**
  * Set `__static` path to static files in production
@@ -9,6 +11,11 @@ import EventListener from './EventListener'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
+
+// 托盘
+const Menu = electron.Menu
+const Tray = electron.Tray
+let appTray
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -40,6 +47,30 @@ function createWindow() {
 
   global.update = new Update(mainWindow);
   new EventListener();
+
+  var trayMenuTemplate = [
+    {
+      label: '显示主界面',
+      click: function () {
+        mainWindow.show()
+      }
+    },
+    {
+      label: '退出',
+      click: function () {
+        app.quit()
+        // app.quit() //因为程序设定关闭为最小化，所以调用两次关闭，防止最大化时一次不能关闭的情况
+      }
+    }
+  ]
+
+  appTray = new Tray(path.join(__static, 'image/icon.ico'))
+  const contextMenu = Menu.buildFromTemplate(trayMenuTemplate)
+  appTray.setToolTip('快速发布工具')
+  appTray.setContextMenu(contextMenu)
+  appTray.on('click', function () {
+    mainWindow.show()
+  })
 }
 
 app.on('ready', createWindow)

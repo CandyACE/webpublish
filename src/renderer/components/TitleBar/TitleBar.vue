@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     handleMinimize: function () {
-      this.win.minimize();
+      this.win.hide();
     },
     handleMaximize: function () {
       if (this.win.isMaximized()) {

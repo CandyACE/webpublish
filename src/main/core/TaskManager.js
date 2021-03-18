@@ -25,7 +25,8 @@ export default class TaskManager {
   }
 
   addTask(task) {
-    this.taskList.push(task);
+    this.taskList.unshift(task);
+    // this.taskList.push(task);
     this._configManager.setSystemConfig('tasks', this.taskList);
     return this.taskList;
   }
