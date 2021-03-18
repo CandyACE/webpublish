@@ -383,7 +383,6 @@ export default {
   background-color: rgb(251, 251, 251);
   width: 100%;
   height: 100%;
-  z-index: 9999999;
 }
 
 .hide {

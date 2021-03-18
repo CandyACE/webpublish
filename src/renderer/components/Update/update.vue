@@ -104,6 +104,7 @@ export default {
   width: 100%;
   text-align: center;
   font-size: 14px;
+  z-index: 999999999;
 
   .el-link {
     vertical-align: top !important;
