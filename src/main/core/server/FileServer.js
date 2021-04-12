@@ -70,13 +70,13 @@ export default class FileServer extends ServerBase {
    * @param {*} task 
    */
   async _readFiles(req, res, task) {
-    var filePath = ""
+    var filePath = "", paramPath = ""
     try {
       if (task.type === FILE_STATUS.FILE) {
         // 如果是文件，就直接找到这个文件发出去
         filePath = task.path;
       } else {
-        var paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
+        paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
         filePath = path.join(task.path, paramPath);
         filePath = filePath.split('?')[0];
       }
@@ -91,9 +91,37 @@ export default class FileServer extends ServerBase {
         //将readdir方法也promise化
         const files = await readdir(filePath);
         res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
         res.setHeader('Access-Control-Allow-Origin', "*")
-        res.end(files.join('\r\n'));//返回所有的文件名
+        // res.setHeader('Content-Type', 'text/plain');
+        // res.end(files.join('\r\n'));//返回所有的文件名
+        res.setHeader('Content-Type', 'text/html;charset=UTF-8')
+
+        var isRoot = filePath.replaceAll('\\', '') !== task.path.replaceAll('\\', '')
+        var fileScript = !isRoot ? "" : '<a href="' + req.url + '/../' + '">../</a><br/>'
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          let tempFilename = path.join(filePath, file)
+          let tempFileStat = await stat(tempFilename)
+          if (tempFileStat.isFile()) {
+            fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '</a><br/>'
+          } else {
+            fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '\\' + '</a><br/>'
+          }
+        }
+
+        var html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>`+ filePath.replace(task.path, '') + `</title>
+        </head>
+          <body>
+            `+ fileScript + `
+          </body>
+        </html>
+        `
+        res.end(html)
       }
     } catch (error) {
       console.log(error)

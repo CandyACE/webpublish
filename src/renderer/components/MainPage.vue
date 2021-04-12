@@ -10,101 +10,105 @@
           <div>将文件夹或文件拖拽到此处添加</div>
         </el-card>
         <el-scrollbar style="height: calc(100% - 20px); top: 20px">
-          <div v-show="taskList.length > 0">
-            <div
-              v-for="task in taskList"
-              :id="task.path"
-              :key="task.id"
-              class="taskCardParent"
-            >
-              <el-card
-                class="taskCard"
-                shadow="hover"
-                :body-style="{ padding: '10px' }"
+          <div v-show="taskList.length > 0" id="taskCardList">
+            <transition-group name="list-complete">
+              <div
+                v-for="task in taskList"
+                :id="task.path"
+                :key="task.id"
+                class="taskCardParent"
               >
-                <div>
-                  <el-row>
-                    <el-col :span="21" @dblclick.native="editName(task)">
-                      <span id="fileTile" v-if="!task.editing">
-                        {{ getName(task) }}
-                      </span>
-                      <el-input
-                        ref="fileTileEditor"
-                        v-else
-                        size="mini"
-                        @blur="saveName(task)"
-                        v-model="task.name"
-                        style="width: 235px"
-                      ></el-input>
-                    </el-col>
-                    <el-col :span="3">
-                      <div style="cursor: pointer">
-                        <el-tag
-                          v-if="task.type == 'directory'"
-                          type="success"
-                          size="medium"
-                          @click="showFile(task)"
-                          ><i class="el-icon-folder-opened"
-                        /></el-tag>
-                        <el-tag
-                          v-else-if="task.type == 'file'"
-                          type="info"
-                          size="medium"
-                          @click="showFile(task)"
-                          ><i class="el-icon-document"
-                        /></el-tag>
-                        <el-tag v-else type="danger" size="medium">未知</el-tag>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <div class="urlDiv">
+                <el-card
+                  class="taskCard"
+                  shadow="hover"
+                  :body-style="{ padding: '10px' }"
+                >
+                  <div>
+                    <el-row>
+                      <el-col :span="21" @dblclick.native="editName(task)">
+                        <span id="fileTile" v-if="!task.editing">
+                          {{ getName(task) }}
+                        </span>
                         <el-input
-                          readonly
+                          ref="fileTileEditor"
+                          v-else
                           size="mini"
-                          v-for="(item, index) in networkInterfaces"
-                          :key="index"
-                          :value="createUrl(task, item)"
-                          style="margin-bottom: 5px"
-                          @focus="copy(task, item)"
+                          @blur="saveName(task)"
+                          v-model="task.name"
+                          style="width: 235px"
+                        ></el-input>
+                      </el-col>
+                      <el-col :span="3">
+                        <div style="cursor: pointer">
+                          <el-tag
+                            v-if="task.type == 'directory'"
+                            type="success"
+                            size="medium"
+                            @click="showFile(task)"
+                            ><i class="el-icon-folder-opened"
+                          /></el-tag>
+                          <el-tag
+                            v-else-if="task.type == 'file'"
+                            type="info"
+                            size="medium"
+                            @click="showFile(task)"
+                            ><i class="el-icon-document"
+                          /></el-tag>
+                          <el-tag v-else type="danger" size="medium"
+                            >未知</el-tag
+                          >
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24">
+                        <div class="urlDiv">
+                          <el-input
+                            readonly
+                            size="mini"
+                            v-for="(item, index) in networkInterfaces"
+                            :key="index"
+                            :value="createUrl(task, item)"
+                            style="margin-bottom: 5px"
+                            @focus="copy(task, item)"
+                          >
+                            <el-button
+                              slot="append"
+                              icon="el-icon-document-copy"
+                              @click="copy(task, item)"
+                            ></el-button>
+                          </el-input>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="21">
+                        <!-- <el-tooltip placement="bottom"> -->
+                        <div slot="content" style="max-width: 290px">
+                          {{ task.path }}
+                        </div>
+                        <div class="filepath">{{ task.path }}</div>
+                        <!-- </el-tooltip> -->
+                      </el-col>
+                      <el-col :span="3">
+                        <el-popconfirm
+                          title="确定移除发布此数据？"
+                          @onConfirm="removeTask(task)"
                         >
                           <el-button
-                            slot="append"
-                            icon="el-icon-document-copy"
-                            @click="copy(task, item)"
+                            type="danger"
+                            circle
+                            size="mini"
+                            icon="el-icon-delete"
+                            slot="reference"
                           ></el-button>
-                        </el-input>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="21">
-                      <!-- <el-tooltip placement="bottom"> -->
-                      <div slot="content" style="max-width: 290px">
-                        {{ task.path }}
-                      </div>
-                      <div class="filepath">{{ task.path }}</div>
-                      <!-- </el-tooltip> -->
-                    </el-col>
-                    <el-col :span="3">
-                      <el-popconfirm
-                        title="确定移除发布此数据？"
-                        @onConfirm="removeTask(task)"
-                      >
-                        <el-button
-                          type="danger"
-                          circle
-                          size="mini"
-                          icon="el-icon-delete"
-                          slot="reference"
-                        ></el-button>
-                      </el-popconfirm>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-card>
-            </div>
+                        </el-popconfirm>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </el-card>
+              </div>
+            </transition-group>
           </div>
           <div></div>
         </el-scrollbar>
@@ -340,6 +344,7 @@ export default {
   position: relative;
   perspective: 150;
   -webkit-perspective: 150;
+  transition: all 1s;
 
   &:hover {
     z-index: 2;
@@ -383,6 +388,26 @@ export default {
   background-color: rgb(251, 251, 251);
   width: 100%;
   height: 100%;
+  // background-image: url(http://www.tangweitian.cn:2333/images/2019/05/16/nwIoAS67Z6h0B6ez.jpg);
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   width: 100vw;
+  //   height: 100vh;
+  //   top: 0;
+  //   left: 0;
+  //   backdrop-filter: blur(20px);
+  // }
+}
+
+.list-complete-enter,
+.list-complete-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-complete-leave-active {
+  position: absolute;
 }
 
 .hide {
