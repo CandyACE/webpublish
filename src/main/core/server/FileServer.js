@@ -6,6 +6,7 @@ import { promisify } from 'util'
 import getMime from '../../helper/mime'
 import electron from 'electron';
 import ServerBase from './serverBase';
+import DirectoryHTML from '../../helper/DirectoryHtml';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -19,7 +20,7 @@ export default class FileServer extends ServerBase {
     var _this = this;
     this.stop();
 
-    this._server = new http.createServer(async function (req, res) {
+    this._server = new http.createServer(async function (req, res, next) {
       if (!req.url) {
         _this._error(res, 'error url')
         return;
@@ -36,7 +37,7 @@ export default class FileServer extends ServerBase {
         _this._error(res, "no Found this id")
         return;
       }
-      _this._readFiles(req, res, task)
+      _this._readFiles(req, res, task, next)
     })
 
     this._server.on('error', function () {
@@ -83,48 +84,51 @@ export default class FileServer extends ServerBase {
       const stats = await stat(filePath);
       if (stats.isFile()) {
         var mime = getMime(filePath);
+        console.log("🚀 ~ file: FileServer.js ~ line 87 ~ FileServer ~ _readFiles ~ mime", mime)
         res.statusCode = 200;
         res.setHeader('Content-Type', mime);
         res.setHeader('Access-Control-Allow-Origin', "*")
         fs.createReadStream(filePath).pipe(res);//以流的方式来读取文件
       } else if (stats.isDirectory()) {//如果是文件夹，拿到文件列表
-        //将readdir方法也promise化
-        const files = await readdir(filePath);
-        res.statusCode = 200;
-        res.setHeader('Access-Control-Allow-Origin', "*")
-        // res.setHeader('Content-Type', 'text/plain');
-        // res.end(files.join('\r\n'));//返回所有的文件名
-        res.setHeader('Content-Type', 'text/html;charset=UTF-8')
+        var isRoot = filePath.replaceAll('\\', '') === task.path.replaceAll('\\', '')
+        DirectoryHTML(filePath, res, { isRoot: isRoot })
+        // //将readdir方法也promise化
+        // const files = await readdir(filePath);
+        // res.statusCode = 200;
+        // res.setHeader('Access-Control-Allow-Origin', "*")
+        // // res.setHeader('Content-Type', 'text/plain');
+        // // res.end(files.join('\r\n'));//返回所有的文件名
+        // res.setHeader('Content-Type', 'text/html;charset=UTF-8')
 
-        var isRoot = filePath.replaceAll('\\', '') !== task.path.replaceAll('\\', '')
-        var fileScript = !isRoot ? "" : '<a href="' + req.url + '/../' + '">../</a><br/>'
+        // var isRoot = filePath.replaceAll('\\', '') !== task.path.replaceAll('\\', '')
+        // var fileScript = !isRoot ? "" : '<a href="' + req.url + '/../' + '">../</a><br/>'
 
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          let tempFilename = path.join(filePath, file)
-          let tempFileStat = await stat(tempFilename)
-          if (tempFileStat.isFile()) {
-            fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '</a><br/>'
-          } else {
-            fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '\\' + '</a><br/>'
-          }
-        }
+        // for (let i = 0; i < files.length; i++) {
+        //   const file = files[i];
+        //   let tempFilename = path.join(filePath, file)
+        //   let tempFileStat = await stat(tempFilename)
+        //   if (tempFileStat.isFile()) {
+        //     fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '</a><br/>'
+        //   } else {
+        //     fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '\\' + '</a><br/>'
+        //   }
+        // }
 
-        var html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>`+ filePath.replace(task.path, '') + `</title>
-        </head>
-          <body>
-            `+ fileScript + `
-          </body>
-        </html>
-        `
-        res.end(html)
+        // var html = `
+        // <!DOCTYPE html>
+        // <html>
+        // <head>
+        //   <title>`+ filePath.replace(task.path, '') + `</title>
+        // </head>
+        //   <body>
+        //     `+ fileScript + `
+        //   </body>
+        // </html>
+        // `
+        // res.end(html)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       console.log(`${filePath} is not a directory or file.`)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码

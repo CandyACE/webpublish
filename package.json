@@ -1,15 +1,17 @@
 {
   "name": "webpublish",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "hostUpdateUrl": "http://oss.tangweitian.cn/update/webpublish/host/",
-  "maintainers": [{
-    "version": "0.1.6",
-    "detail": []
-  }],
+  "maintainers": [
+    {
+      "version": "0.1.6",
+      "detail": []
+    }
+  ],
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
@@ -32,15 +34,18 @@
     "directories": {
       "output": "build"
     },
-    "publish": [{
-      "provider": "generic",
-      "url": "http://oss.tangweitian.cn/update/webpublish"
-    }],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://oss.tangweitian.cn/update/webpublish"
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "x": 410,
           "y": 150,
           "type": "link",
@@ -65,18 +70,21 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "batch": "^0.6.1",
     "compressing": "^1.5.1",
     "electron-store": "^6.0.0",
+    "electron-updater": "^4.3.5",
     "element-ui": "^2.13.2",
+    "escape-html": "^1.0.3",
     "lodash": "^4.17.20",
+    "mime-types": "^2.1.30",
     "mkdirp": "^1.0.4",
     "node-fetch": "^2.6.1",
     "progress-stream": "^2.0.0",
     "pump": "^3.0.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
-    "vue-router": "^3.0.1",
-    "electron-updater": "^4.3.5"
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

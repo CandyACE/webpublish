@@ -103,6 +103,23 @@
                             slot="reference"
                           ></el-button>
                         </el-popconfirm>
+                        <!-- <el-dropdown>
+                          <el-button
+                            circle
+                            size="mini"
+                            icon="el-icon-more"
+                          ></el-button>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item
+                              ><el-checkbox
+                                >是否启用</el-checkbox
+                              ></el-dropdown-item
+                            >
+                            <el-dropdown-item divided>
+                              <span style="color: red">移除</span>
+                            </el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown> -->
                       </el-col>
                     </el-row>
                   </div>
@@ -126,7 +143,6 @@ import fs from "fs";
 import { FILE_STATUS } from "@shared/constants";
 import { guid } from "@shared/twtools";
 import path from "path";
-import { create } from "domain";
 import optionsPageVue from "./options/optionsPage.vue";
 import updateVue from "./Update/update.vue";
 import { remote } from "electron";
@@ -331,7 +347,7 @@ export default {
   vertical-align: middle;
 
   &.active {
-    height: 50px;
+    height: 50px; 
   }
 }
 
@@ -357,9 +373,9 @@ export default {
   height: auto;
   width: 310px;
 
-  &:hover {
-    transform: scale3d(1.02, 1.02, 1.02);
-  }
+  // &:hover {
+  //   transform: translateZ(5px);
+  // }
 }
 
 .mainTop {

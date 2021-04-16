@@ -1,4 +1,5 @@
 import path from 'path';
+import mime from 'mime-types'
 
 const mimeType = {
     css: 'text/css',
@@ -22,12 +23,16 @@ const mimeType = {
     mp4: 'video/mp4'
 }
 
-export default (filePath) => {
-    const ext = path
-        .extname(filePath)
-        .split('.')
-        .pop()
-        .toLowerCase();
+// export default (filePath) => {
+//     const ext = path
+//         .extname(filePath)
+//         .split('.')
+//         .pop()
+//         .toLowerCase();
 
-    return ext && mimeType[ext] ? mimeType[ext] : mimeType['txt']
+//     return ext && mimeType[ext] ? mimeType[ext] : mimeType['txt']
+// }
+
+export default (filePath) => {
+    return mime.lookup(filePath)
 }

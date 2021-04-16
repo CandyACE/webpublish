@@ -1,3 +1,4 @@
+import FileNewServer from "./server/FileNewServer";
 import FileServer from "./server/FileServer";
 
 export default class ServerManager {
