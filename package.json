@@ -72,6 +72,8 @@
     "axios": "^0.18.0",
     "batch": "^0.6.1",
     "compressing": "^1.5.1",
+    "electron-is": "^3.0.0",
+    "electron-log": "^4.3.4",
     "electron-store": "^6.0.0",
     "electron-updater": "^4.3.5",
     "element-ui": "^2.13.2",
@@ -79,12 +81,10 @@
     "lodash": "^4.17.20",
     "mime-types": "^2.1.30",
     "mkdirp": "^1.0.4",
-    "node-fetch": "^2.6.1",
-    "progress-stream": "^2.0.0",
-    "pump": "^3.0.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "ajv": "^6.5.0",

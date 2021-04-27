@@ -8,7 +8,7 @@
 
 <script>
 import MainPageVue from "./components/MainPage.vue";
-import TitleBarVue from "./components/TitleBar/TitleBar.vue";
+import TitleBarVue from "./components/Native/TitleBar.vue";
 export default {
   name: "webpublish",
   components: {
