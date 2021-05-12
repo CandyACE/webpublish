@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 if (is.windows()) {
-  app.setAppUserModelId(appId)
+  // app.setAppUserModelId(appId)
 }
 
 global.launcher = new Launcher()

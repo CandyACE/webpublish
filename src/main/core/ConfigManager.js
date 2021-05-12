@@ -1,4 +1,5 @@
 import ElectronStore from "electron-store";
+import is from 'electron-is'
 
 export default class ConfigManager {
     constructor() {

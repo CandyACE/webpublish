@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events'
 import { join } from 'path'
 import { Tray, Menu } from "electron";
+import path from 'path'
+import logger from './Logger';
 
 let tray = null
 
@@ -14,7 +16,7 @@ export default class TrayManager extends EventEmitter {
     }
 
     load() {
-        this.template = require('../config/tray')
+        this.template = require('../config/tray').default
 
         this.setIcons()
     }

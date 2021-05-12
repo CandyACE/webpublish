@@ -47,7 +47,7 @@ export default class FileServer extends ServerBase {
     // var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
     var port = this._app.configManager.getSystemConfig('port', "9090");
     this._server.listen(port, () => {
-      global.vue.$msg.success(`服务启动成功，端口：${port}`);
+      // global.vue.$msg.success(`服务启动成功，端口：${port}`);
     })
   }
 
@@ -84,7 +84,6 @@ export default class FileServer extends ServerBase {
       const stats = await stat(filePath);
       if (stats.isFile()) {
         var mime = getMime(filePath);
-        console.log("🚀 ~ file: FileServer.js ~ line 87 ~ FileServer ~ _readFiles ~ mime", mime)
         res.statusCode = 200;
         res.setHeader('Content-Type', mime);
         res.setHeader('Access-Control-Allow-Origin', "*")

@@ -17,16 +17,16 @@ export default class Application extends EventEmitter {
 
     init() {
         this.configManager = new ConfigManager();
-        this.taskManager = new TaskManager(this.configManager)
-        this.serverManager = new ServerManager(this);
+        this.taskManager = new TaskManager(this.configManager);
         this.trayManager = new TrayManager();
-        this.initWindowManager()
+        this.initWindowManager();
+        this.serverManager = new ServerManager(this);
         this.isReady = true;
     }
 
     initWindowManager() {
         this.windowManager = new WindowManager({
-            userConfig: this.configManager.getUserConfig()
+            userConfig: this.configManager.getSystemConfig()
         })
 
         this.windowManager.on('window-resized', (data) => {
@@ -67,7 +67,7 @@ export default class Application extends EventEmitter {
 
     showPage(page, options = {}) {
         const { openedAtLogin } = options
-        const autoHideWindow = this.configManager.getUserConfig('auto-hide-window')
+        const autoHideWindow = this.configManager.getSystemConfig('auto-hide-window')
         return this.windowManager.openWindow(page, {
             hidden: openedAtLogin || autoHideWindow
         })

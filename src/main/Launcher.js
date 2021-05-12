@@ -3,6 +3,8 @@ import { app } from 'electron'
 import is from 'electron-is'
 import ExceptionHandler from './core/ExceptionHandler'
 import logger from './core/Logger'
+import Application from './Application'
+import { parseArgvAsFile, splitArgv } from './common/utils'
 
 export default class Launcher extends EventEmitter {
   constructor() {
@@ -10,7 +12,7 @@ export default class Launcher extends EventEmitter {
 
     logger.info('Launcher init')
     this.makeSingleInstance(() => {
-      this.init()
+      this.init() 
     })
   }
 
@@ -69,11 +71,11 @@ export default class Launcher extends EventEmitter {
       this.openedAtLogin = true
     }
 
-    const file = parseArgvAsFile(args)
-    if (file) {
-      this.file = file
-      this.sendFileToApplication()
-    }
+    // const file = parseArgvAsFile(args)
+    // if (file) {
+    //   this.file = file
+    //   this.sendFileToApplication()
+    // }
   }
 
   handelAppReady() {

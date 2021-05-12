@@ -20,10 +20,6 @@ Vue.config.productionTip = false
 Vue.use(ElementUI, {
   size: 'mini'
 })
-const loading = Loading.service({
-  fullscreen: true,
-  background: 'rgba(0, 0, 0, 0.1)'
-})
 // Vue.use(ElementUI.Popover)
 Vue.component('ts-icon', Icon)
 
@@ -31,6 +27,12 @@ Vue.use(Msg, ElementUI.Message, {
   showClose: true,
   offset: 30,
 })
+
+const loading = Loading.service({
+  fullscreen: true,
+  background: 'rgba(0, 0, 0, 0.1)'
+})
+
 
 /* eslint-disable no-new */
 global.vue = new Vue({
