@@ -226,6 +226,7 @@ export default {
       }
 
       var stat = this.isFileOrDirectory(obj);
+
       this.application.taskManager.addTask({
         id: guid(),
         name: obj.path.split("\\").pop(),
@@ -260,6 +261,10 @@ export default {
       let result = FILE_STATUS.UNKNOW;
       if (stat.isFile()) {
         result = FILE_STATUS.FILE;
+        var ext = path.extname(file.path);
+        if (".mbtiles" === ext.toLowerCase()) {
+          result = FILE_STATUS.MBTILES;
+        }
       } else if (stat.isDirectory()) {
         result = FILE_STATUS.DIRECTORY;
       }
@@ -347,7 +352,7 @@ export default {
   vertical-align: middle;
 
   &.active {
-    height: 50px; 
+    height: 50px;
   }
 }
 

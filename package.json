@@ -69,6 +69,7 @@
     }
   },
   "dependencies": {
+    "@mapbox/mbtiles": "^0.12.1",
     "axios": "^0.18.0",
     "batch": "^0.6.1",
     "compressing": "^1.5.1",

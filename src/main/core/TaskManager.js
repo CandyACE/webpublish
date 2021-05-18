@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import { FILE_STATUS } from "@shared/constants";
+import mbTiles from '@mapbox/mbtiles'
 
 export default class TaskManager {
   constructor(configManager) {
@@ -14,8 +16,21 @@ export default class TaskManager {
       if (!item.name) {
         item.name = item.path.split('\\').pop()
       }
+      this.startMbTiles(item)
     })
     this.taskList = list
+  }
+
+  startMbTiles(task) {
+    if (task.type !== FILE_STATUS.MBTILES) {
+      return;
+    }
+    new mbTiles(task.path, function (err, mbObject) {
+      if (err) {
+        return global.Vue.$msg.error(err);
+      }
+      task.mbtiles = mbObject
+    })
   }
 
   setTask(index, newValue) {
@@ -25,6 +40,7 @@ export default class TaskManager {
   }
 
   addTask(task) {
+    this.startMbTiles(task)
     this.taskList.unshift(task);
     // this.taskList.push(task);
     this._configManager.setSystemConfig('tasks', this.taskList);

@@ -76,6 +76,32 @@ export default class FileServer extends ServerBase {
       if (task.type === FILE_STATUS.FILE) {
         // 如果是文件，就直接找到这个文件发出去
         filePath = task.path;
+      } else if (task.type === FILE_STATUS.MBTILES) {
+        console.log(task.type)
+        let mbtiles = task.mbtiles;
+        paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
+        var getInfo = paramPath.split('?')
+        if (getInfo.length > 1 && "getInfo" === getInfo[1]) {
+          res.setHeader('Content-Type', 'application/json;charset=UTF-8');
+          res.setHeader('Access-Control-Allow-Origin', "*")
+          mbtiles.getInfo(function (err, info) {
+            res.end(JSON.stringify(info))
+          })
+          return;
+        }
+        var ext = paramPath.split('.')[1];
+        var param = paramPath.split('/');
+        var z = param[1],
+          x = param[2],
+          y = param[3]
+        mbtiles.getTile(z, x, y, function (err, data, headers) {
+          res.setHeader('Access-Control-Allow-Origin', "*")
+          Object.keys(headers).forEach(e => {
+            res.setHeader(e, headers[e])
+          })
+          res.end(data)
+        })
+        return;
       } else {
         paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
         filePath = path.join(task.path, paramPath);
