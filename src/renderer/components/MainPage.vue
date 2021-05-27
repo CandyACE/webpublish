@@ -125,7 +125,7 @@ import fs from "fs";
 import { FILE_STATUS } from "@shared/constants";
 import { guid } from "@shared/twtools";
 import path from "path";
-import optionsPageVue from "./options/optionsPage.vue";
+import optionsPageVue from "./options/Index.vue";
 import updateVue from "./Update/update.vue";
 import { remote } from "electron";
 import os from "os";

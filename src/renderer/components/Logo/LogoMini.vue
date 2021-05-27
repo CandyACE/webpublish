@@ -4,8 +4,8 @@
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        width="28"
-        height="28"
+        :width="width"
+        :height="height"
         viewBox="0 0 128 126"
       >
         <image
@@ -21,6 +21,16 @@
 <script>
 export default {
   name: "ts-logo-mini",
+  props: {
+    width: {
+      type: Number,
+      default: 28,
+    },
+    height: {
+      type: Number,
+      default: 28,
+    },
+  },
 };
 </script>
 
@@ -31,8 +41,6 @@ export default {
   width: 100%;
   > a {
     display: block;
-    width: 28px;
-    height: 28px;
     text-align: center;
     font-size: 0;
     padding: 2px;

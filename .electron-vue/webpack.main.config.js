@@ -40,7 +40,17 @@ let mainConfig = {
       {
         test: /\.node$/,
         use: 'node-loader'
-      }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        use: {
+          loader: 'url-loader',
+          query: {
+            limit: 10000,
+            name: 'imgs/[name]--[folder].[ext]'
+          }
+        }
+      },
     ]
   },
   node: {
@@ -60,7 +70,7 @@ let mainConfig = {
       __AUTHOR__: JSON.stringify(author),
       __UPDATEURL__: JSON.stringify(build.publish[0].url),
       __HOSTURL__: JSON.stringify(hostUpdateUrl),
-      appId: `${build.appId}`
+      "appId": `"${build.appId}"`
     })
   ],
   resolve: {
@@ -80,7 +90,7 @@ if (process.env.NODE_ENV !== 'production') {
   mainConfig.plugins.push(
     new webpack.DefinePlugin({
       '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
-      , appId: `${build.appId}`
+      , "appId": `"${build.appId}"`
     })
   )
 }
@@ -93,7 +103,7 @@ if (process.env.NODE_ENV === 'production') {
     new MinifyPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"',
-      appId: `${build.appId}`
+      "appId": `"${build.appId}"`
     })
   )
 }

@@ -1,17 +1,16 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-import App from './pages/App'
+import App from './App.vue'
 import router from './router'
 
 import ElementUI, { Loading } from 'element-ui'
+import "@/components/Theme/Index.scss";
 import 'element-ui/lib/theme-chalk/index.css'
-import "@/components/Theme/Default.scss";
 
 import Icon from '@/components/Icons/Icon'
-import Application from '../main/Application'
 import Msg from "@/components/Msg"
-
+import store from './store'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -33,11 +32,11 @@ const loading = Loading.service({
   background: 'rgba(0, 0, 0, 0.1)'
 })
 
-
 /* eslint-disable no-new */
 global.vue = new Vue({
   components: { App },
   router,
+  store,
   template: '<App/>'
 }).$mount('#app')
 

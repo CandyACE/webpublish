@@ -13,7 +13,6 @@ var cache = {}
  * @param {boolean} isRoot 
  */
 async function DirectoryHTML(dirPath, res, options) {
-    console.log("🚀 get")
     var isRoot = options.isRoot || false;
     var hidden = options.hidden;
     var res = res;
@@ -35,8 +34,6 @@ async function DirectoryHTML(dirPath, res, options) {
         }
         fileList.sort(fileSort)
 
-        console.log("🚀 ~ file: DirectoryHtml.js ~ line 82 ~ fileList", fileList)
-        console.log("🚀 ~ file: DirectoryHtml.js ~ line 84 ~ res", res)
 
         var style = ''
         var styleList = []
@@ -62,7 +59,6 @@ async function DirectoryHTML(dirPath, res, options) {
 
         dirTemplate += '<style>' + style + '</style>'
 
-        console.log("🚀 ~ file: DirectoryHtml.js ~ line 128 ~ style", style)
 
         return res.end(dirTemplate)
     })

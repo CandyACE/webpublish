@@ -11,9 +11,9 @@ export default class Launcher extends EventEmitter {
     super()
 
     logger.info('Launcher init')
-    this.makeSingleInstance(() => {
-      this.init() 
-    })
+    // this.makeSingleInstance(() => {
+    this.init()
+    // })
   }
 
   makeSingleInstance(callback) {

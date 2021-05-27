@@ -3,7 +3,6 @@ import fs from 'fs'
 import { promisify } from 'util'
 import electron from 'electron';
 import ServerBase from './serverBase';
-import Tasks from '../TaskManager/Task/Index';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -75,7 +74,7 @@ export default class FileServer extends ServerBase {
   async _readFiles(req, res, task) {
     var filePath = task.path
     try {
-      Tasks[task.type].Action(req, res, task)
+      task.Action(req, res)
     } catch (error) {
       console.error(error)
       console.log(`${filePath} is not a directory or file.`)

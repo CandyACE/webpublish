@@ -4,14 +4,17 @@
     :class="['aside', 'hidden-sm-and-down', { draggable: asideDraggable }]"
   >
     <div class="aside-inner">
-      <ts-logo-mini class="logo-mini"/>
+      <ts-logo-mini class="logo-mini" />
       <ul class="menu top-menu">
         <li @click="nav('/taskList')" class="non-draggable">
           <ts-icon name="menu-task" width="20" height="20" />
         </li>
+        <li class="non-draggable">
+          <ts-icon name="menu-add" width="20" height="20"></ts-icon>
+        </li>
       </ul>
       <ul class="menu bottom-menu">
-        <li @click="nav('/preference')" class="non-draggable">
+        <li @click="nav('/optionsPage')" class="non-draggable">
           <ts-icon name="menu-preference" width="20" height="20" />
         </li>
         <li @click="showAboutPanel" class="non-draggable">
@@ -37,9 +40,6 @@ export default {
     [LogoMini.name]: LogoMini,
   },
   computed: {
-    ...mapState("app", {
-      currentPage: (state) => state.currentPage,
-    }),
     asideDraggable: function () {
       return false;
     },

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import getTask from './Task/Index';
 
 export default class TaskManager {
   constructor(configManager) {
@@ -10,12 +11,9 @@ export default class TaskManager {
   initTaskList() {
     var list = this._configManager.getSystemConfig('tasks', []);
     list.forEach(item => {
-      item.editing = false;
-      if (!item.name) {
-        item.name = item.path.split('\\').pop()
-      }
+      var task = getTask(item.type);
+      this.taskList.push(new task(item))
     })
-    this.taskList = list
   }
 
   setTask(index, newValue) {

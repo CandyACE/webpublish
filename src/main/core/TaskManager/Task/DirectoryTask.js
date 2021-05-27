@@ -11,18 +11,16 @@ const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
 
 export default class DirectoryTask extends TaskBase {
-    constructor(task) {
-        this._task = task;
-    }
     /**
      * 
      * @param {http.IncomingMessage} req 
      * @param {http.ServerResponse} res 
+     * @param {Object} taskInfo
      * @param {fs.Stats} stats
      */
-    async Action(req, res, stats) {
+    static async Action(req, res, taskInfo, stats) {
 
-        var paramPath = decodeURIComponent(req.url).replace('/' + this._task.id, '')
+        var paramPath = decodeURIComponent(req.url).replace('/' + taskInfo.id, '')
         var filePath = path.join(taskInfo.path, paramPath)
         filePath = filePath.split('?')[0]
         const stats1 = await stat(filePath)
@@ -34,5 +32,9 @@ export default class DirectoryTask extends TaskBase {
             var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
             DirectoryHTML(filePath, res, { isRoot: isRoot })
         }
+    }
+
+    async Action(req, res, stats) {
+        DirectoryTask.Action(req, res, this, stats)
     }
 }

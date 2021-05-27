@@ -1,115 +1,50 @@
 <template>
-  <div>
-    <el-card class="taskCard" shadow="hover" :body-style="{ padding: '10px' }">
-      <el-row>
-        <el-col :span="21">
-          <span id="fileTile">
-            {{ getName(task) }}
-          </span>
-        </el-col>
-        <el-col :span="3">
-          <div style="cursor: pointer">
-            <el-tag
-              v-if="task.type == 'directory'"
-              type="success"
-              size="medium"
-              @click="showFile(task)"
-              ><i class="el-icon-folder-opened"
-            /></el-tag>
-            <el-tag
-              v-else-if="task.type == 'file'"
-              type="info"
-              size="medium"
-              @click="showFile(task)"
-              ><i class="el-icon-document"
-            /></el-tag>
-            <el-tag v-else type="danger" size="medium">未知</el-tag>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <div class="urlDiv">
-            <el-input
-              readonly
-              size="mini"
-              v-for="(item, index) in networkInterfaces"
-              :key="index"
-              :value="createUrl(task, item)"
-              style="margin-bottom: 5px"
-              @focus="copy(task, item)"
-            >
-              <el-button
-                slot="append"
-                icon="el-icon-document-copy"
-                @click="copy(task, item)"
-              ></el-button>
-            </el-input>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="21">
-          <div slot="content" style="max-width: 290px">
-            {{ task.path }}
-          </div>
-          <div class="filepath">{{ task.path }}</div>
-        </el-col>
-        <el-col :span="3">
-          <el-popconfirm
-            title="确定移除发布此数据？"
-            @onConfirm="removeTask(task)"
-          >
-            <el-button
-              type="danger"
-              circle
-              size="mini"
-              icon="el-icon-delete"
-              slot="reference"
-            ></el-button>
-          </el-popconfirm>
-        </el-col>
-      </el-row>
-    </el-card>
+  <div :key="task.id" class="task-item">
+    <div class="task-name" :title="task.name">
+      <span>{{ task.name }}</span>
+    </div>
+    <div class="task-type" :style="{ color: taskType[task.type].color }">
+      {{ taskType[task.type].text }}
+      <div class="task-type-background-1"></div>
+      <div class="task-type-background-2"></div>
+    </div>
+    <ts-task-urls :task="task" />
   </div>
 </template>
 
 <script>
 import fs from "fs";
 import { FILE_STATUS } from "@shared/constants";
-import { guid } from "@shared/twtools";
-import path from "path";
 import { remote } from "electron";
-import os from "os";
+import TaskUrlVue from "./TaskUrl.vue";
 
 export default {
   name: "ts-task-item",
-  components: {},
+  components: {
+    [TaskUrlVue.name]: TaskUrlVue,
+  },
+  data() {
+    return {
+      taskType: {
+        [FILE_STATUS.FILE]: {
+          text: "FILE",
+          color: "rgba(204,102,0,.2)",
+        },
+        [FILE_STATUS.DIRECTORY]: {
+          text: "DIRECTORY",
+          color: "rgba(204,102,0,.2)",
+        },
+        [FILE_STATUS.MBTILES]: {
+          text: "MBTiles",
+          color: "rgba(204,102,0,.2)",
+        },
+      },
+    };
+  },
   props: {
     task: Object,
   },
-  computed: {
-    networkInterfaces: function () {
-      const _net = Object.values(os.networkInterfaces());
-      var temp = [];
-      _net.forEach((element1) => {
-        element1.forEach((element2) => {
-          if (
-            element2.family !== undefined &&
-            element2.family.toUpperCase() === "IPV4"
-          ) {
-            if (element2.address === "127.0.0.1") {
-              temp.unshift(element2);
-            } else {
-              temp.push(element2);
-            }
-          }
-        });
-      });
-      console.log("networkInterfaces", temp);
-      return temp;
-    },
-  },
+  computed: {},
   methods: {
     showFile(task) {
       remote.shell.showItemInFolder(task.path);
@@ -125,20 +60,6 @@ export default {
       return result;
     },
   },
-  copy(task, element) {
-    var path = this.createUrl(task, element);
-    this.$electron.clipboard.writeText(path);
-    this.$msg.success("复制成功！");
-  },
-  createUrl(task, element) {
-    var address = element.address;
-    var port = this.application.configManager.getSystemConfig("port", "9090");
-    return (
-      `http://${address}:${port}/${task.id}/` +
-      (task.type == FILE_STATUS.FILE ? `${path.basename(task.path)}` : "")
-    );
-  },
-
   removeTask(task) {
     this.application.taskManager.removeTask(task);
   },
@@ -164,136 +85,75 @@ export default {
 </script>
 
 <style lang="scss">
-#fileTile {
-  font-size: 17px;
-  font-weight: bold;
-  line-height: 28px;
-  margin-left: 5px;
-  pointer-events: none;
-}
-
-.filepath {
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: calc(100% - 20px);
-  line-height: 26px;
-  margin-left: 5px;
-  cursor: default;
-}
-
-.el-scrollbar__wrap {
-  overflow-x: hidden !important;
-}
-
-.el-row {
-  margin-bottom: 10px;
-}
-
-.addItems {
-  height: 20px;
-  // margin: 10px;
-  font-size: 12px;
-  width: 100%;
-  text-align: center;
-  position: absolute;
-  z-index: 999;
-  pointer-events: none;
-  vertical-align: middle;
-
-  &.active {
-    height: 50px;
-  }
-}
-
-.taskCardParent {
-  width: 310px;
-  height: 135px;
-  float: left;
-  margin: 10px;
-  z-index: 1;
+.task-item {
   position: relative;
-  perspective: 150;
-  -webkit-perspective: 150;
-  transition: all 1s;
-
+  min-height: 88px;
+  padding: 16px 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   &:hover {
-    z-index: 2;
+    border-color: rgb(230, 154, 79);
+  }
+  .task-item-actions {
+    position: absolute;
+    top: 16px;
+    right: 12px;
+  }
+}
+.selected .task-item {
+  border-color: rgb(204, 102, 0);
+}
+.task-name {
+  color: #505753;
+  margin-bottom: 32px;
+  margin-right: 240px;
+  word-break: break-all;
+  min-height: 26px;
+  & > span {
+    font-size: 14px;
+    line-height: 26px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 }
 
-.taskCard {
-  // margin: 10px;
-  // height: 125px;
-  height: auto;
-  width: 310px;
-
-  // &:hover {
-  //   transform: translateZ(5px);
-  // }
-}
-
-.mainTop {
-  width: 100%;
-  height: 90px;
-}
-
-.titleText {
-  padding-top: 16px;
-  padding-left: 50px;
-  font-size: 32px;
-  font-family: "Segoe UI Regular";
-}
-
-.ts-main {
+.task-type {
+  font-size: xxx-large;
+  font-weight: 1000;
   position: absolute;
-  top: 28px;
-  height: calc(100% - 28px);
-  width: 100%;
-}
-
-.mainDiv,
-.optionsDiv {
+  top: 60px;
+  pointer-events: none;
   height: 100%;
-  position: absolute;
-  background-color: rgb(251, 251, 251);
   width: 100%;
-  height: 100%;
-  // background-image: url(http://www.tangweitian.cn:2333/images/2019/05/16/nwIoAS67Z6h0B6ez.jpg);
-  // &::before {
-  //   content: "";
-  //   position: absolute;
-  //   width: 100vw;
-  //   height: 100vh;
-  //   top: 0;
-  //   left: 0;
-  //   backdrop-filter: blur(20px);
-  // }
-}
 
-.list-complete-enter,
-.list-complete-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.list-complete-leave-active {
-  position: absolute;
-}
-
-.hide {
-  display: none;
-}
-
-.urlDiv {
-  transition: max-height 0.5s;
-  max-height: 29px;
-  overflow: hidden;
-
-  &:hover {
-    max-height: 200px;
-    overflow-x: auto;
+  .task-type-background-1 {
+    &:before {
+      content: "";
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      top: 22px;
+      left: -52px;
+      position: absolute;
+      background-color: rgba(239, 92, 92, 0.14);
+    }
+  }
+  .task-type-background-2:before {
+    content: "";
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    top: -5px;
+    left: 12px;
+    position: absolute;
+    background-color: rgba(239, 180, 92, 0.14);
   }
 }
 </style>

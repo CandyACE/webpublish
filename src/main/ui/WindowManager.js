@@ -72,7 +72,7 @@ export default class WindowManager extends EventEmitter {
 
     window = new BrowserWindow({
       ...defaultBrowserOptions,
-      ...pageOptions.attrs
+      ...pageOptions.attrs,
     })
 
     const bounds = this.getPageBounds(page)

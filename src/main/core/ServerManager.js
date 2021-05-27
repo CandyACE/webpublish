@@ -12,10 +12,12 @@ export default class ServerManager {
      * @type {http.Server}
      */
     this._server_api = undefined;
+    this.isRunning = false;
   }
 
   stop() {
     this._server.stop();
+    this.isRunning = false;
   }
 
   restart() {
@@ -23,6 +25,11 @@ export default class ServerManager {
   }
 
   start() {
-    this._server.start()
+    var _this = this;
+    this._server.start().then(() => {
+      _this.isRunning = true;
+    }).catch(err => {
+      _this.isRunning = false;
+    })
   }
 }

@@ -1,30 +1,21 @@
 <template>
   <div id="app">
-    <ts-title-bar :optionsVisible.sync="optionsVisible" />
-    <main-page :optionsVisible.sync="optionsVisible" />
-    <!-- <router-view></router-view> -->
+    <ts-title-bar />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import MainPageVue from "./components/MainPage.vue";
 import TitleBarVue from "./components/Native/TitleBar.vue";
 export default {
   name: "webpublish",
   components: {
     [TitleBarVue.name]: TitleBarVue,
-    [MainPageVue.name]: MainPageVue,
   },
   data() {
-    return {
-      optionsVisible: false,
-    };
+    return {};
   },
-  methods: {
-    setOptionsVisible() {
-      this.optionsVisible = !this.optionsVisible;
-    },
-  },
+  methods: {},
 };
 </script>
 
