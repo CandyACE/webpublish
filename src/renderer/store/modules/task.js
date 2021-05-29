@@ -10,6 +10,7 @@ const getters = {}
 const mutations = {
     UPDATE_TASK_LIST(state, taskList) {
         state.taskList = taskList
+        console.log(state.taskList)
     },
     UPDATE_CURRENT_TASK_ITEM(state, taskItem) {
         state.currentTaskItem = taskItem
@@ -18,8 +19,9 @@ const mutations = {
 
 const actions = {
     fetchList({ commit, state }) {
-        let data = api.fetchTaskList();
-        commit('UPDATE_TASK_LIST', data)
+        return api.fetchTaskList().then(data => {
+            commit('UPDATE_TASK_LIST', data)
+        })
     },
     updateCurrentTaskItem({ commit }, task) {
         commit('UPDATE_CURRENT_TASK_ITEM', task)

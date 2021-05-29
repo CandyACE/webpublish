@@ -1,14 +1,19 @@
 <template>
   <div :key="task.id" class="task-item">
-    <div class="task-name" :title="task.name">
-      <span>{{ task.name }}</span>
+    <div class="task-name" :title="taskName">
+      <span>{{ taskName }}</span>
     </div>
     <div class="task-type" :style="{ color: taskType[task.type].color }">
       {{ taskType[task.type].text }}
       <div class="task-type-background-1"></div>
       <div class="task-type-background-2"></div>
     </div>
-    <ts-task-urls :task="task" />
+    <ts-task-urls
+      :id="task.id"
+      :url="task.getUrl()"
+      :useData="Number(task.useData)"
+      :totalData="Number(task.totalData)"
+    />
   </div>
 </template>
 
@@ -42,9 +47,15 @@ export default {
     };
   },
   props: {
-    task: Object,
+    task: {
+      type: Object,
+    },
   },
-  computed: {},
+  computed: {
+    taskName() {
+      return this.task.name || this.task.path.split("\\").pop();
+    },
+  },
   methods: {
     showFile(task) {
       remote.shell.showItemInFolder(task.path);
@@ -59,27 +70,27 @@ export default {
       }
       return result;
     },
-  },
-  removeTask(task) {
-    this.application.taskManager.removeTask(task);
-  },
+    removeTask(task) {
+      this.application.taskManager.removeTask(task);
+    },
 
-  editName(task) {
-    task.editing = true;
-    this.$nextTick(() => {
-      this.$refs.fileTileEditor[0].focus();
-      this.$refs.fileTileEditor[0].select();
-    });
-  },
+    // editName(task) {
+    //   task.editing = true;
+    //   this.$nextTick(() => {
+    //     this.$refs.fileTileEditor[0].focus();
+    //     this.$refs.fileTileEditor[0].select();
+    //   });
+    // },
 
-  saveName(task) {
-    let index = this.taskList.indexOf(task);
-    task.editing = false;
-    this.application.taskManager.setTask(index, task);
-  },
+    // saveName(task) {
+    //   let index = this.taskList.indexOf(task);
+    //   task.editing = false;
+    //   this.application.taskManager.setTask(index, task);
+    // },
 
-  getName(task) {
-    return task.name || task.path.split("\\").pop();
+    getName() {
+      return this.task.name || this.task.path.split("\\").pop();
+    },
   },
 };
 </script>

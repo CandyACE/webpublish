@@ -19,7 +19,6 @@ export default class DirectoryTask extends TaskBase {
      * @param {fs.Stats} stats
      */
     static async Action(req, res, taskInfo, stats) {
-
         var paramPath = decodeURIComponent(req.url).replace('/' + taskInfo.id, '')
         var filePath = path.join(taskInfo.path, paramPath)
         filePath = filePath.split('?')[0]
@@ -28,6 +27,7 @@ export default class DirectoryTask extends TaskBase {
             // 地址应该传入拼接后的地址
             var info = { ...taskInfo, path: filePath }
             FileTask.Action(req, res, info, stats1)
+            taskInfo.useData += stats1.size;
         } else if (stats1.isDirectory()) {
             var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
             DirectoryHTML(filePath, res, { isRoot: isRoot })

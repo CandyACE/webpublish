@@ -2,15 +2,18 @@
   <div id="app">
     <ts-title-bar />
     <router-view></router-view>
+    <ts-task-engine></ts-task-engine>
   </div>
 </template>
 
 <script>
 import TitleBarVue from "./components/Native/TitleBar.vue";
+import TaskEngineVue from "./components/Task/TaskEngine.vue";
 export default {
   name: "webpublish",
   components: {
     [TitleBarVue.name]: TitleBarVue,
+    [TaskEngineVue.name]: TaskEngineVue,
   },
   data() {
     return {};

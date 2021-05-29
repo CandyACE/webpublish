@@ -1,6 +1,7 @@
 import { remote } from 'electron'
 import { FILE_STATUS } from '../../shared/constants'
 import is from 'electron-is'
+import { cloneDeep } from 'lodash';
 
 const application = remote.getGlobal('application')
 
@@ -33,7 +34,10 @@ export default class Api {
   }
 
   fetchTaskList() {
-    return application.taskManager.taskList;
+    return new Promise((resolve) => {
+      var data = cloneDeep(application.taskManager.taskList)
+      resolve(data)
+    })
   }
 
   addTask(info) {

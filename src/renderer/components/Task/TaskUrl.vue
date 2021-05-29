@@ -6,12 +6,17 @@
         size="mini"
         v-for="(item, index) in networkInterfaces"
         :key="index"
-        :value="createUrl(task, item)"
-        @focus="copy(task, item)"
+        :value="createUrl(id, url, item)"
+        @focus="copy(id, url, item)"
       >
       </el-input>
     </div>
-    <div>{{ task.useData }}/{{ task.totalData }}</div>
+    <div>
+      {{ this.useData | bytesToSize }}/{{ this.totalData | bytesToSize }}
+    </div>
+    <div v-if="this.useData > 0">
+      {{ this.useData | bytesToSize }}/{{ this.totalData | bytesToSize }}
+    </div>
   </div>
 </template>
 
@@ -20,13 +25,24 @@ import os from "os";
 import { remote } from "electron";
 import path from "path";
 import { FILE_STATUS } from "../../../shared/constants";
+import { bytesToSize } from "../../../shared/utils";
 
 export default {
   name: "ts-task-urls",
   props: {
-    task: {
-      type: Object,
-      default: null,
+    id: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
+    useData: {
+      type: Number,
+      default: 0,
+    },
+    totalData: {
+      type: Number,
+      default: 0,
     },
   },
   computed: {
@@ -52,17 +68,20 @@ export default {
     },
   },
   methods: {
-    createUrl(task, element) {
+    createUrl(id, url, element) {
       var address = element.address;
       var application = remote.getGlobal("application");
       var port = application.configManager.getSystemConfig("port", "9090");
-      return `http://${address}:${port}/${task.id}/` + task.getUrl();
+      return `http://${address}:${port}/${id}/` + url;
     },
-    copy(task, element) {
-      var path = this.createUrl(task, element);
+    copy(id, url, element) {
+      var path = this.createUrl(id, url, element);
       this.$electron.clipboard.writeText(path);
       this.$msg.success("复制成功！");
     },
+  },
+  filters: {
+    bytesToSize,
   },
 };
 </script>

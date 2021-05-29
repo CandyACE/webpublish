@@ -18,7 +18,8 @@ export default new Router({
         {
           path: '/task',
           alias: '/',
-          component: require('@/components/Task/Index').default
+          component: require('@/components/Task/Index').default,
+          props: true
         },
         {
           path: '/optionsPage',

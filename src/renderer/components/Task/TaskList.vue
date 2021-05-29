@@ -1,14 +1,10 @@
 <template>
-  <div class="task-list">
-    <div
-      v-for="task in taskList"
-      :id="task.path"
-      :key="task.id"
-      class="taskCardParent"
-    >
-      <ts-task-item :task="task"></ts-task-item>
+  <div class="task-list" v-if="taskList.length > 0">
+    <div v-for="item in taskList" :key="item.id" :attr="item.id">
+      <ts-task-item :task="item"></ts-task-item>
     </div>
   </div>
+  <div v-else class="no-task"></div>
 </template>
 
 <script>
@@ -20,9 +16,6 @@ export default {
   name: "ts-task-list",
   components: {
     [TaskItemVue.name]: TaskItemVue,
-  },
-  data() {
-    return {};
   },
   computed: {
     ...mapState("task", {
