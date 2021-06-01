@@ -132,26 +132,27 @@ export default {
     top: 16px;
     right: 12px;
   }
+
+  .task-name {
+    color: #505753;
+    margin-bottom: 32px;
+    margin-right: 240px;
+    word-break: break-all;
+    min-height: 26px;
+    pointer-events: none;
+    & > span {
+      font-size: 14px;
+      line-height: 26px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
 }
 .selected .task-item {
   border-color: rgb(204, 102, 0);
-}
-.task-name {
-  color: #505753;
-  margin-bottom: 32px;
-  margin-right: 240px;
-  word-break: break-all;
-  min-height: 26px;
-  pointer-events: none;
-  & > span {
-    font-size: 14px;
-    line-height: 26px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
 }
 
 .task-type {

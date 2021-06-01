@@ -1300,7 +1300,7 @@ iframe {
 
 @media only screen and (max-width:567px) {
   .hidden-xs-only {
-    display:none!important
+    display:none !important
   }
 }
 
@@ -1318,6 +1318,15 @@ iframe {
 @media only screen and (max-width: 791px) {
   .hidden-sm-and-down {
     display: none !important;
+  }
+
+  .panel{
+    .panel-header {
+      margin: 0 16px;
+    }
+    .panel-content{
+      padding: 0 16px 0;
+    }
   }
 }
 

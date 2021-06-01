@@ -1,7 +1,7 @@
 <template>
   <el-container class="content panel" direction="vertical">
     <el-header class="panel-header" height="84">
-      <h4 class="task-title hidden-xs-only">发布列表</h4>
+      <h4 class="task-title">发布列表</h4>
     </el-header>
     <el-main class="panel-content">
       <ts-task-list></ts-task-list>

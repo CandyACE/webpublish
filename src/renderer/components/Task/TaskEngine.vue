@@ -12,6 +12,14 @@ export default {
     setTimeout(() => {
       this.startPolling();
     }, 100);
+
+    window.onresize = () => {
+      if (document.body.clientWidth >= 791) {
+        this.$store.dispatch("task/changeTaskProgressType", "line");
+      } else {
+        this.$store.dispatch("task/changeTaskProgressType", "circle");
+      }
+    };
   },
   destroyed() {
     this.stopPolling();

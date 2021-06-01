@@ -2,7 +2,8 @@ import api from "../../api"
 
 const state = {
     taskList: [],
-    currentTaskItem: null
+    currentTaskItem: null,
+    taskProgressType: 'line'
 }
 
 const getters = {}
@@ -13,6 +14,9 @@ const mutations = {
     },
     UPDATE_CURRENT_TASK_ITEM(state, taskItem) {
         state.currentTaskItem = taskItem
+    },
+    CHANGE_TASK_PROGRESS_TYPE(state, type) {
+        state.taskProgressType = type
     }
 }
 
@@ -32,6 +36,9 @@ const actions = {
     removeTask({ dispatch }, task) {
         api.removeTask(task);
         dispatch('fetchList')
+    },
+    changeTaskProgressType({ commit }, type) {
+        commit('CHANGE_TASK_PROGRESS_TYPE', type)
     }
 }
 

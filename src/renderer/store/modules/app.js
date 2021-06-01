@@ -4,6 +4,7 @@ const state = {
   aboutPanelVisible: false,
   addTaskVisible: false,
   addTaskType: ADD_TASK_TYPE.FILE,
+  addTaskFiles: [],
   addTaskUrl: '',
   addTaskOptions: {}
 }
@@ -25,6 +26,9 @@ const mutations = {
   },
   CHANGE_ADD_TASK_OPTIONS(state, options) {
     state.addTaskOptions = { ...options }
+  },
+  CHANGE_ADD_TASK_FILES(state, fileList) {
+    state.addTaskFiles = [...fileList]
   }
 }
 
@@ -41,10 +45,17 @@ const actions = {
   },
   hideAddTaskDialog({ commit }) {
     commit('CHANGE_ADD_TASK_VISIBLE', false);
-    commit('CAHNGE_ADD_TASK_URL', '');
+    commit('CHANGE_ADD_TASK_URL', '');
+    commit('CHANGE_ADD_TASK_FILES', [])
   },
   updateAddTaskUrl({ commit }, url = '') {
     commit('CHANGE_ADD_TASK_URL', url)
+  },
+  addTaskAddFiles({ commit }, { fileList }) {
+    commit('CHANGE_ADD_TASK_FILES', fileList)
+  },
+  updateAddTaskOptions({ commit }, options = {}) {
+    commit('CHANGE_ADD_TASK_OPTIONS', options)
   }
 }
 

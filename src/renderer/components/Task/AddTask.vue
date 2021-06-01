@@ -1,22 +1,37 @@
 <template>
-  <el-dialog width="64vw"
-  custom-class="tab-title-dialog add-task-dialog" :visible.sync="visible" :before-close="handleClose">
+  <el-dialog
+    width="64vw"
+    custom-class="tab-title-dialog add-task-dialog"
+    :visible.sync="visible"
+    :before-close="handleClose"
+  >
     <el-form ref="taskForm" label-position="left" :model="form">
       <el-tabs :value="type">
         <el-tab-pane label="添加任务" name="file">
           <el-form-item>
-            
+            <ts-select-files :change="handleTaskChange" />
           </el-form-item>
         </el-tab-pane>
       </el-tabs>
+      <el-row :gutter="12">
+        <el-col :span="12" :xs="24">
+          <el-form-item label="任务名称" :label-width="formLabelWidth">
+            <el-input v-model="form.taskName"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
   </el-dialog>
 </template>
 
 <script>
 import { ADD_TASK_TYPE } from "../../../shared/constants";
+import SelectFileVue from "./SelectFile.vue";
 export default {
   name: "ts-add-task",
+  components: {
+    [SelectFileVue.name]: SelectFileVue,
+  },
   props: {
     visible: {
       type: Boolean,
@@ -29,14 +44,21 @@ export default {
   },
   data() {
     return {
-      from: {},
+      formLabelWidth: "100px",
+      form: {},
       rules: {},
     };
   },
   methods: {
+    handleTaskChange(filePath, fileStats) {
+      
+    },
     handleClose() {
       this.$store.dispatch("app/hideAddTaskDialog");
       this.$store.dispatch("app/updateAddTaskOptions", {});
+    },
+    handleTorrentChange(taskPath) {
+      this.form.taskPath = taskPath;
     },
   },
 };

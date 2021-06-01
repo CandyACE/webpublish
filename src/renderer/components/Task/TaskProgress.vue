@@ -7,7 +7,9 @@
     <el-progress
       :percentage="percent"
       :color="progressColor"
+      :type="taskProgressType"
       :show-text="false"
+      :width="20"
     ></el-progress>
   </div>
   <div v-else class="task-progress">
@@ -23,6 +25,7 @@ import { remote } from "electron";
 import path from "path";
 import { FILE_STATUS } from "../../../shared/constants";
 import { bytesToSize, calcProgress } from "../../../shared/utils";
+import { mapState } from "vuex";
 
 export default {
   name: "ts-task-progress",
@@ -46,6 +49,9 @@ export default {
     };
   },
   computed: {
+    ...mapState("task", {
+      taskProgressType: (state) => state.taskProgressType,
+    }),
     percent() {
       return calcProgress(this.totalData, this.useData);
     },
