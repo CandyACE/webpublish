@@ -2,69 +2,14 @@ import http from 'http'
 
 export default class TaskBase {
     constructor(task) {
-        this._id = task.id;
-        this._name = task.name;
-        this._path = task.path;
-        this._enable = task.enable;
-        this._type = task.type;
-        this._useData = task.useData || 0;
-        this._totalData = task.totalData || 0;
-    }
-
-    get id() {
-        return this._id
-    }
-
-    set id(value) {
-        this._id = value;
-    }
-
-    get name() {
-        return this._name
-    }
-
-    set name(value) {
-        this._name = value;
-    }
-
-    get path() {
-        return this._path
-    }
-
-    set path(value) {
-        this._path = value;
-    }
-
-    get enable() {
-        return this._enable
-    }
-
-    set enable(value) {
-        this._enable = value;
-    }
-
-    get type() {
-        return this._type
-    }
-
-    set type(value) {
-        this._type = value;
-    }
-
-    get useData() {
-        return this._useData
-    }
-
-    set useData(value) {
-        this._useData = value;
-    }
-
-    get totalData() {
-        return this._totalData
-    }
-
-    set totalData(value) {
-        this._totalData = value;
+        this.gid = task.gid || task.id;
+        this.id = task.id;
+        this.name = task.name;
+        this.path = task.path;
+        this.enable = Boolean(task.enable);
+        this.type = task.type;
+        this.useData = Number(task.useData) || 0;
+        this.totalData = Number(task.totalData) || 0;
     }
 
     /**
@@ -78,12 +23,40 @@ export default class TaskBase {
 
     }
 
-    async Action(req, res, stats) {
-        TaskBase.Action(req, res, this, stats)
+    static getUrl(path) {
+        return ""
     }
 
     getUrl() {
-        return ""
+        return TaskBase.getUrl(this.path)
+    }
+
+    check() {
+        var result = {
+            next: true,
+            message: "",
+            code: 200
+        }
+        if (this.enable == false) {
+            result.next = false;
+            result.code = 500
+            result.message = JSON.stringify({
+                taskId: this.id,
+                message: `任务 [${this.id}] 已经关闭`
+            })
+            return result;
+        }
+
+        if (this.useData >= this.totalData) {
+            result.next = false;
+            result.code = 500
+            result.message = JSON.stringify({
+                taskId: this.id,
+                message: `任务 [${this.id}] 已经超出流量限制`
+            })
+            return result;
+        }
+
+        return result
     }
 }
-

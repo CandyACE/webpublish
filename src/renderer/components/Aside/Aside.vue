@@ -9,7 +9,7 @@
         <li @click="nav('/taskList')" class="non-draggable">
           <ts-icon name="menu-task" width="20" height="20" />
         </li>
-        <li class="non-draggable">
+        <li @click="showAddTask()" class="non-draggable">
           <ts-icon name="menu-add" width="20" height="20"></ts-icon>
         </li>
       </ul>
@@ -45,6 +45,9 @@ export default {
     },
   },
   methods: {
+    showAddTask() {
+      this.$store.dispatch("app/showAddTaskDialog");
+    },
     showAboutPanel() {
       this.$store.dispatch("app/showAboutPanel");
     },

@@ -1,16 +1,27 @@
 <template>
-  <div :key="task.id" class="task-item">
+  <div
+    :key="task.id"
+    class="task-item"
+    :class="{
+      error:
+        Number(task.totalData) != 0 &&
+        Number(task.useData) >= Number(task.totalData),
+    }"
+  >
     <div class="task-name" :title="taskName">
       <span>{{ taskName }}</span>
     </div>
-    <div class="task-type" :style="{ color: taskType[task.type].color }">
+    <div
+      class="task-type"
+      :class="{ disenabled: !task.enable }"
+      :style="{ color: taskType[task.type].color }"
+    >
       {{ taskType[task.type].text }}
       <div class="task-type-background-1"></div>
       <div class="task-type-background-2"></div>
     </div>
-    <ts-task-urls
-      :id="task.id"
-      :url="task.getUrl()"
+    <ts-task-item-actions :task="task"></ts-task-item-actions>
+    <ts-task-progress
       :useData="Number(task.useData)"
       :totalData="Number(task.totalData)"
     />
@@ -21,12 +32,14 @@
 import fs from "fs";
 import { FILE_STATUS } from "@shared/constants";
 import { remote } from "electron";
-import TaskUrlVue from "./TaskUrl.vue";
+import TaskProgressVue from "./TaskProgress";
+import TaskItemActionsVue from "./TaskItemActions.vue";
 
 export default {
   name: "ts-task-item",
   components: {
-    [TaskUrlVue.name]: TaskUrlVue,
+    [TaskProgressVue.name]: TaskProgressVue,
+    [TaskItemActionsVue.name]: TaskItemActionsVue,
   },
   data() {
     return {
@@ -109,6 +122,11 @@ export default {
   &:hover {
     border-color: rgb(230, 154, 79);
   }
+
+  &.error {
+    border-color: rgb(236, 43, 43);
+  }
+
   .task-item-actions {
     position: absolute;
     top: 16px;
@@ -124,6 +142,7 @@ export default {
   margin-right: 240px;
   word-break: break-all;
   min-height: 26px;
+  pointer-events: none;
   & > span {
     font-size: 14px;
     line-height: 26px;
@@ -143,6 +162,11 @@ export default {
   pointer-events: none;
   height: 100%;
   width: 100%;
+
+  &.disenabled {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+  }
 
   .task-type-background-1 {
     &:before {

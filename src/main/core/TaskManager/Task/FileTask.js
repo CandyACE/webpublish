@@ -26,7 +26,6 @@ export default class FileTask extends TaskBase {
             var mime = getMime(taskInfo.path);
             asyncLock.acquire('fileTask-size-write', function () {
                 taskInfo.useData += stats.size
-                console.log(taskInfo.useData)
             })
             res.statusCode = 200;
             res.setHeader('Content-Type', mime);
@@ -35,11 +34,11 @@ export default class FileTask extends TaskBase {
         }
     }
 
-    async Action(req, res, stats) {
-        FileTask.Action(req, res, this, stats)
+    getUrl() {
+        return FileTask.getUrl(this.path)
     }
 
-    getUrl() {
-        return basename(this.path);
+    static getUrl(path) {
+        return basename(path);
     }
 }

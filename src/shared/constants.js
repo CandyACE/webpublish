@@ -4,3 +4,7 @@ export const FILE_STATUS = {
   MBTILES: 'mbtiles',
   UNKNOW: 'unknow'
 }
+
+export const ADD_TASK_TYPE = {
+  FILE: 'file'
+}

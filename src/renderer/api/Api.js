@@ -44,7 +44,15 @@ export default class Api {
 
   }
 
+  changeTaskOptions(task) {
+    return application.taskManager.changeTaskOptions(task)
+  }
+
   removeTask(task) {
     return application.taskManager.removeTask(task);
+  }
+
+  getPort() {
+    return application.configManager.getSystemConfig("port", "9090")
   }
 }

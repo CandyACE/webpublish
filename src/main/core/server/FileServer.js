@@ -3,6 +3,7 @@ import fs from 'fs'
 import { promisify } from 'util'
 import electron from 'electron';
 import ServerBase from './serverBase';
+import getTask from '../TaskManager/Task/Index';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -74,13 +75,35 @@ export default class FileServer extends ServerBase {
   async _readFiles(req, res, task) {
     var filePath = task.path
     try {
-      task.Action(req, res)
+      var check = task.check();
+      console.log(check)
+      if (!check.next) {
+        res.statusCode = check.code;
+        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
+        res.end(check.message)
+        return;
+      }
+
+      getTask(task.type).Action(req, res, task).then().catch(error => {
+        console.error(error)
+        console.log(`${filePath} is not a directory or file.`)
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
+        res.end(JSON.stringify({
+          taskId: task.id,
+          message: `${filePath} is not a directory or file.`
+        }))
+        return;
+      })
     } catch (error) {
       console.error(error)
       console.log(`${filePath} is not a directory or file.`)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-      res.end(`${filePath} is not a directory or file.`)
+      res.end(JSON.stringify({
+        taskId: task.id,
+        message: `${filePath} is not a directory or file.`
+      }))
       return;
     }
   }

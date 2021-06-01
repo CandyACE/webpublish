@@ -16,10 +16,15 @@ export default class TaskManager {
     })
   }
 
-  setTask(index, newValue) {
-    Vue.set(this.taskList, index, newValue)
-    this._configManager.setSystemConfig('tasks', this.taskList)
-    return this.taskList
+  changeTaskOptions(task) {
+    for (let i = 0; i < this.taskList.length; i++) {
+      const item = this.taskList[i];
+      if (item.gid == task.gid) {
+        Object.assign(this.taskList[i], task)
+        break;
+      }
+    }
+    return this.taskList;
   }
 
   addTask(task) {
@@ -30,8 +35,13 @@ export default class TaskManager {
   }
 
   removeTask(task) {
-    this.taskList.splice(this.taskList.indexOf(task), 1);
-    this._configManager.setSystemConfig('tasks', this.taskList);
+    for (let i = 0; i < this.taskList.length; i++) {
+      const item = this.taskList[i];
+      if (item.gid == task.gid) {
+        this.taskList.splice(i, 1);
+        break;
+      }
+    }
     return this.taskList;
   }
 }

@@ -34,7 +34,7 @@ export default class DirectoryTask extends TaskBase {
         }
     }
 
-    async Action(req, res, stats) {
-        DirectoryTask.Action(req, res, this, stats)
+    getUrl() {
+        return TaskBase.getUrl(this.path)
     }
 }
