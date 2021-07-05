@@ -1,7 +1,9 @@
 import FileServer from "./server/FileServer";
+import { EventEmitter } from 'events'
 
-export default class ServerManager {
+export default class ServerManager extends EventEmitter {
   constructor(application) {
+    super()
     this._app = application;
     /**
      * @type {FileServer}
@@ -21,15 +23,16 @@ export default class ServerManager {
   }
 
   restart() {
-    this._server.restart()
+    this.stop()
+    this.start()
   }
 
   start() {
     var _this = this;
-    this._server.start().then(() => {
-      _this.isRunning = true;
-    }).catch(err => {
-      _this.isRunning = false;
+    this._server.start().then(function () {
+      _this.emit('server')
+    }).catch(function (err) {
+      _this.emit('server', err)
     })
   }
 }

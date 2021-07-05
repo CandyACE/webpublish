@@ -1,9 +1,10 @@
 import ElectronStore from "electron-store";
 import is from 'electron-is'
+import { app } from "electron";
 
 export default class ConfigManager {
     constructor() {
-        this._systemConfig = {};
+        this.systemConfig = {};
 
         this.init();
     }
@@ -13,17 +14,17 @@ export default class ConfigManager {
     }
 
     initSystemConfig() {
-        this._systemConfig = new ElectronStore({
+        this.systemConfig = new ElectronStore({
             name: 'ts-webpublish',
             defaults: {
-                listen: true,
                 tasks: [],
                 port: 9090,
                 address: '127.0.0.1',
-                autoStart: false,
+                'open-at-login': false,
+                'locale': app.getLocale(),
                 'auto-hide-window': false,
                 'auto-check-update': true,
-                'hide-app-menu': is.windows() || is.linux(),
+                'hide-app-menu': true,
                 'keep-window-state': false,
                 'window-state': {},
                 api: {
@@ -46,17 +47,17 @@ export default class ConfigManager {
     getSystemConfig(key, defaultValue) {
         if (typeof key === 'undefined' &&
             typeof defaultValue === 'undefined') {
-            return this._systemConfig.store
+            return this.systemConfig.store
         }
 
-        return this._systemConfig.get(key, defaultValue)
+        return this.systemConfig.get(key, defaultValue)
     }
 
     setSystemConfig(...args) {
-        this._systemConfig.set(...args)
+        this.systemConfig.set(...args)
     }
 
     reset() {
-        this._systemConfig.clear()
+        this.systemConfig.clear()
     }
 }

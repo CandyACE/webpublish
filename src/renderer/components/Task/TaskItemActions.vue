@@ -1,5 +1,5 @@
 <template>
-  <ul :key="task.id" class="task-item-actions">
+  <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => {}">
     <li v-for="action in taskActions" :key="action" class="task-item-action">
       <i v-if="action === 'STOP'" @click.stop="onStopClick">
         <el-tooltip content="停止">
@@ -16,7 +16,7 @@
           <ts-icon name="folder" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
-      <i v-if="action === 'INFO'">
+      <i v-if="action === 'INFO'" @click.stop="onInfoClick">
         <el-tooltip content="配置">
           <ts-icon name="node" width="14" height="14"></ts-icon>
         </el-tooltip>
@@ -28,7 +28,7 @@
       </i>
       <i v-if="action === 'LINK'">
         <el-dropdown :show-timeout="0" @command="handleCommand">
-          <ts-icon name="link" width="14" height="14"></ts-icon>
+          <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="(address, index) in networkInterfaces"
@@ -110,7 +110,7 @@ export default {
   methods: {
     onDeleteClick() {
       this.$confirm(
-        `该操作将移除 <br/><span style="color:red;">[${this.task.id}]</span> 任务，是否继续？`,
+        `该操作将移除 <br/><span style="color:red;">[${this.task.name}]</span> 任务，是否继续？`,
         "提示",
         {
           confirmButtonText: "删除",
@@ -142,6 +142,9 @@ export default {
       showItemInFolder(this.task.path, {
         errorMsg: `[${this.task.path}] 文件不存在`,
       });
+    },
+    onInfoClick() {
+      this.$store.dispatch("task/showTaskItemInfoDialog", this.task);
     },
     createUrl(element) {
       var address = element.address;

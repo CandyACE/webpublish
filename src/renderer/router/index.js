@@ -22,8 +22,23 @@ export default new Router({
           props: true
         },
         {
-          path: '/optionsPage',
-          component: require('@/components/options/Index').default
+          path: "/options",
+          name: "options",
+          component: require('@/components/Options/Index').default,
+          props: true,
+          children: [
+            {
+              path: 'basic',
+              alias: '',
+              components: {
+                subnav: require('@/components/Options/OptionsSubnav').default,
+                form: require('@/components/Options/Basic').default
+              },
+              props: {
+                subnav: { current: 'basic' }
+              }
+            }
+          ]
         }
       ]
     }, {

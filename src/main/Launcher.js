@@ -5,15 +5,16 @@ import ExceptionHandler from './core/ExceptionHandler'
 import logger from './core/Logger'
 import Application from './Application'
 import { parseArgvAsFile, splitArgv } from './common/utils'
+import Vue from 'vue'
 
 export default class Launcher extends EventEmitter {
   constructor() {
     super()
 
     logger.info('Launcher init')
-    // this.makeSingleInstance(() => {
-    this.init()
-    // })
+    this.makeSingleInstance(() => {
+      this.init()
+    })
   }
 
   makeSingleInstance(callback) {

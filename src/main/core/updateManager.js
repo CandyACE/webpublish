@@ -1,14 +1,13 @@
 import { ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
+import { EventEmitter } from 'events'
 import updateType from "../helper/updateType";
 
-class Update {
-    /**
-     * 
-     * @param {Electron.BrowserWindow} mainWindow 
-     */
-    constructor(mainWindow) {
-        this.mainWindow = mainWindow;
+class UpdateManager extends EventEmitter {
+
+    constructor() {
+        super()
+        // this.mainWindow = mainWindow;
         this._init()
     }
 
@@ -33,7 +32,8 @@ class Update {
 
     Message(type, data) {
         console.log(type, data)
-        this.mainWindow.webContents.send('update-message', type, data);
+        // this.mainWindow.webContents.send('update-message', type, data);
+        this.emit('update-message', { type, data })
     }
 
     _init() {
@@ -69,13 +69,13 @@ class Update {
             }, 1000)
         })
 
-        ipcMain.on(updateType.checkNow, function () {
-            _this.checkForUpdates();
-        })
+        // ipcMain.on(updateType.checkNow, function () {
+        //     _this.checkForUpdates();
+        // })
 
-        ipcMain.on(updateType.update, function () {
-            _this.update()
-        })
+        // ipcMain.on(updateType.update, function () {
+        //     _this.update()
+        // })
     }
 }
-export default Update
+export default UpdateManager

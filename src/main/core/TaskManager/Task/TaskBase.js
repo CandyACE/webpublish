@@ -1,15 +1,16 @@
 import http from 'http'
+import { guid } from '../../../../shared/twtools'
 
 export default class TaskBase {
     constructor(task) {
-        this.gid = task.gid || task.id;
+        this.gid = task.gid || task.id || guid();
         this.id = task.id;
         this.name = task.name;
         this.path = task.path;
         this.enable = Boolean(task.enable);
         this.type = task.type;
         this.useData = Number(task.useData) || 0;
-        this.totalData = Number(task.totalData) || 0;
+        this.limitData = Number(task.limitData) || 0;
     }
 
     /**
@@ -21,6 +22,10 @@ export default class TaskBase {
      */
     static async Action(req, res, taskInfo, stats) {
 
+    }
+
+    Action(req, res, stats) {
+        return TaskBase.Action(req, res, this, stats)
     }
 
     static getUrl(path) {
@@ -47,7 +52,7 @@ export default class TaskBase {
             return result;
         }
 
-        if (this.useData >= this.totalData) {
+        if (this.limitData !== 0 && this.useData >= this.limitData) {
             result.next = false;
             result.code = 500
             result.message = JSON.stringify({

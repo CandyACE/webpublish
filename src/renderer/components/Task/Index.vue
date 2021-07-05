@@ -6,15 +6,19 @@
     <el-main class="panel-content">
       <ts-task-list></ts-task-list>
     </el-main>
+    <ts-update></ts-update>
   </el-container>
 </template>
 
 <script>
+import updateVue from "../Update/update.vue";
 import TaskListVue from "./TaskList.vue";
+
 export default {
   name: "ts-content-task",
   components: {
     [TaskListVue.name]: TaskListVue,
+    [updateVue.name]: updateVue,
   },
   methods: {
     fetchList() {

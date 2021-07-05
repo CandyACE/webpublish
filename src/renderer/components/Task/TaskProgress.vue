@@ -1,8 +1,12 @@
 <template>
-  <div class="task-progress" v-if="Number(this.totalData) != 0">
-    <div>
+  <div class="task-progress" v-if="Number(this.limitData) != 0">
+    <div v-if="type === 'size'">
       <span>{{ this.useData | bytesToSize }} / </span
-      ><span>{{ this.totalData | bytesToSize }}</span>
+      ><span>{{ this.limitData | bytesToSize }}</span>
+    </div>
+    <div v-else>
+      <span>{{ this.useData | countToSize }} / </span
+      ><span>{{ this.limitData | countToSize }}</span>
     </div>
     <el-progress
       :percentage="percent"
@@ -12,10 +16,13 @@
       :width="20"
     ></el-progress>
   </div>
-  <div v-else class="task-progress">
-    <span
+  <div v-else class="task-progress-nolimit">
+    <span v-if="type === 'size'"
       >已使用：<span>{{ this.useData | bytesToSize }}</span></span
     >
+    <span v-else>
+      已使用：<span>{{ this.useData | countToSize }}</span>
+    </span>
   </div>
 </template>
 
@@ -24,17 +31,21 @@ import os from "os";
 import { remote } from "electron";
 import path from "path";
 import { FILE_STATUS } from "../../../shared/constants";
-import { bytesToSize, calcProgress } from "../../../shared/utils";
+import { bytesToSize, calcProgress, countToSize } from "../../../shared/utils";
 import { mapState } from "vuex";
 
 export default {
   name: "ts-task-progress",
   props: {
+    type: {
+      type: String,
+      default: "size",
+    },
     useData: {
       type: Number,
       default: 0,
     },
-    totalData: {
+    limitData: {
       type: Number,
       default: 0,
     },
@@ -53,7 +64,7 @@ export default {
       taskProgressType: (state) => state.taskProgressType,
     }),
     percent() {
-      return calcProgress(this.totalData, this.useData);
+      return calcProgress(this.limitData, this.useData);
     },
   },
   methods: {
@@ -71,6 +82,7 @@ export default {
   },
   filters: {
     bytesToSize,
+    countToSize,
   },
 };
 </script>
@@ -79,6 +91,18 @@ export default {
 .task-progress {
   position: absolute;
   bottom: 20px;
+  right: 14px;
+  width: 300px;
+  text-align: right;
+  pointer-events: none;
+
+  & span {
+    font-size: 12px;
+    color: #9b9b9b;
+  }
+}
+.task-progress-nolimit {
+  position: absolute;
   right: 14px;
   width: 300px;
   text-align: right;

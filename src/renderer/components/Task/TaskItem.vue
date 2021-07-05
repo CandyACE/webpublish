@@ -4,26 +4,19 @@
     class="task-item"
     :class="{
       error:
-        Number(task.totalData) != 0 &&
-        Number(task.useData) >= Number(task.totalData),
+        Number(task.limitData) != 0 &&
+        Number(task.useData) >= Number(task.limitData),
     }"
   >
     <div class="task-name" :title="taskName">
       <span>{{ taskName }}</span>
     </div>
-    <div
-      class="task-type"
-      :class="{ disenabled: !task.enable }"
-      :style="{ color: taskType[task.type].color }"
-    >
-      {{ taskType[task.type].text }}
-      <div class="task-type-background-1"></div>
-      <div class="task-type-background-2"></div>
-    </div>
+    <ts-task-type :task="task" />
     <ts-task-item-actions :task="task"></ts-task-item-actions>
     <ts-task-progress
       :useData="Number(task.useData)"
-      :totalData="Number(task.totalData)"
+      :limitData="Number(task.limitData)"
+      :type="task.type === 'mbtiles' ? 'count' : 'size'"
     />
   </div>
 </template>
@@ -34,12 +27,14 @@ import { FILE_STATUS } from "@shared/constants";
 import { remote } from "electron";
 import TaskProgressVue from "./TaskProgress";
 import TaskItemActionsVue from "./TaskItemActions.vue";
+import TaskTypeVue from "./TaskType.vue";
 
 export default {
   name: "ts-task-item",
   components: {
     [TaskProgressVue.name]: TaskProgressVue,
     [TaskItemActionsVue.name]: TaskItemActionsVue,
+    [TaskTypeVue.name]: TaskTypeVue,
   },
   data() {
     return {
@@ -153,43 +148,5 @@ export default {
 }
 .selected .task-item {
   border-color: rgb(204, 102, 0);
-}
-
-.task-type {
-  font-size: xxx-large;
-  font-weight: 1000;
-  position: absolute;
-  top: 60px;
-  pointer-events: none;
-  height: 100%;
-  width: 100%;
-
-  &.disenabled {
-    filter: grayscale(100%);
-    -webkit-filter: grayscale(100%);
-  }
-
-  .task-type-background-1 {
-    &:before {
-      content: "";
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      top: 22px;
-      left: -52px;
-      position: absolute;
-      background-color: rgba(239, 92, 92, 0.14);
-    }
-  }
-  .task-type-background-2:before {
-    content: "";
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    top: -5px;
-    left: 12px;
-    position: absolute;
-    background-color: rgba(239, 180, 92, 0.14);
-  }
 }
 </style>

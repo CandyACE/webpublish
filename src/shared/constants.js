@@ -6,5 +6,5 @@ export const FILE_STATUS = {
 }
 
 export const ADD_TASK_TYPE = {
-  FILE: 'file'
+  DEFAULT: 'default'
 }

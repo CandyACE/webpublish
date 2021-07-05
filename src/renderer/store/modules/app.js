@@ -3,7 +3,7 @@ import { ADD_TASK_TYPE } from "../../../shared/constants";
 const state = {
   aboutPanelVisible: false,
   addTaskVisible: false,
-  addTaskType: ADD_TASK_TYPE.FILE,
+  addTaskType: ADD_TASK_TYPE.DEFAULT,
   addTaskFiles: [],
   addTaskUrl: '',
   addTaskOptions: {}
@@ -39,7 +39,7 @@ const actions = {
   hideAboutPanel({ commit }) {
     commit('CHANGE_ABOUT_PANEL_VISIBLE', false)
   },
-  showAddTaskDialog({ commit }, taskType = ADD_TASK_TYPE.FILE) {
+  showAddTaskDialog({ commit }, taskType = ADD_TASK_TYPE.DEFAULT) {
     commit('CHANGE_ADD_TASK_TYPE', taskType);
     commit('CHANGE_ADD_TASK_VISIBLE', true);
   },

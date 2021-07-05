@@ -18,37 +18,39 @@ export default class FileServer extends ServerBase {
     this.stop();
 
     return new Promise((resolve, reject) => {
-      this._server = new http.createServer(async function (req, res, next) {
-        if (!req.url) {
-          _this._error(res, 'error url')
-          return;
-        }
-        // 获取 id
-        var param = req.url.split('/');
-        var id = param[1];
-        if (!id) {
-          _this._error(res, 'id is require')
-          return;
-        }
-        var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
-        if (!task) {
-          _this._error(res, "no Found this id")
-          return;
-        }
-        _this._readFiles(req, res, task, next)
-      })
+      try {
+        this._server = new http.createServer(async function (req, res, next) {
+          if (!req.url) {
+            _this._error(res, 'error url')
+            return;
+          }
+          // 获取 id
+          var param = req.url.split('/');
+          var id = param[1];
+          if (!id) {
+            _this._error(res, 'id is require')
+            return;
+          }
+          var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
+          if (!task) {
+            _this._error(res, "no Found this id")
+            return;
+          }
+          _this._readFiles(req, res, task, next)
+        })
 
-      this._server.on('error', function () {
-        electron.remote.dialog.showErrorBox('端口占用', port + " 端口被占用")
-        reject(port + " 端口被占用")
-      })
+        var port = this._app.configManager.getSystemConfig('port', "9090");
 
-      // var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
-      var port = this._app.configManager.getSystemConfig('port', "9090");
-      this._server.listen(port, () => {
-        // global.vue.$msg.success(`服务启动成功，端口：${port}`);
-        resolve()
-      })
+        this._server.on('error', function () {
+          reject(port + " 端口被占用")
+        })
+
+        this._server.listen(port, () => {
+          resolve()
+        })
+      } catch (error) {
+        console.log('FileServer', error)
+      }
     })
 
   }
@@ -84,13 +86,13 @@ export default class FileServer extends ServerBase {
         return;
       }
 
-      getTask(task.type).Action(req, res, task).then().catch(error => {
+      task.Action(req, res).then().catch(error => {
         console.error(error)
         console.log(`${filePath} is not a directory or file.`)
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
         res.end(JSON.stringify({
-          taskId: task.id,
+          task: task,
           message: `${filePath} is not a directory or file.`
         }))
         return;
@@ -101,7 +103,7 @@ export default class FileServer extends ServerBase {
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
       res.end(JSON.stringify({
-        taskId: task.id,
+        task: task,
         message: `${filePath} is not a directory or file.`
       }))
       return;

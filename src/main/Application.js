@@ -1,10 +1,12 @@
 import { app } from 'electron';
 import { EventEmitter } from 'events'
+import AutoLaunchManager from './core/AutoLaunchManager';
 import ConfigManager from './core/ConfigManager';
 import logger from './core/Logger';
 import ServerManager from './core/ServerManager';
 import TaskManager from './core/TaskManager/TaskManager';
 import TrayManager from './core/TrayManager';
+import UpdateManager from './core/updateManager';
 import WindowManager from './ui/WindowManager';
 
 export default class Application extends EventEmitter {
@@ -12,13 +14,14 @@ export default class Application extends EventEmitter {
         super();
         this.isReady = false;
         this.init();
-        this.serverManager.start();
     }
 
     init() {
         this.configManager = new ConfigManager();
         this.taskManager = new TaskManager(this.configManager);
         this.trayManager = new TrayManager();
+        this.autoLaunchManager = new AutoLaunchManager();
+        this.updateManager = new UpdateManager();
         this.initWindowManager();
         this.serverManager = new ServerManager(this);
         this.isReady = true;

@@ -2,6 +2,7 @@ import { remote } from 'electron'
 import { FILE_STATUS } from '../../shared/constants'
 import is from 'electron-is'
 import { cloneDeep } from 'lodash';
+import { changeKeysToCamelCase, changeKeysToKebabCase } from '../../shared/utils';
 
 const application = remote.getGlobal('application')
 
@@ -21,6 +22,7 @@ export default class Api {
       ? this.loadConfigFromNativeStore()
       : this.loadConfigFromLocalStorage()
 
+    result = changeKeysToCamelCase(result)
     this.config = result;
   }
 
@@ -33,6 +35,22 @@ export default class Api {
     return {}
   }
 
+  fetchOptions() {
+    return new Promise((resolve) => {
+      this.loadConfig()
+      resolve(this.config)
+    })
+  }
+
+  saveOptions(params = {}) {
+    const kebabParams = changeKeysToKebabCase(params)
+    return this.saveOptionsToStore(kebabParams)
+  }
+
+  saveOptionsToStore(params = {}) {
+    application.configManager.setSystemConfig(params)
+  }
+
   fetchTaskList() {
     return new Promise((resolve) => {
       var data = cloneDeep(application.taskManager.taskList)
@@ -40,8 +58,8 @@ export default class Api {
     })
   }
 
-  addTask(info) {
-
+  addTask(options) {
+    return application.taskManager.addTask(options)
   }
 
   changeTaskOptions(task) {

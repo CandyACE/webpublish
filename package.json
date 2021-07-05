@@ -1,17 +1,11 @@
 {
   "name": "webpublish",
-  "version": "0.2.4",
+  "version": "1.0.0-alpha",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "hostUpdateUrl": "http://oss.tangweitian.cn/update/webpublish/host/",
-  "maintainers": [
-    {
-      "version": "0.1.6",
-      "detail": []
-    }
-  ],
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
@@ -86,7 +80,8 @@
     "vue-electron": "^1.0.6",
     "vue-router": "^3.1.6",
     "vuex": "^3.3.0",
-    "vuex-router-sync": "^5.0.0"
+    "vuex-router-sync": "^5.0.0",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "ajv": "^6.5.0",
@@ -104,7 +99,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^10.1.2",
+    "electron": "^10.4.7",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
@@ -113,7 +108,7 @@
     "mini-css-extract-plugin": "^0.4.0",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
-    "node-sass": "^4.9.2",
+    "node-sass": "^4.14.0",
     "sass-loader": "^7.0.3",
     "sass-resources-loader": "^2.2.1",
     "style-loader": "^0.21.0",

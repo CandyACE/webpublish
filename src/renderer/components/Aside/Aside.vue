@@ -6,7 +6,7 @@
     <div class="aside-inner">
       <ts-logo-mini class="logo-mini" />
       <ul class="menu top-menu">
-        <li @click="nav('/taskList')" class="non-draggable">
+        <li @click="nav('/task')" class="non-draggable">
           <ts-icon name="menu-task" width="20" height="20" />
         </li>
         <li @click="showAddTask()" class="non-draggable">
@@ -14,7 +14,7 @@
         </li>
       </ul>
       <ul class="menu bottom-menu">
-        <li @click="nav('/optionsPage')" class="non-draggable">
+        <li @click="nav('/options')" class="non-draggable">
           <ts-icon name="menu-preference" width="20" height="20" />
         </li>
         <li @click="showAboutPanel" class="non-draggable">

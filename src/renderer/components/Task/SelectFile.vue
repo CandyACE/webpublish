@@ -27,7 +27,7 @@
         </el-tooltip>
       </el-col>
       <el-col class="task-actions" :span="4">
-        <span>
+        <span @click="handleTrashClick">
           <ts-icon name="trash" width="14" height="14" />
         </span>
       </el-col>
@@ -61,9 +61,11 @@ export default {
   },
   watch: {
     taskFiles(fileList) {
+      console.log("select List Changed", fileList);
       var _this = this;
       if (fileList.length === 0) {
         this.reset();
+        _this.$emit("change", "", "");
         return;
       }
 
@@ -73,32 +75,39 @@ export default {
       }
 
       fs.stat(file.raw.path, function (err, stats) {
-        var fileStats = FILE_STATUS.DIRECTORY;
+        try {
+          var fileStats = FILE_STATUS.DIRECTORY;
 
-        if (stats.isFile()) {
-          if (path.extname(file.raw.name) === "mbtiles") {
-            fileStats = FILE_STATUS.MBTILES;
+          if (stats.isFile()) {
+            if (path.extname(file.raw.name) === ".mbtiles") {
+              fileStats = FILE_STATUS.MBTILES;
+            } else {
+              fileStats = FILE_STATUS.FILE;
+            }
           }
-          fileStats = FILE_STATUS.FILE;
-        }
 
-        _this.taskName = file.raw.name;
-        _this.$emit("change", file.path, fileStats);
+          _this.taskName = file.raw.name;
+          console.log("check change");
+          _this.$emit("change", file.raw, fileStats);
+        } catch (error) {
+          console.log(error);
+        }
       });
     },
   },
   methods: {
+    handleTrashClick() {
+      this.$store.dispatch("app/addTaskAddFiles", { fileList: [] });
+    },
     reset() {
-      this.name = "";
+      this.taskName = "";
     },
     handleChange(file, fileList) {
       this.$store.dispatch("app/addTaskAddFiles", { fileList });
-      console.log(fileList);
     },
     handleExceed(files) {
       var fileList = buildFileList(files[0]);
       this.$store.dispatch("app/addTaskAddFiles", { fileList });
-      console.log(fileList);
     },
   },
 };

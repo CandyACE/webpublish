@@ -11,7 +11,7 @@ export default {
     let count = 0;
     this.onDragEnter = (ev) => {
       if (count === 0) {
-        this.$store.dispatch("app/showAddTaskDialog", ADD_TASK_TYPE.FILE);
+        this.$store.dispatch("app/showAddTaskDialog", ADD_TASK_TYPE.DEFAULT);
       }
       count++;
     };
@@ -25,7 +25,6 @@ export default {
 
     this.onDrop = (ev) => {
       count = 0;
-
       const fileList = [...ev.dataTransfer.files].map((item) => ({
         raw: item,
         name: item.name,

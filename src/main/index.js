@@ -1,8 +1,4 @@
 import { app, BrowserWindow } from 'electron'
-import electron from 'electron'
-import Update from './core/update'
-import EventListener from './EventListener'
-import path from 'path'
 import is from 'electron-is'
 import Launcher from './Launcher'
 

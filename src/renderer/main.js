@@ -12,6 +12,7 @@ import Icon from '@/components/Icons/Icon'
 import Msg from "@/components/Msg"
 import store from './store'
 import { sync } from 'vuex-router-sync'
+import Application from '../main/Application'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -28,7 +29,7 @@ Vue.use(Msg, ElementUI.Message, {
   offset: 30,
 })
 
-const loading = Loading.service({
+var loading = Loading.service({
   fullscreen: true,
   background: 'rgba(0, 0, 0, 0.1)'
 })
@@ -47,3 +48,27 @@ global.vue = new Vue({
 setTimeout(() => {
   loading.close()
 }, 400)
+
+store.dispatch('options/fetchOptions')
+  .then((config) => {
+    console.info('[WebPublish] load Options:', config)
+  })
+  .catch((err) => {
+    alert(err)
+  })
+
+router.beforeEach((to, from, next) => {
+  console.log('to', to)
+  console.log('from', from)
+  loading = Loading.service({
+    fullscreen: true,
+    background: 'rgba(0, 0, 0, 0.1)'
+  })
+  next()
+})
+
+router.afterEach((to, from) => {
+  setTimeout(() => {
+    loading.close()
+  }, 400)
+})

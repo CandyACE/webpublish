@@ -1,130 +1,78 @@
 <template>
-  <div class="parent">
-    <div class="top">
-      <img src="../../../../static/image/twtoolsLogo.png" />
-      <div>快速发布工具</div>
-      <div class="version">
-        <div>
-          版本: <span>{{ version }}</span>
-        </div>
-        <div>
-          编译时间: <span>{{ time }}</span>
-        </div>
-        <div>
-          作者: <span>{{ author }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="center">
-      <div style="margin-bottom: 10px">
-        <el-button type="success" size="small" @click="onSubmit"
-          >应用</el-button
-        >
-      </div>
-      <el-collapse v-model="activeName" accordion>
-        <el-collapse-item title="常规" name="default">
-          <el-form ref="form" :model="options" label-width="80px" size="mini">
-            <el-form-item label="启动选项">
-              <el-checkbox v-model="options.default.autoStart"
-                >开机自启动</el-checkbox
-              >
-            </el-form-item>
-            <el-form-item label="端口号">
-              <el-input-number
-                v-model="options.default.port"
-              ></el-input-number> </el-form-item
-          ></el-form>
-        </el-collapse-item>
-      </el-collapse>
-    </div>
-  </div>
+  <el-container class="content panel" direction="horizontal">
+    <el-aside width="200px" class="subnav hidden-xs-only">
+      <router-view name="subnav"></router-view>
+    </el-aside>
+    <router-view name="form"></router-view>
+  </el-container>
 </template>
 
 <script>
 export default {
-  name: "options-page",
-  data() {
-    const port = global.application.configManager.getSystemConfig(
-      "port",
-      "9090"
-    );
-    const autoStart = global.application.configManager.getSystemConfig(
-      "autoStart",
-      false
-    );
-    return {
-      version: __VERSION__,
-      author: __AUTHOR__,
-      time: __TIME__,
-      activeName: "",
-      options: {
-        default: {
-          port: port,
-          autoStart: autoStart,
-        },
-      },
-    };
-  },
-  methods: {
-    onSubmit() {
-      // 提交配置
-      global.application.configManager.setSystemConfig({
-        port: this.options.default.port,
-      });
-      // 开机自启
-      global.application.configManager.setSystemConfig({
-        autoStart: this.options.default.autoStart,
-      });
-      this.$electron.ipcRenderer.send(
-        "Config:SetAutoStart",
-        this.options.default.autoStart
-      );
-
-      // 重启服务
-      global.application.serverManager.stop();
-      global.application.serverManager.start();
-    },
-  },
+  name: "ts-content-options",
+  computed: {},
+  components: {},
+  methods: {},
 };
 </script>
 
-<style lang="scss" scoped>
-.center {
-  padding: 15px;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-}
-
-.parent {
-  text-align: center;
-}
-
-.top {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-  margin: 15px;
-  padding: 15px;
-  font: 15px sans-serif;
-
-  img {
-    width: 64px;
-    height: 64px;
+<style lang="scss">
+.form-options {
+  padding: 16px 7% 64px 0;
+  .el-switch__label {
+    font-weight: normal;
+    color: #606266;
+    &.is-active {
+      color: #606266;
+    }
   }
-  .version {
-    margin: 5px;
-    font: 12px sans-serif;
-    color: gray;
-
-    div {
-      margin: 5px;
-      color: black;
-
-      span {
-        color: gray;
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #606266;
+  }
+  .el-form-item {
+    a {
+      color: #606266;
+      text-decoration: none;
+      &:hover {
+        color: #303133;
+        text-decoration: underline;
+      }
+      &:active {
+        color: #303133;
       }
     }
+  }
+  .el-form-item.el-form-item--mini {
+    margin-bottom: 32px;
+  }
+  .el-form-item__content {
+    color: #606266;
+  }
+  .form-item-sub {
+    margin-bottom: 8px;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+.form-actions {
+  position: fixed;
+  bottom: 0;
+  left: auto;
+  z-index: 10;
+  width: -webkit-fill-available;
+  box-sizing: border-box;
+  padding: 24px 36px;
+  margin-left: -36px;
+  // aside.width + subnav.width + padding-left + scrollbar.width
+  margin-right: 322px;
+}
+.action-link {
+  cursor: pointer;
+  color: rgb(230, 154, 79);
+  &:hover {
+    color: rgb(230, 154, 79);
+    text-decoration: underline;
   }
 }
 </style>
