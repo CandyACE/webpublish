@@ -40,6 +40,11 @@
           </el-dropdown-menu>
         </el-dropdown>
       </i>
+      <i v-if="action === 'WMTS'" @click.stop="onMapClick">
+        <el-tooltip content="地图预览">
+          <ts-icon name="image" width="14" height="14"></ts-icon>
+        </el-tooltip>
+      </i>
     </li>
   </ul>
 </template>
@@ -58,9 +63,10 @@ import "@/components/Icons/video";
 import "@/components/Icons/info-square";
 import "@/components/Icons/node";
 import "@/components/Icons/trash";
+import "@/components/Icons/image";
 import os from "os";
 import api from "../../api";
-import { remote } from "electron";
+import { remote, shell } from "electron";
 import { showItemInFolder } from "../Native/utils";
 import { cloneDeep } from "lodash";
 
@@ -78,6 +84,9 @@ export default {
   computed: {
     taskCommonActions() {
       let result = this.task.enable ? ["STOP"] : ["START"];
+      if (this.task.type === FILE_STATUS.MBTILES) {
+        result.push("WMTS");
+      }
       return result;
     },
     taskActions() {
@@ -108,6 +117,10 @@ export default {
     },
   },
   methods: {
+    onMapClick() {
+      var port = api.getPort();
+      shell.openExternal(`http://127.0.0.1:${port}/${this.task.id}/getMap`);
+    },
     onDeleteClick() {
       this.$confirm(
         `该操作将移除 <br/><span style="color:red;">[${this.task.name}]</span> 任务，是否继续？`,

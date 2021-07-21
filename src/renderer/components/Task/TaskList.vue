@@ -1,10 +1,10 @@
 <template>
   <div class="task-list" v-if="taskList.length > 0">
-    <transition-group>
+    <!-- <transition-group> -->
       <div v-for="item in taskList" :key="item.gid" :attr="item.gid">
         <ts-task-item :task="item"></ts-task-item>
       </div>
-    </transition-group>
+    <!-- </transition-group> -->
   </div>
   <div v-else class="no-task"></div>
 </template>

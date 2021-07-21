@@ -23,7 +23,7 @@ export default {
 
     setTimeout(() => {
       this.startPolling();
-    }, 100);
+    }, 200);
 
     window.onresize = () => {
       if (document.body.clientWidth >= 791) {
