@@ -120,7 +120,8 @@ export default {
   },
   computed: {
     showTypeRadio() {
-      return path.extname(this.task.path) === ".mbtiles";
+      return false;
+      // return path.extname(this.task.path) === ".mbtiles";
     },
     formLimitMin() {
       return this.form.selectTaskType === "mbtiles"
@@ -133,12 +134,13 @@ export default {
   },
   watch: {
     task: function (val) {
+      if (!val) return {};
       this.form.taskName = val.name;
       this.form.id = val.id;
       this.form.gid = val.gid;
-      this.form.limit = val.limitData;
-      this.showLimit = val.limitData !== 0;
-      this.form.use = val.useData;
+      this.form.limit = Number(val.limitData);
+      this.showLimit = Number(val.limitData) !== 0;
+      this.form.use = Number(val.useData);
       this.form.selectTaskType = val.type;
 
       // if (val.type !== "mbtiles") {
@@ -162,6 +164,7 @@ export default {
           var item = {
             gid: this.form.gid,
             id: this.form.id,
+            name: this.form.taskName,
             useData: this.form.use,
             limitData: taskLimit.showLimit ? Number(taskLimit.limitData) : 0,
             type: this.form.selectTaskType,
@@ -169,7 +172,7 @@ export default {
 
           if (item.type !== "mbtiles") {
             item.limitData = item.limitData * 1024 * 1024;
-            item.useData = item.useData * 1024 * 1024;
+            // item.useData = item.useData * 1024 * 1024;
           }
 
           this.$store.dispatch("task/changeTaskOptions", item);

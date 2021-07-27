@@ -18,6 +18,14 @@ export default class TaskManager {
       this.taskList.push(new task(item))
     })
     this.taskListChanged.raiseEvent()
+
+    setInterval(() => {
+      this.saveTask()
+    }, 5000);
+  }
+
+  saveTask() {
+    this._configManager.setSystemConfig('tasks', this.taskList)
   }
 
   changeTaskOptions(task) {

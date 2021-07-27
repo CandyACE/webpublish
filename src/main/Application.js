@@ -105,6 +105,7 @@ export default class Application extends EventEmitter {
     }
 
     quit() {
+        this.taskManager.saveTask()
         this.stop()
         app.exit()
     }

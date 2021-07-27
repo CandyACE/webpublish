@@ -2,9 +2,13 @@
   <el-container id="container">
     <ts-aside></ts-aside>
     <router-view></router-view>
+    <!-- <ts-welcome :visible="true"></ts-welcome> -->
     <ts-add-task :visible="addTaskVisible" :type="addTaskType" />
     <ts-about-panel :visible="aboutPanelVisible" />
-    <ts-task-item-property :visible="taskItemInfoVisible" :task="currentTaskItem" />
+    <ts-task-item-property
+      :visible="taskItemInfoVisible"
+      :task="currentTaskItem"
+    />
     <ts-dragger />
   </el-container>
 </template>
@@ -16,6 +20,7 @@ import { mapState } from "vuex";
 import AddTaskVue from "./Task/AddTask.vue";
 import Dragger from "./Dragger/Index";
 import TaskPropertyVue from "./Task/TaskProperty.vue";
+import WelcomeVue from "./Welcome/Welcome.vue";
 
 export default {
   name: "ts-main",
@@ -25,6 +30,7 @@ export default {
     [AddTaskVue.name]: AddTaskVue,
     [Dragger.name]: Dragger,
     [TaskPropertyVue.name]: TaskPropertyVue,
+    // [WelcomeVue.name]: WelcomeVue,
   },
   computed: {
     ...mapState("app", {
