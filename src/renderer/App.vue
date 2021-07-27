@@ -1,30 +1,24 @@
 <template>
   <div id="app">
-    <ts-title-bar :optionsVisible.sync="optionsVisible" />
-    <main-page :optionsVisible.sync="optionsVisible" />
-    <!-- <router-view></router-view> -->
+    <ts-title-bar />
+    <router-view></router-view>
+    <ts-task-engine></ts-task-engine>
   </div>
 </template>
 
 <script>
-import MainPageVue from "./components/MainPage.vue";
-import TitleBarVue from "./components/TitleBar/TitleBar.vue";
+import TitleBarVue from "./components/Native/TitleBar.vue";
+import TaskEngineVue from "./components/Task/TaskEngine.vue";
 export default {
   name: "webpublish",
   components: {
     [TitleBarVue.name]: TitleBarVue,
-    [MainPageVue.name]: MainPageVue,
+    [TaskEngineVue.name]: TaskEngineVue,
   },
   data() {
-    return {
-      optionsVisible: false,
-    };
+    return {};
   },
-  methods: {
-    setOptionsVisible() {
-      this.optionsVisible = !this.optionsVisible;
-    },
-  },
+  methods: {},
 };
 </script>
 

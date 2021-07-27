@@ -1,38 +1,71 @@
 <template>
   <transition name="el-zoom-in-bottom">
-    <div class="newVersion" v-if="state === stateType.hasNew">
-      <span
-        >获取到新版本<el-link type="primary" @click="update"
-          >立刻更新！</el-link
+    <div class="checkUpdate">
+      <div class="newVersion" v-if="state === stateType.hasNew">
+        <span
+          >获取到新版本<el-link type="primary" @click="update"
+            >立刻更新！</el-link
+          >
+          或者
+          <el-link type="primary" @click="openChangedUrl"
+            >查看更新日志</el-link
+          ></span
         >
-        或者
-        <el-link type="primary" @click="openChangedUrl"
-          >查看更新日志</el-link
-        ></span
-      >
-    </div>
-    <el-progress
-      class="newVersion"
-      :text-inside="true"
-      :stroke-width="17"
-      v-else-if="state === stateType.download"
-      :percentage="progress"
-    ></el-progress>
-    <!-- <div class="newVersion" v-else-if="state !== stateType.download">
+      </div>
+      <el-progress
+        class="newVersion"
+        :text-inside="true"
+        :stroke-width="17"
+        v-else-if="state === stateType.download"
+        :percentage="progress"
+      ></el-progress>
+      <!-- <div class="newVersion" v-else-if="state !== stateType.download">
       正在下载...{{ progress }}%
     </div> -->
-    <div v-else-if="state === stateType.error"></div>
+      <div v-else-if="state === stateType.error"></div>
+    </div>
   </transition>
 </template>
 
 <script>
 import updateType from "../../../main/helper/updateType";
 import { shell } from "electron";
+import { remote } from "electron";
 
 export default {
   name: "ts-update",
   mounted() {
-    this.$electron.ipcRenderer.on("update-message", (event, type, data) => {
+    var application = remote.getGlobal("application");
+    application.updateManager.on("update-message", this.updateEvent);
+
+    application.updateManager.checkForUpdates();
+    // this.$electron.ipcRenderer.on("update-message", (event, type, data) => {
+    //   console.log(type);
+    //   switch (type) {
+    //     case updateType.NotAvailable:
+    //       this.state = this.stateType.None;
+    //       break;
+    //     case updateType.Available:
+    //       this.state = this.stateType.hasNew;
+    //       break;
+    //     case updateType.Error:
+    //       break;
+    //     case updateType.Checking:
+    //       break;
+    //     case updateType.Progress:
+    //       this.state = this.stateType.download;
+    //       this.progress = data.percent.toFixed(2);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // });
+
+    // this.$electron.ipcRenderer.send(updateType.checkNow);
+  },
+  methods: {
+    updateEvent({ type, data }) {
+      console.log(type);
       switch (type) {
         case updateType.NotAvailable:
           this.state = this.stateType.None;
@@ -51,14 +84,11 @@ export default {
         default:
           break;
       }
-    });
-
-    this.$electron.ipcRenderer.send(updateType.checkNow);
-  },
-  methods: {
+    },
     update() {
-      console.log(1);
-      this.$electron.ipcRenderer.send(updateType.update);
+      // this.$electron.ipcRenderer.send(updateType.update);
+      var application = remote.getGlobal("application");
+      application.updateManager.update();
     },
     openChangedUrl() {
       try {
@@ -88,26 +118,28 @@ export default {
 </script>
 
 <style lang="scss">
-.el-progress-bar__outer {
-  border-radius: 0 !important;
-  background-color: #3a3e63;
-}
+.checkUpdate {
+  .el-progress-bar__outer {
+    border-radius: 0 !important;
+    background-color: #3a3e63;
+  }
 
-.el-progress-bar__inner {
-  border-radius: 0 !important;
-}
+  .el-progress-bar__inner {
+    border-radius: 0 !important;
+  }
 
-.newVersion {
-  background-color: blanchedalmond;
-  position: absolute !important;
-  bottom: 0px;
-  width: 100%;
-  text-align: center;
-  font-size: 14px;
-  z-index: 999999999;
+  .newVersion {
+    background-color: blanchedalmond;
+    position: absolute !important;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    z-index: 999999999;
 
-  .el-link {
-    vertical-align: top !important;
+    .el-link {
+      vertical-align: top !important;
+    }
   }
 }
 </style>

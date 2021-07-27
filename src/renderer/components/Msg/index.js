@@ -1,3 +1,5 @@
+import logger from "../../../main/core/Logger"
+
 const queue = []
 const maxLength = 5
 

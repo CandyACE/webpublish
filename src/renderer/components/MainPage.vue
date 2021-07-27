@@ -83,12 +83,10 @@
                     </el-row>
                     <el-row>
                       <el-col :span="21">
-                        <!-- <el-tooltip placement="bottom"> -->
                         <div slot="content" style="max-width: 290px">
                           {{ task.path }}
                         </div>
                         <div class="filepath">{{ task.path }}</div>
-                        <!-- </el-tooltip> -->
                       </el-col>
                       <el-col :span="3">
                         <el-popconfirm
@@ -103,23 +101,7 @@
                             slot="reference"
                           ></el-button>
                         </el-popconfirm>
-                        <!-- <el-dropdown>
-                          <el-button
-                            circle
-                            size="mini"
-                            icon="el-icon-more"
-                          ></el-button>
-                          <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item
-                              ><el-checkbox
-                                >是否启用</el-checkbox
-                              ></el-dropdown-item
-                            >
-                            <el-dropdown-item divided>
-                              <span style="color: red">移除</span>
-                            </el-dropdown-item>
-                          </el-dropdown-menu>
-                        </el-dropdown> -->
+                        
                       </el-col>
                     </el-row>
                   </div>
@@ -143,7 +125,7 @@ import fs from "fs";
 import { FILE_STATUS } from "@shared/constants";
 import { guid } from "@shared/twtools";
 import path from "path";
-import optionsPageVue from "./options/optionsPage.vue";
+import optionsPageVue from "./options/Index.vue";
 import updateVue from "./Update/update.vue";
 import { remote } from "electron";
 import os from "os";

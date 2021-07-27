@@ -1,12 +1,9 @@
 import http from 'http'
-import path from 'path'
 import fs from 'fs'
-import { FILE_STATUS } from "@shared/constants";
 import { promisify } from 'util'
-import getMime from '../../helper/mime'
 import electron from 'electron';
 import ServerBase from './serverBase';
-import DirectoryHTML from '../../helper/DirectoryHtml';
+import getTask from '../TaskManager/Task/Index';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -20,35 +17,42 @@ export default class FileServer extends ServerBase {
     var _this = this;
     this.stop();
 
-    this._server = new http.createServer(async function (req, res, next) {
-      if (!req.url) {
-        _this._error(res, 'error url')
-        return;
+    return new Promise((resolve, reject) => {
+      try {
+        this._server = new http.createServer(async function (req, res, next) {
+          if (!req.url) {
+            _this._error(res, 'error url')
+            return;
+          }
+          // 获取 id
+          var param = req.url.split('/');
+          var id = param[1];
+          if (!id) {
+            _this._error(res, 'id is require')
+            return;
+          }
+          var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
+          if (!task) {
+            _this._error(res, "no Found this id")
+            return;
+          }
+          _this._readFiles(req, res, task, next)
+        })
+
+        var port = this._app.configManager.getSystemConfig('port', "9090");
+
+        this._server.on('error', function () {
+          reject(port + " 端口被占用")
+        })
+
+        this._server.listen(port, () => {
+          resolve()
+        })
+      } catch (error) {
+        console.log('FileServer', error)
       }
-      // 获取 id
-      var param = req.url.split('/');
-      var id = param[1];
-      if (!id) {
-        _this._error(res, 'id is require')
-        return;
-      }
-      var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
-      if (!task) {
-        _this._error(res, "no Found this id")
-        return;
-      }
-      _this._readFiles(req, res, task, next)
     })
 
-    this._server.on('error', function () {
-      electron.remote.dialog.showErrorBox('端口占用', port + " 端口被占用")
-    })
-
-    // var address = this._app.configManager.getSystemConfig('address', '127.0.0.1');
-    var port = this._app.configManager.getSystemConfig('port', "9090");
-    this._server.listen(port, () => {
-      global.vue.$msg.success(`服务启动成功，端口：${port}`);
-    })
   }
 
   stop() {
@@ -71,94 +75,37 @@ export default class FileServer extends ServerBase {
    * @param {*} task 
    */
   async _readFiles(req, res, task) {
-    var filePath = "", paramPath = ""
+    var filePath = task.path
     try {
-      if (task.type === FILE_STATUS.FILE) {
-        // 如果是文件，就直接找到这个文件发出去
-        filePath = task.path;
-      } else if (task.type === FILE_STATUS.MBTILES) {
-        console.log(task.type)
-        let mbtiles = task.mbtiles;
-        paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
-        var getInfo = paramPath.split('?')
-        if (getInfo.length > 1 && "getInfo" === getInfo[1]) {
-          res.setHeader('Content-Type', 'application/json;charset=UTF-8');
-          res.setHeader('Access-Control-Allow-Origin', "*")
-          mbtiles.getInfo(function (err, info) {
-            res.end(JSON.stringify(info))
-          })
-          return;
-        }
-        var ext = paramPath.split('.')[1];
-        var param = paramPath.split('/');
-        var z = param[1],
-          x = param[2],
-          y = param[3]
-        mbtiles.getTile(z, x, y, function (err, data, headers) {
-          res.setHeader('Access-Control-Allow-Origin', "*")
-          Object.keys(headers).forEach(e => {
-            res.setHeader(e, headers[e])
-          })
-          res.end(data)
-        })
+      var check = task.check();
+      console.log(check)
+      if (!check.next) {
+        res.statusCode = check.code;
+        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
+        res.end(check.message)
         return;
-      } else {
-        paramPath = decodeURIComponent(req.url).replace('/' + task.id, '');
-        filePath = path.join(task.path, paramPath);
-        filePath = filePath.split('?')[0];
       }
-      const stats = await stat(filePath);
-      if (stats.isFile()) {
-        var mime = getMime(filePath);
-        console.log("🚀 ~ file: FileServer.js ~ line 87 ~ FileServer ~ _readFiles ~ mime", mime)
-        res.statusCode = 200;
-        res.setHeader('Content-Type', mime);
-        res.setHeader('Access-Control-Allow-Origin', "*")
-        fs.createReadStream(filePath).pipe(res);//以流的方式来读取文件
-      } else if (stats.isDirectory()) {//如果是文件夹，拿到文件列表
-        var isRoot = filePath.replaceAll('\\', '') === task.path.replaceAll('\\', '')
-        DirectoryHTML(filePath, res, { isRoot: isRoot })
-        // //将readdir方法也promise化
-        // const files = await readdir(filePath);
-        // res.statusCode = 200;
-        // res.setHeader('Access-Control-Allow-Origin', "*")
-        // // res.setHeader('Content-Type', 'text/plain');
-        // // res.end(files.join('\r\n'));//返回所有的文件名
-        // res.setHeader('Content-Type', 'text/html;charset=UTF-8')
 
-        // var isRoot = filePath.replaceAll('\\', '') !== task.path.replaceAll('\\', '')
-        // var fileScript = !isRoot ? "" : '<a href="' + req.url + '/../' + '">../</a><br/>'
-
-        // for (let i = 0; i < files.length; i++) {
-        //   const file = files[i];
-        //   let tempFilename = path.join(filePath, file)
-        //   let tempFileStat = await stat(tempFilename)
-        //   if (tempFileStat.isFile()) {
-        //     fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '</a><br/>'
-        //   } else {
-        //     fileScript += '\r\n<a href="' + req.url + '\\' + file + '">' + file + '\\' + '</a><br/>'
-        //   }
-        // }
-
-        // var html = `
-        // <!DOCTYPE html>
-        // <html>
-        // <head>
-        //   <title>`+ filePath.replace(task.path, '') + `</title>
-        // </head>
-        //   <body>
-        //     `+ fileScript + `
-        //   </body>
-        // </html>
-        // `
-        // res.end(html)
-      }
+      task.Action(req, res).then().catch(error => {
+        console.error(error)
+        console.log(`${filePath} is not a directory or file.`)
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
+        res.end(JSON.stringify({
+          task: task,
+          message: `${filePath} is not a directory or file.`
+        }))
+        return;
+      })
     } catch (error) {
       console.error(error)
       console.log(`${filePath} is not a directory or file.`)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-      res.end(`${filePath} is not a directory or file.`)
+      res.end(JSON.stringify({
+        task: task,
+        message: `${filePath} is not a directory or file.`
+      }))
       return;
     }
   }
