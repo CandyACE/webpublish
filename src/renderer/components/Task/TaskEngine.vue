@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { remote } from "electron";
 export default {
   name: "ts-task-engine",
   data() {
@@ -11,19 +10,18 @@ export default {
   },
   mounted() {
     var _this = this;
-    const application = remote.getGlobal("application");
-    application.serverManager.addListener("server", function (err) {
+    this.application.serverManager.addListener("server", function (err) {
       if (err) {
         _this.$message.error(err);
         return;
       }
       _this.$message.success("服务启动成功");
     });
-    application.serverManager.start();
+    this.application.serverManager.start();
 
-    setTimeout(() => {
-      this.startPolling();
-    }, 200);
+    // setTimeout(() => {
+    //   this.startPolling();
+    // }, 200);
 
     window.onresize = () => {
       if (document.body.clientWidth >= 791) {
@@ -37,19 +35,19 @@ export default {
     this.stopPolling();
   },
   methods: {
-    startPolling() {
-      this.timer = setTimeout(() => {
-        this.polling();
-        this.startPolling();
-      }, this.interval);
-    },
-    polling() {
-      this.$store.dispatch("task/fetchList");
-    },
-    stopPolling() {
-      clearInterval(this.timer);
-      this.timer = null;
-    },
+    // startPolling() {
+    //   this.timer = setTimeout(() => {
+    //     this.polling();
+    //     this.startPolling();
+    //   }, this.interval);
+    // },
+    // polling() {
+    //   this.$store.dispatch("task/fetchList");
+    // },
+    // stopPolling() {
+    //   clearInterval(this.timer);
+    //   this.timer = null;
+    // },
   },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div
     class="task-type"
-    :class="{ disenabled: !task.enable }"
+    :class="{ disenabled: isServerRunning }"
     :style="{ color: taskType[task.type].color }"
   >
     {{ taskType[task.type].text }}
@@ -37,6 +37,11 @@ export default {
         },
       },
     };
+  },
+  computed: {
+    isServerRunning() {
+      return !(this.task.enable && this.application.serverManager.isRunning);
+    },
   },
 };
 </script>

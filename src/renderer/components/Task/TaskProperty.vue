@@ -175,7 +175,8 @@ export default {
             // item.useData = item.useData * 1024 * 1024;
           }
 
-          this.$store.dispatch("task/changeTaskOptions", item);
+          // this.$store.dispatch("task/changeTaskOptions", item);
+          this.application.taskManager.changeTaskOptions(item);
 
           this.$store.dispatch("task/hideTaskItemInfoDialog");
         } catch (error) {

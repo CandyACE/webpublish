@@ -1,17 +1,16 @@
 <template>
   <div class="task-list" v-if="taskList.length > 0">
-    <!-- <transition-group> -->
-      <div v-for="item in taskList" :key="item.gid" :attr="item.gid">
-        <ts-task-item :task="item"></ts-task-item>
-      </div>
-    <!-- </transition-group> -->
+    <transition-group>
+    <div v-for="item in taskList" :key="item.gid" :attr="item.gid">
+      <ts-task-item :task="item"></ts-task-item>
+    </div>
+    </transition-group>
   </div>
   <div v-else class="no-task"></div>
 </template>
 
 <script>
 import TaskItemVue from "./TaskItem.vue";
-import { remote } from "electron";
 import { mapState } from "vuex";
 
 export default {
@@ -19,10 +18,15 @@ export default {
   components: {
     [TaskItemVue.name]: TaskItemVue,
   },
+  data() {
+    return {
+      taskList: this.application.taskManager.taskList,
+    };
+  },
   computed: {
-    ...mapState("task", {
-      taskList: (state) => state.taskList,
-    }),
+    // ...mapState("task", {
+    //   taskList: (state) => state.taskList,
+    // }),
   },
 };
 </script>

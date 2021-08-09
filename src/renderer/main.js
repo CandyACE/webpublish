@@ -12,7 +12,7 @@ import Icon from '@/components/Icons/Icon'
 import Msg from "@/components/Msg"
 import store from './store'
 import { sync } from 'vuex-router-sync'
-import Application from '../main/Application'
+import RenderApplication from '../main/RenderApplication'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -37,6 +37,9 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 sync(store, router)
 
+var application = new RenderApplication()
+Vue.prototype.application = application
+
 /* eslint-disable no-new */
 global.vue = new Vue({
   components: { App },
@@ -58,8 +61,6 @@ store.dispatch('options/fetchOptions')
   })
 
 router.beforeEach((to, from, next) => {
-  console.log('to', to)
-  console.log('from', from)
   loading = Loading.service({
     fullscreen: true,
     background: 'rgba(0, 0, 0, 0.1)'
@@ -72,3 +73,4 @@ router.afterEach((to, from) => {
     loading.close()
   }, 400)
 })
+

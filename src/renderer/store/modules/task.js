@@ -25,29 +25,29 @@ const mutations = {
 }
 
 const actions = {
-    fetchList({ commit, state }) {
-        return api.fetchTaskList().then((data) => {
-            commit('UPDATE_TASK_LIST', data)
-        })
-    },
-    changeTaskOptions({ dispatch }, task) {
-        api.changeTaskOptions(task)
-        dispatch('fetchList')
-    },
+    // fetchList({ commit, state }) {
+    //     return api.fetchTaskList().then((data) => {
+    //         commit('UPDATE_TASK_LIST', data)
+    //     })
+    // },
+    // changeTaskOptions({ dispatch }, task) {
+    //     api.changeTaskOptions(task)
+    //     dispatch('fetchList')
+    // },
     updateCurrentTaskItem({ commit }, task) {
         commit('UPDATE_CURRENT_TASK_ITEM', task)
     },
-    removeTask({ dispatch }, task) {
-        api.removeTask(task);
-        dispatch('fetchList')
-    },
+    // removeTask({ dispatch }, task) {
+    //     api.removeTask(task);
+    //     dispatch('fetchList')
+    // },
     changeTaskProgressType({ commit }, type) {
         commit('CHANGE_TASK_PROGRESS_TYPE', type)
     },
-    addTask({ dispatch }, options) {
-        api.addTask(options);
-        dispatch('fetchList')
-    },
+    // addTask({ dispatch }, options) {
+    //     api.addTask(options);
+    //     dispatch('fetchList')
+    // },
     showTaskItemInfoDialog({ commit, dispatch }, task) {
         dispatch('updateCurrentTaskItem', task)
         commit('CHANGE_TASK_INFO_VISIBLE', true)

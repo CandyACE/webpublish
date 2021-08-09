@@ -174,9 +174,10 @@ export default {
       this.$store.dispatch("app/hideAddTaskDialog");
     },
     addTask(options) {
-      this.$store.dispatch("task/addTask", options).catch((err) => {
-        this.$message.error(err.message);
-      });
+      // this.$store.dispatch("task/addTask", options).catch((err) => {
+      //   this.$message.error(err.message);
+      // });
+      this.application.taskManager.addTask(options);
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

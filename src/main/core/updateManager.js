@@ -55,7 +55,7 @@ class UpdateManager extends EventEmitter {
         })
         // 没有可更新数据时
         autoUpdater.on(updateType.NotAvailable, (event, arg) => {
-            this.Message(updateType.NotAvailable)
+            this.Message(updateType.Available)
         })
         // 下载监听
         autoUpdater.on(updateType.Progress, (progressObj) => {

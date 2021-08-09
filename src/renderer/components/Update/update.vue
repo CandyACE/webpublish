@@ -131,11 +131,12 @@ export default {
   .newVersion {
     background-color: blanchedalmond;
     position: absolute !important;
-    bottom: 0px;
-    width: 100%;
+    top: 35px;
+    width: 170px;
+    right: 0px;
     text-align: center;
     font-size: 14px;
-    z-index: 999999999;
+    z-index: 99999;
 
     .el-link {
       vertical-align: top !important;

@@ -1,12 +1,12 @@
 <template>
   <el-container class="content panel" direction="vertical">
+    <ts-update></ts-update>
     <el-header class="panel-header" height="84">
       <h4 class="task-title">发布列表</h4>
     </el-header>
     <el-main class="panel-content">
       <ts-task-list></ts-task-list>
     </el-main>
-    <ts-update></ts-update>
   </el-container>
 </template>
 
@@ -21,12 +21,12 @@ export default {
     [updateVue.name]: updateVue,
   },
   methods: {
-    fetchList() {
-      this.$store.dispatch("task/fetchList");
-    },
+    // fetchList() {
+    //   this.$store.dispatch("task/fetchList");
+    // },
   },
   created: function () {
-    this.fetchList();
+    // this.fetchList();
   },
 };
 </script>

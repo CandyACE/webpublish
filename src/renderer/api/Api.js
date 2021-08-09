@@ -51,24 +51,24 @@ export default class Api {
     application.configManager.setSystemConfig(params)
   }
 
-  fetchTaskList() {
-    return new Promise((resolve) => {
-      var data = cloneDeep(application.taskManager.taskList)
-      resolve(data)
-    })
-  }
+  // fetchTaskList() {
+  //   return new Promise((resolve) => {
+  //     var data = cloneDeep(application.taskManager.taskList)
+  //     resolve(data)
+  //   })
+  // }
 
-  addTask(options) {
-    return application.taskManager.addTask(options)
-  }
+  // addTask(options) {
+  //   return application.taskManager.addTask(options)
+  // }
 
-  changeTaskOptions(task) {
-    return application.taskManager.changeTaskOptions(task)
-  }
+  // changeTaskOptions(task) {
+  //   return application.taskManager.changeTaskOptions(task)
+  // }
 
-  removeTask(task) {
-    return application.taskManager.removeTask(task);
-  }
+  // removeTask(task) {
+  //   return application.taskManager.removeTask(task);
+  // }
 
   getPort() {
     return application.configManager.getSystemConfig("port", "9090")

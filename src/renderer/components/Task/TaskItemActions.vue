@@ -132,7 +132,8 @@ export default {
           dangerouslyUseHTMLString: true,
         }
       ).then(() => {
-        this.$store.dispatch("task/removeTask", this.task);
+        // this.$store.dispatch("task/removeTask", this.task);
+        this.application.taskManager.removeTask(this.task);
         this.$message({
           type: "success",
           message: "移除成功！",
@@ -142,13 +143,15 @@ export default {
     onStartClick() {
       var task = { ...this.task };
       task.enable = true;
-      this.$store.dispatch("task/changeTaskOptions", task);
+      // this.$store.dispatch("task/changeTaskOptions", task);
+      this.application.taskManager.changeTaskOptions(task);
       this.$msg.success(`[${task.id}] 已启动`);
     },
     onStopClick() {
       var task = { ...this.task };
       task.enable = false;
-      this.$store.dispatch("task/changeTaskOptions", task);
+      // this.$store.dispatch("task/changeTaskOptions", task);
+      this.application.taskManager.changeTaskOptions(task);
       this.$msg.success(`[${task.id}] 已停止`);
     },
     onFolderClick() {

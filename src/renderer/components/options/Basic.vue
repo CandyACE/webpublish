@@ -85,6 +85,7 @@ export default {
       });
     },
     submitForm(formName) {
+      let _this = this;
       this.$refs[formName].validate((valid) => {
         if (!valid) {
           console.log("[WebPublish] options form valid:", valid);
@@ -116,7 +117,7 @@ export default {
             application.autoLaunchManager.disable();
           }
 
-          if (data.port) application.serverManager.restart();
+          if (data.port) _this.application.serverManager.restart();
         }
       });
     },
