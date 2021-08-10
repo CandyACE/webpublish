@@ -14,7 +14,7 @@ export default class ServerManager extends EventEmitter {
      * @type {http.Server}
      */
     this._server_api = undefined;
-    this.isRunning = false;
+    this.isRunning = true;
   }
 
   stop() {
@@ -32,6 +32,7 @@ export default class ServerManager extends EventEmitter {
     this._server.start().then(function () {
       _this.emit('server')
       _this.isRunning = true;
+      debugger
     }).catch(function (err) {
       _this.emit('server', err)
       _this.isRunning = false

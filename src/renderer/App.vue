@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <ts-title-bar />
-    <router-view></router-view>
     <ts-task-engine></ts-task-engine>
+    <router-view></router-view>
   </div>
 </template>
 
