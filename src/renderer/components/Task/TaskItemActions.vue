@@ -29,7 +29,7 @@
       <i v-if="action === 'LINK'">
         <el-dropdown :show-timeout="0" @command="handleCommand">
           <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown" v-if="task.enable">
             <el-dropdown-item
               v-for="(address, index) in networkInterfaces"
               :key="index"
@@ -141,22 +141,24 @@ export default {
       });
     },
     onStartClick() {
-      var task = { ...this.task };
-      task.enable = true;
-      // this.$store.dispatch("task/changeTaskOptions", task);
-      this.application.taskManager.changeTaskOptions(task);
-      this.$msg.success(`[${task.id}] 已启动`);
+      if (!this.task.setEnable(true)) {
+        this.$msg.error(`[${this.task.path}] 路径不存在`);
+        return;
+      }
+      this.application.taskManager.changeTaskOptions(this.task);
+      this.$msg.success(`[${this.task.id}] 已启动`);
     },
     onStopClick() {
-      var task = { ...this.task };
-      task.enable = false;
-      // this.$store.dispatch("task/changeTaskOptions", task);
-      this.application.taskManager.changeTaskOptions(task);
-      this.$msg.success(`[${task.id}] 已停止`);
+      this.task.setEnable(false);
+      this.application.taskManager.changeTaskOptions(this.task);
+      this.$msg.success(`[${this.task.id}] 已停止`);
     },
     onFolderClick() {
       showItemInFolder(this.task.path, {
         errorMsg: `[${this.task.path}] 文件不存在`,
+        errorFun: () => {
+          this.task.setEnable(false);
+        },
       });
     },
     onInfoClick() {

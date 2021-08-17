@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -30,6 +30,7 @@
       "updateInfos": [
         "新增 gzip压缩设置",
         "新增 服务启动失败，任务的失败效果 ",
+        "新增 如果文件失效，会自动停止服务 ",
         "新增 增加更新检查按钮，在托盘右键以及关于菜单中",
         "修复 修复欢迎界面每次打开都显示的问题 ",
         "修复 修改端口，服务不会启动的bug ",

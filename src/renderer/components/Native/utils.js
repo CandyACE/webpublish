@@ -2,7 +2,7 @@ import { access, constants } from 'fs'
 import { Message } from 'element-ui'
 import { remote } from 'electron'
 
-export function showItemInFolder(fullPath, { errorMsg }) {
+export function showItemInFolder(fullPath, { errorMsg, errorFun }) {
     if (!fullPath) {
         return
     }
@@ -12,6 +12,7 @@ export function showItemInFolder(fullPath, { errorMsg }) {
         console.log(`${fullPath} ${err ? 'does not exist' : 'exists'}`)
         if (err) {
             Message.error(errorMsg)
+            errorFun && errorFun()
             return
         }
 

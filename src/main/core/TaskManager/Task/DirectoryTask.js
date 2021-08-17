@@ -11,6 +11,22 @@ const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
 
 export default class DirectoryTask extends TaskBase {
+
+    setEnable(val) {
+        var result = false;
+        if (val) {
+            try {
+                fs.accessSync(this.path, fs.constants.F_OK);
+                result = true;
+            } catch (error) {
+                result = false;
+
+            }
+        }
+        this.enable = result;
+        return this.enable;
+    }
+
     /**
      * 
      * @param {http.IncomingMessage} req 

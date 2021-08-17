@@ -7,7 +7,8 @@ export default class TaskBase {
         this.id = task.id;
         this.name = task.name;
         this.path = task.path;
-        this.enable = Boolean(task.enable);
+        this.enable = false;
+        this.setEnable(Boolean(task.enable));
         this.gzip = Boolean(task.gzip);
         if (task.gzip === undefined) {
             this.gzip = true;
@@ -15,6 +16,10 @@ export default class TaskBase {
         this.type = task.type;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
+    }
+
+    setEnable(val) {
+        this.enable = val;
     }
 
     /**

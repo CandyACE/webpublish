@@ -14,6 +14,21 @@ const asyncLock = new AsyncLock();
 
 export default class FileTask extends TaskBase {
 
+    setEnable(val) {
+        var result = false;
+        if (val) {
+            try {
+                fs.accessSync(this.path, fs.constants.F_OK);
+                result = true;
+            } catch (error) {
+                result = false;
+
+            }
+        }
+        this.enable = result;
+        return this.enable;
+    }
+
     /**
      * 
      * @param {http.IncomingMessage} req 
