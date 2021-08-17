@@ -1,15 +1,21 @@
 export default [
     {
-        label: '显示主界面',
+        label: '显示 WebPublish',
         click: function () {
             application.show()
         }
     },
     {
-        label: '退出',
+        label: '检查更新...',
+        click: function () {
+            application.updateManager.checkForUpdates(true)
+        }
+    },
+    { type: "separator" },
+    {
+        label: '退出 WebPublish',
         click: function () {
             application.quit()
-            // app.quit() //因为程序设定关闭为最小化，所以调用两次关闭，防止最大化时一次不能关闭的情况
         }
     }
 ]

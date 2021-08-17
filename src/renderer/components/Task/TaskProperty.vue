@@ -61,6 +61,11 @@
           <el-link @click.stop="handleClearUsed">清空流量</el-link>
         </el-col>
       </el-row>
+      <el-row :gutter="12">
+        <el-form-item>
+          <el-checkbox v-model="form.gzip">启用 gzip</el-checkbox>
+        </el-form-item>
+      </el-row>
       <ts-task-limit
         ref="taskLimit"
         :showLimit="showLimit"
@@ -114,6 +119,7 @@ export default {
         limit: 0,
         use: 0,
         selectTaskType: "file",
+        gzip: false,
       },
       rules: [],
     };
@@ -142,6 +148,7 @@ export default {
       this.showLimit = Number(val.limitData) !== 0;
       this.form.use = Number(val.useData);
       this.form.selectTaskType = val.type;
+      this.form.gzip = val.gzip;
 
       // if (val.type !== "mbtiles") {
       //   this.form.limit = (this.form.limit / 1024 / 1024).toFixed(1);
@@ -166,6 +173,7 @@ export default {
             id: this.form.id,
             name: this.form.taskName,
             useData: this.form.use,
+            gzip: this.form.gzip,
             limitData: taskLimit.showLimit ? Number(taskLimit.limitData) : 0,
             type: this.form.selectTaskType,
           };

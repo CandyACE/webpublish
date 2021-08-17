@@ -42,8 +42,7 @@ let rendererConfig = {
     renderer: path.join(__dirname, '../src/renderer/main.js')
   },
   externals: [
-    ...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d)),
-    'sqlite3'
+    ...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))
   ],
   module: {
     rules: [
@@ -158,7 +157,8 @@ let rendererConfig = {
       __TIME__: JSON.stringify(getTime()),
       __AUTHOR__: JSON.stringify(author),
       __UPDATEURL__: JSON.stringify(build.publish[0].url),
-      __HOSTURL__: JSON.stringify(hostUpdateUrl)
+      __HOSTURL__: JSON.stringify(hostUpdateUrl),
+      __UPDATEINFO__: JSON.stringify(build.publish[0].updateInfos)
     })
   ],
   output: {

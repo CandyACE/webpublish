@@ -8,6 +8,10 @@ export default class TaskBase {
         this.name = task.name;
         this.path = task.path;
         this.enable = Boolean(task.enable);
+        this.gzip = Boolean(task.gzip);
+        if (task.gzip === undefined) {
+            this.gzip = true;
+        }
         this.type = task.type;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;

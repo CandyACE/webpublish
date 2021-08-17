@@ -2,7 +2,7 @@ import { EventEmitter } from 'events'
 import { join } from 'path'
 import { Tray, Menu } from "electron";
 import path from 'path'
-import logger from './Logger';
+import logger from '../core/Logger';
 
 let tray = null
 

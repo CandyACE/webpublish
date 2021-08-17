@@ -1,11 +1,13 @@
 <template>
   <div id="task-limit">
     <el-row :gutter="12">
-      <el-form-item>
-        <el-checkbox v-model="showLimit">
-          {{ textLimit }}
-        </el-checkbox>
-      </el-form-item>
+      <el-col :span="24" :xs="24">
+        <el-form-item>
+          <el-checkbox v-model="showLimit">
+            {{ textLimit }}
+          </el-checkbox>
+        </el-form-item>
+      </el-col>
     </el-row>
     <el-row v-if="showLimit" :gutter="12">
       <el-col :span="9">
@@ -45,7 +47,6 @@ export default {
       default: "100px",
     },
     limitData: {
-      type: Number,
       default: 0,
     },
   },

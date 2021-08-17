@@ -32,7 +32,6 @@ export default class ServerManager extends EventEmitter {
     this._server.start().then(function () {
       _this.emit('server')
       _this.isRunning = true;
-      debugger
     }).catch(function (err) {
       _this.emit('server', err)
       _this.isRunning = false

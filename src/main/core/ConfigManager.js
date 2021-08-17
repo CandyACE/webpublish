@@ -27,6 +27,7 @@ export default class ConfigManager {
                 'hide-app-menu': true,
                 'keep-window-state': false,
                 'window-state': {},
+                'last-update-version': '',
                 api: {
                     enabled: false,
                     port: 9080

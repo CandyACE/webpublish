@@ -2,13 +2,14 @@ import { ipcMain } from "electron";
 import { autoUpdater } from "electron-updater";
 import { EventEmitter } from 'events'
 import updateType from "../helper/updateType";
+import { Notification } from 'electron'
 
 class UpdateManager extends EventEmitter {
 
     constructor() {
         super()
-        // this.mainWindow = mainWindow;
         this._init()
+        this.showMessage = false;
     }
 
     update() {
@@ -17,7 +18,8 @@ class UpdateManager extends EventEmitter {
         autoUpdater.checkForUpdates()
     }
 
-    checkForUpdates() {
+    checkForUpdates(showMessage) {
+        this.showMessage = showMessage
         autoUpdater.autoDownload = false;
         autoUpdater.autoInstallOnAppQuit = false;
         autoUpdater.checkForUpdates().then(it => {
@@ -25,7 +27,6 @@ class UpdateManager extends EventEmitter {
             if (downloadPromise == undefined) {
                 return;
             }
-
             console.log(downloadPromise)
         })
     }
@@ -52,10 +53,15 @@ class UpdateManager extends EventEmitter {
         // 发现可更新数据时
         autoUpdater.on(updateType.Available, (event, arg) => {
             this.Message(updateType.Available)
+            new Notification({ title: "有可用的更新！" }).show()
         })
         // 没有可更新数据时
         autoUpdater.on(updateType.NotAvailable, (event, arg) => {
             this.Message(updateType.NotAvailable)
+            if (this.showMessage) {
+                new Notification({ title: "已经是最新的版本！" }).show()
+                this.showMessage = false;
+            }
         })
         // 下载监听
         autoUpdater.on(updateType.Progress, (progressObj) => {

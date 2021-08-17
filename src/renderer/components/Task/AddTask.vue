@@ -8,47 +8,57 @@
     @open="handleOpen"
   >
     <el-form ref="taskForm" label-position="left" :model="form" :rules="rules">
-      <el-tabs :value="type">
-        <el-tab-pane label="添加任务" name="default">
+      <el-tabs :value="type" @tab-click="handleTabClick">
+        <el-tab-pane label="添加文件(夹)" name="default">
           <el-form-item>
             <ts-select-files v-on:change="handleTaskChange" />
           </el-form-item>
+          <el-row :gutter="12">
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                prop="taskName"
+                label="任务名称："
+                :label-width="formLabelWidth"
+              >
+                <el-input v-model="form.taskName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                label="二级域名："
+                prop="id"
+                :label-width="formLabelWidth"
+              >
+                <el-input v-model="form.id"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="12" v-if="showFileTypeSelection">
+            <el-form-item label="任务类别：" :label-width="formLabelWidth">
+              <el-radio v-model="form.selectTaskType" label="file"
+                >文件</el-radio
+              >
+              <el-radio v-model="form.selectTaskType" label="mbtiles"
+                >MBTiles</el-radio
+              >
+            </el-form-item>
+          </el-row>
+          <el-row :gutter="12">
+            <el-col :span="24" :xs="24">
+              <el-form-item>
+                <el-checkbox v-model="form.gzip">启用 gzip</el-checkbox>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <ts-task-limit
+            ref="taskLimit"
+            :showLimit="showLimit"
+            :type="form.selectTaskType"
+            :limitData="form.limit"
+          ></ts-task-limit>
         </el-tab-pane>
+        <el-tab-pane label="添加代理" name="proxy" v-if="false"> </el-tab-pane>
       </el-tabs>
-      <el-row :gutter="12">
-        <el-col :span="24" :xs="24">
-          <el-form-item
-            prop="taskName"
-            label="任务名称："
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="form.taskName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" :xs="24">
-          <el-form-item
-            label="二级域名："
-            prop="id"
-            :label-width="formLabelWidth"
-          >
-            <el-input v-model="form.id"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="12" v-if="showFileTypeSelection">
-        <el-form-item label="任务类别：" :label-width="formLabelWidth">
-          <el-radio v-model="form.selectTaskType" label="file">文件</el-radio>
-          <el-radio v-model="form.selectTaskType" label="mbtiles"
-            >MBTiles</el-radio
-          >
-        </el-form-item>
-      </el-row>
-      <ts-task-limit
-        ref="taskLimit"
-        :showLimit="showLimit"
-        :type="form.selectTaskType"
-        :limitData="form.limit"
-      ></ts-task-limit>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-row>
@@ -135,6 +145,7 @@ export default {
         taskName: "",
         id: "",
         selectTaskType: FILE_STATUS.FILE,
+        gzip: true,
         limit: 0,
       };
     },
@@ -167,6 +178,9 @@ export default {
       this.$store.dispatch("app/hideAddTaskDialog");
       this.$store.dispatch("app/updateAddTaskOptions", {});
     },
+    handleTabClick(tab, event) {
+      this.$store.dispatch("app/changeAddTaskType", tab.name);
+    },
     handleClosed() {
       this.reset();
     },
@@ -192,6 +206,7 @@ export default {
             name: this.form.taskName,
             path: this.form.taskPath,
             enable: true,
+            gzip: this.form.gzip,
             type: this.taskType,
             limitData: limit.showLimit ? Number(limit.limitData) : 0,
           };

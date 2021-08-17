@@ -3,7 +3,7 @@ import { EventEmitter } from 'events'
 import AutoLaunchManager from './core/AutoLaunchManager';
 import ConfigManager from './core/ConfigManager';
 import logger from './core/Logger';
-import TrayManager from './core/TrayManager';
+import TrayManager from './ui/TrayManager';
 import UpdateManager from './core/updateManager';
 import WindowManager from './ui/WindowManager';
 

@@ -42,11 +42,9 @@ export default {
       default: "size",
     },
     useData: {
-      type: Number,
       default: 0,
     },
     limitData: {
-      type: Number,
       default: 0,
     },
   },

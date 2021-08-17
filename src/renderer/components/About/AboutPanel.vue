@@ -7,17 +7,20 @@
   >
     <ts-app-info></ts-app-info>
     <ts-copyright />
+    <ts-check-update />
   </el-dialog>
 </template>
 
 <script>
 import AppInfoVue from "./AppInfo.vue";
+import CheckUpdateVue from "./CheckUpdate.vue";
 import CopyrightVue from "./Copyright.vue";
 export default {
   name: "ts-about-panel",
   components: {
     [AppInfoVue.name]: AppInfoVue,
     [CopyrightVue.name]: CopyrightVue,
+    [CheckUpdateVue.name]: CheckUpdateVue,
   },
   props: {
     visible: {

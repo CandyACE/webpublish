@@ -2,7 +2,7 @@
   <el-container id="container">
     <ts-aside></ts-aside>
     <router-view></router-view>
-    <!-- <ts-welcome :visible="true"></ts-welcome> -->
+    <ts-welcome></ts-welcome>
     <ts-add-task :visible="addTaskVisible" :type="addTaskType" />
     <ts-about-panel :visible="aboutPanelVisible" />
     <ts-task-item-property
@@ -30,7 +30,7 @@ export default {
     [AddTaskVue.name]: AddTaskVue,
     [Dragger.name]: Dragger,
     [TaskPropertyVue.name]: TaskPropertyVue,
-    // [WelcomeVue.name]: WelcomeVue,
+    [WelcomeVue.name]: WelcomeVue,
   },
   computed: {
     ...mapState("app", {

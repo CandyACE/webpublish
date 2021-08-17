@@ -40,6 +40,14 @@ sync(store, router)
 var application = new RenderApplication()
 Vue.prototype.application = application
 
+store.dispatch('options/fetchOptions')
+  .then((config) => {
+    console.info('[WebPublish] load Options:', config)
+  })
+  .catch((err) => {
+    alert(err)
+  })
+
 /* eslint-disable no-new */
 global.vue = new Vue({
   components: { App },
@@ -51,14 +59,6 @@ global.vue = new Vue({
 setTimeout(() => {
   loading.close()
 }, 400)
-
-store.dispatch('options/fetchOptions')
-  .then((config) => {
-    console.info('[WebPublish] load Options:', config)
-  })
-  .catch((err) => {
-    alert(err)
-  })
 
 router.beforeEach((to, from, next) => {
   loading = Loading.service({

@@ -41,10 +41,10 @@ export default class FileTask extends TaskBase {
             let compress, compressType;
 
             // 支持 gzip 使用 gzip 压缩，支持 deflate 使用 deflate 压缩
-            if (encoding && encoding.match(/\bgzip\b/)) {
+            if (taskInfo.gzip && encoding && encoding.match(/\bgzip\b/)) {
                 compress = zlib.createGzip();
                 compressType = "gzip";
-            } else if (encoding && encoding.match(/\bdeflate\b/)) {
+            } else if (taskInfo.gzip && encoding && encoding.match(/\bdeflate\b/)) {
                 compress = zlib.createDeflate();
                 compressType = "deflate";
             } else {

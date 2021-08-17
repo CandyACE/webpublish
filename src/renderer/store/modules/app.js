@@ -56,6 +56,9 @@ const actions = {
   },
   updateAddTaskOptions({ commit }, options = {}) {
     commit('CHANGE_ADD_TASK_OPTIONS', options)
+  },
+  changeAddTaskType({ commit }, taskType) {
+    commit('CHANGE_ADD_TASK_TYPE', taskType)
   }
 }
 
