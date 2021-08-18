@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import { EventEmitter } from 'events'
 import AutoLaunchManager from './core/AutoLaunchManager';
 import ConfigManager from './core/ConfigManager';
@@ -6,6 +6,7 @@ import logger from './core/Logger';
 import TrayManager from './ui/TrayManager';
 import UpdateManager from './core/updateManager';
 import WindowManager from './ui/WindowManager';
+import updateType from './helper/updateType';
 
 export default class Application extends EventEmitter {
     constructor() {
@@ -20,6 +21,9 @@ export default class Application extends EventEmitter {
         this.autoLaunchManager = new AutoLaunchManager();
         this.updateManager = new UpdateManager();
         this.initWindowManager();
+        this.initUpdateManager();
+        this.handleCommands();
+        this.handleIpcMessages();
         this.isReady = true;
     }
 
@@ -36,6 +40,14 @@ export default class Application extends EventEmitter {
         })
         this.windowManager.on('window-closed', (data) => {
             this.storeWindowState(data)
+        })
+    }
+
+    initUpdateManager() {
+        this.updateManager.on('update-message', ({ type, data }) => {
+            if (type === updateType.Checking) {
+                this.configManager.setSystemConfig('last-check-update-time', Date.now())
+            }
         })
     }
 
@@ -95,5 +107,18 @@ export default class Application extends EventEmitter {
     quit() {
         this.emit("exit")
         app.exit()
+    }
+
+    handleCommands() {
+        this.on('application:check-for-updates', () => {
+            this.updateManager.checkForUpdates(true);
+        })
+    }
+
+    handleIpcMessages() {
+        ipcMain.on('command', (event, command, ...args) => {
+            logger.log('[WebPublish] ipc receive command', command, ...args)
+            this.emit(command, ...args)
+        })
     }
 }

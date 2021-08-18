@@ -1,9 +1,20 @@
 <template>
   <el-row class="copyright">
     <el-col :span="6" class="copyright-left">
-        <a target="_blank" href="https://tangweitian.cn" rel="noopener noreferrer">
+      <a
+        target="_blank"
+        href="https://tangweitian.cn"
+        rel="noopener noreferrer"
+      >
         &copy;2021 Tangweitian
-        </a>
+      </a>
+    </el-col>
+    <el-col :span="18" class="copyright-right">
+      <a
+        href="https://gitee.com/tstwt/webpublish"
+        target="_blank"
+        rel="noopener noreferrer"
+      >开源地址</a>
     </el-col>
   </el-row>
 </template>
@@ -25,6 +36,14 @@ export default {
 
   .copyright-left {
     text-align: left;
+  }
+
+  .copyright-right {
+    text-align: right;
+
+    a {
+      margin-left: 30px;
+    }
   }
 }
 </style>

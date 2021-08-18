@@ -34,6 +34,26 @@
             </el-checkbox>
           </el-col>
         </el-form-item>
+        <el-form-item label="自动更新：" :label-width="formLabelWidth">
+          <el-col class="form-item-sub" :span="24">
+            <el-checkbox :checked="true" disabled> 自动更新 </el-checkbox>
+            <div
+              class="el-form-item__info"
+              style="margin-top: 8px"
+              v-if="form.lastCheckUpdateTime !== 0"
+            >
+              {{
+                "上次检查更新时间：" +
+                (form.lastCheckUpdateTime !== 0
+                  ? new Date(form.lastCheckUpdateTime).toLocaleString()
+                  : new Date().toLocaleString())
+              }}
+              <span class="action-link" @click.prevent="onCheckUpdateClick"
+                >立刻检查</span
+              >
+            </div>
+          </el-col>
+        </el-form-item>
         <el-form-item label="其他：" :label-width="formLabelWidth" v-if="false">
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.userExperience">
@@ -70,12 +90,19 @@ import is from "electron-is";
 import { remote } from "electron";
 
 const initialForm = (config) => {
-  const { port, autoStart, keepWindowState, userExperience } = config;
+  const {
+    port,
+    autoStart,
+    keepWindowState,
+    userExperience,
+    lastCheckUpdateTime,
+  } = config;
   const result = {
     port,
     autoStart,
     keepWindowState,
     // userExperience,
+    lastCheckUpdateTime,
   };
   return result;
 };
@@ -138,6 +165,17 @@ export default {
 
           if (data.port) _this.application.serverManager.restart();
         }
+      });
+    },
+    onCheckUpdateClick() {
+      this.$electron.ipcRenderer.send(
+        "command",
+        "application:check-for-updates"
+      );
+      this.$message.info("正在检查更新...");
+      this.$store.dispatch("options/fetchOptions").then((config) => {
+        const { lastCheckUpdateTime } = config;
+        this.form.lastCheckUpdateTime = lastCheckUpdateTime;
       });
     },
   },

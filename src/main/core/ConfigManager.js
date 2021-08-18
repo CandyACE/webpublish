@@ -28,6 +28,7 @@ export default class ConfigManager {
                 'keep-window-state': false,
                 'window-state': {},
                 'last-update-version': '',
+                'last-check-update-time': 0,
                 'user-experience': true,
                 api: {
                     enabled: false,
