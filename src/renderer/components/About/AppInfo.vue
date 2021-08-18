@@ -8,9 +8,12 @@
     <div class="thank-info">
       <h4>鸣谢（排名不分先后）</h4>
       <ul>
-        <li>感谢 panweichen</li>
-        <li>感谢 iKangxu</li>
-        <li>感谢开源的 Motrix 提供参考</li>
+        <li v-for="(info, index) in thanks" :key="index">
+          <!-- <el-link :underline="false" type="info">{{ info.name }}</el-link> -->
+          <a target="_blank" :href="info.link" rel="noopener noreferrer">{{
+            info.name
+          }}</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -24,6 +27,20 @@ export default {
     return {
       version: __VERSION__,
       appName: "快速发布工具",
+      thanks: [
+        {
+          name: "感谢 panweichen",
+          link: "",
+        },
+        {
+          name: "感谢 iKangxu",
+          link: "https://github.com/IKangXu",
+        },
+        {
+          name: "感谢开源的 Motrix 提供参考",
+          link: "https://motrix.app/",
+        },
+      ],
     };
   },
   components: {
@@ -84,6 +101,15 @@ export default {
       li {
         float: left;
         width: 50%;
+
+        a {
+          color: #909399;
+          text-decoration: none;
+          &:hover {
+            color: #606266;
+            cursor: pointer;
+          }
+        }
       }
     }
   }

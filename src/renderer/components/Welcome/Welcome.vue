@@ -117,7 +117,7 @@ export default {
     margin: 0;
     max-height: 300px;
     overflow-y: auto;
-    height: calc(100vh - 227px - 15vh - 73px);
+    height: calc(100vh - 227px - 15vh - 90px);
 
     .updateInfos {
       .updateInfo {

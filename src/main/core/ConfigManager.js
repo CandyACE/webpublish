@@ -28,6 +28,7 @@ export default class ConfigManager {
                 'keep-window-state': false,
                 'window-state': {},
                 'last-update-version': '',
+                'user-experience': true,
                 api: {
                     enabled: false,
                     port: 9080

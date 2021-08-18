@@ -62,7 +62,7 @@
         </el-col>
       </el-row>
       <el-row :gutter="12">
-        <el-form-item>
+        <el-form-item :span="24">
           <el-checkbox v-model="form.gzip">启用 gzip</el-checkbox>
         </el-form-item>
       </el-row>

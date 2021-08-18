@@ -29,11 +29,12 @@
       <i v-if="action === 'LINK'">
         <el-dropdown :show-timeout="0" @command="handleCommand">
           <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
-          <el-dropdown-menu slot="dropdown" v-if="task.enable">
+          <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="(address, index) in networkInterfaces"
               :key="index"
               :command="createUrl(address)"
+              :disabled="!task.enable"
             >
               {{ createUrl(address) }}
             </el-dropdown-item>

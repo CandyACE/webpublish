@@ -34,6 +34,24 @@
             </el-checkbox>
           </el-col>
         </el-form-item>
+        <el-form-item label="其他：" :label-width="formLabelWidth" v-if="false">
+          <el-col class="form-item-sub" :span="24">
+            <el-checkbox v-model="form.userExperience">
+              用户体验计划<el-popover
+                title="用户体验计划"
+                trigger="hover"
+                width="200"
+              >
+                <p>
+                  此计划会收集用户在打开软件的次数，并且发送回指定服务器进行存储，方便统计使用人数量和分布。为后期优化提供数据参考。
+                </p>
+                <p>只会发送登录地址，不会发送隐私数据和本地文件名等。</p>
+                <i
+                  slot="reference"
+                  class="el-icon-warning-outline"
+                ></i></el-popover></el-checkbox
+          ></el-col>
+        </el-form-item>
       </el-form>
       <div class="form-actions">
         <el-button type="primary" @click="submitForm('basicForm')"
@@ -52,11 +70,12 @@ import is from "electron-is";
 import { remote } from "electron";
 
 const initialForm = (config) => {
-  const { port, autoStart, keepWindowState } = config;
+  const { port, autoStart, keepWindowState, userExperience } = config;
   const result = {
     port,
     autoStart,
     keepWindowState,
+    // userExperience,
   };
   return result;
 };

@@ -74,6 +74,12 @@ export default {
         return;
       }
 
+      var path = file.raw.path;
+      var hasList = this.application.taskManager.taskList.filter((f) => {
+        return f.path === path;
+      });
+      this.$message.warning(`[${path}] 任务已经存在【${hasList.length}】份`);
+
       fs.stat(file.raw.path, function (err, stats) {
         try {
           var fileStats = FILE_STATUS.DIRECTORY;
