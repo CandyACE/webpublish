@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     textLimit() {
-      return this.type === "mbtiles" ? "限制次数" : "限制流量";
+      return this.type === "mbtiles" ? "限制次数" : this.$t("task.task-limit");
     },
   },
 };

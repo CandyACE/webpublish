@@ -1,9 +1,12 @@
 import is from 'electron-is'
+import { getI18n } from '../ui/Locale'
+
+let title = getI18n().t('app.title')
 
 export default {
     index: {
         attrs: {
-            title: '快速发布工具',
+            title: title,
             width: 1024,
             height: 768,
             minWidth: 400,

@@ -30,7 +30,7 @@ export default {
         name: item.name,
       }));
       if (!fileList.length) {
-        this.$msg.error("将文件或文件夹拖拽到此处，或者点击选择");
+        this.$msg.error(this.$t("task.select-folder"));
       }
     };
 

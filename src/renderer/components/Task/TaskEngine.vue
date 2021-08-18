@@ -15,7 +15,7 @@ export default {
         _this.$message.error(err);
         return;
       }
-      _this.$message.success("服务启动成功");
+      _this.$message.success(_this.$t("app.server-start-success"));
     });
     this.application.serverManager.start();
 

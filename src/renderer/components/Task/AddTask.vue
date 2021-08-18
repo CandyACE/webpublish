@@ -9,7 +9,7 @@
   >
     <el-form ref="taskForm" label-position="left" :model="form" :rules="rules">
       <el-tabs :value="type" @tab-click="handleTabClick">
-        <el-tab-pane label="添加文件(夹)" name="default">
+        <el-tab-pane :label="`${$t('task.new-folder-task')}`" name="default">
           <el-form-item>
             <ts-select-files v-on:change="handleTaskChange" />
           </el-form-item>
@@ -17,7 +17,7 @@
             <el-col :span="24" :xs="24">
               <el-form-item
                 prop="taskName"
-                label="任务名称："
+                :label="`${$t('task.task-name')}: `"
                 :label-width="formLabelWidth"
               >
                 <el-input v-model="form.taskName"></el-input>
@@ -25,7 +25,7 @@
             </el-col>
             <el-col :span="24" :xs="24">
               <el-form-item
-                label="二级域名："
+                :label="`${$t('task.task-base-path')}: `"
                 prop="id"
                 :label-width="formLabelWidth"
               >
@@ -46,7 +46,9 @@
           <el-row :gutter="12">
             <el-col :span="24" :xs="24">
               <el-form-item>
-                <el-checkbox v-model="form.gzip">启用 gzip</el-checkbox>
+                <el-checkbox v-model="form.gzip">{{
+                  $t("task.task-enable-gzip")
+                }}</el-checkbox>
               </el-form-item>
             </el-col>
           </el-row>
@@ -63,10 +65,10 @@
     <div slot="footer" class="dialog-footer">
       <el-row>
         <el-col :span="24">
-          <el-button @click="handleCancel()">取消</el-button>
-          <el-button type="primary" @click="submitForm('taskForm')"
-            >提交</el-button
-          >
+          <el-button @click="handleCancel()">{{ $t("app.cancel") }}</el-button>
+          <el-button type="primary" @click="submitForm('taskForm')">{{
+            $t("app.submit")
+          }}</el-button>
         </el-col>
       </el-row>
     </div>
@@ -105,12 +107,12 @@ export default {
   data() {
     var checkId = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("二级域名不能为空"));
+        return callback(new Error(this.$t("task.task-base-error")));
       }
 
       var result = this.taskList.find((e) => e.id === value);
       if (result) {
-        return callback(new Error("已经存在该二级域名"));
+        return callback(new Error(this.$t("task.task-base-exist")));
       }
 
       callback();
@@ -118,7 +120,7 @@ export default {
 
     var checkName = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("请输入任务名称"));
+        return callback(new Error(this.$t("task.task-name-error")));
       }
       callback();
     };

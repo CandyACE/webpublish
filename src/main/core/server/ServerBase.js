@@ -1,4 +1,5 @@
 import http from 'http'
+import { getI18n } from '../../ui/Locale'
 
 /**
  * 服务基类
@@ -7,6 +8,8 @@ export default class ServerBase {
     constructor(manager) {
         this._parent = manager
         this._app = manager._app;
+
+        this.i18n = getI18n()
 
         /**
          * @type {http.Server}

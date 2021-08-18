@@ -1,12 +1,12 @@
 <template>
   <div class="app-info">
     <div class="app-version">
-      <span>{{ appName }}</span>
+      <span>{{ title }}</span>
       <span>Version {{ version }}</span>
     </div>
     <ts-logo-mini :width="128" :height="128" class="app-icon"></ts-logo-mini>
     <div class="thank-info">
-      <h4>鸣谢（排名不分先后）</h4>
+      <h4>{{ $t("about.thank-title") }}</h4>
       <ul>
         <li v-for="(info, index) in thanks" :key="index">
           <!-- <el-link :underline="false" type="info">{{ info.name }}</el-link> -->
@@ -26,7 +26,6 @@ export default {
   data() {
     return {
       version: __VERSION__,
-      appName: "快速发布工具",
       thanks: [
         {
           name: "感谢 panweichen",
@@ -42,6 +41,11 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    title() {
+      return this.$t("app.title");
+    },
   },
   components: {
     [LogoMiniVue.name]: LogoMiniVue,

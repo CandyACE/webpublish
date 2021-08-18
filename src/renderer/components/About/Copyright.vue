@@ -14,7 +14,8 @@
         href="https://gitee.com/tstwt/webpublish"
         target="_blank"
         rel="noopener noreferrer"
-      >开源地址</a>
+        >{{ $t("about.open-source") }}</a
+      >
     </el-col>
   </el-row>
 </template>

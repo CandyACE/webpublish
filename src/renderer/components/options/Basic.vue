@@ -1,7 +1,7 @@
 <template>
   <el-container class="content panel" direction="vertical">
     <el-header class="panel-header" height="84">
-      <h4 class="hidden-xs-only">通用</h4>
+      <h4 class="hidden-xs-only">{{ title }}</h4>
     </el-header>
     <el-main class="panel-content">
       <el-form
@@ -12,45 +12,74 @@
         :model="form"
         :rules="rules"
       >
-        <el-form-item label="基础设置：" :label-width="formLabelWidth">
+        <el-form-item
+          :label="`${$t('options.port')}: `"
+          :label-width="formLabelWidth"
+        >
           <el-col class="form-item-sub" :span="24">
-            服务端口
             <el-input-number
               v-model="form.port"
               controls-position="right"
-              label="服务端口"
             ></el-input-number>
           </el-col>
         </el-form-item>
-        <el-form-item label="启动：" :label-width="formLabelWidth">
+        <el-form-item
+          :label="`${$t('options.startup')}: `"
+          :label-width="formLabelWidth"
+        >
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.openAtLogin">
-              开机自动启动</el-checkbox
+              {{ $t("options.open-at-login") }}</el-checkbox
             ></el-col
           >
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.keepWindowState">
-              恢复上次退出时的窗口大小和位置
+              {{ $t("options.keep-window-state") }}
             </el-checkbox>
           </el-col>
         </el-form-item>
-        <el-form-item label="自动更新：" :label-width="formLabelWidth">
+        <el-form-item
+          :label="`${$t('options.language')}`"
+          :label-width="formLabelWidth"
+        >
+          <el-col class="form-item-sub" :span="16">
+            <el-select
+              v-model="form.locale"
+              @change="handleLocaleChange"
+              :placeholder="$t('options.change-language')"
+            >
+              <el-option
+                v-for="item in locales"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          :label="`${$t('options.auto-update')}: `"
+          :label-width="formLabelWidth"
+        >
           <el-col class="form-item-sub" :span="24">
-            <el-checkbox :checked="true" disabled> 自动更新 </el-checkbox>
+            <el-checkbox :checked="true" disabled>
+              {{ $t("options.auto-check-update") }}
+            </el-checkbox>
             <div
               class="el-form-item__info"
               style="margin-top: 8px"
               v-if="form.lastCheckUpdateTime !== 0"
             >
               {{
-                "上次检查更新时间：" +
+                `${$t("options.last-check-update-time")} ` +
                 (form.lastCheckUpdateTime !== 0
                   ? new Date(form.lastCheckUpdateTime).toLocaleString()
                   : new Date().toLocaleString())
               }}
-              <span class="action-link" @click.prevent="onCheckUpdateClick"
-                >立刻检查</span
-              >
+              <span class="action-link" @click.prevent="onCheckUpdateClick">{{
+                $t("app.check-updates-now")
+              }}</span>
             </div>
           </el-col>
         </el-form-item>
@@ -74,10 +103,12 @@
         </el-form-item>
       </el-form>
       <div class="form-actions">
-        <el-button type="primary" @click="submitForm('basicForm')"
-          >保存并应用</el-button
-        >
-        <el-button @click="resetForm('basicForm')">放弃</el-button>
+        <el-button type="primary" @click="submitForm('basicForm')">{{
+          $t("options.save")
+        }}</el-button>
+        <el-button @click="resetForm('basicForm')">{{
+          $t("options.discard")
+        }}</el-button>
       </div>
     </el-main>
   </el-container>
@@ -88,6 +119,8 @@ import { calcFormLabelWidth, diffConfig } from "../../../shared/utils";
 import { cloneDeep } from "lodash";
 import is from "electron-is";
 import { remote } from "electron";
+import { availableLanguages, getLanguage } from "../../../shared/locales";
+import { getLocaleManager } from "../Locale";
 
 const initialForm = (config) => {
   const {
@@ -96,6 +129,7 @@ const initialForm = (config) => {
     keepWindowState,
     userExperience,
     lastCheckUpdateTime,
+    locale,
   } = config;
   const result = {
     port,
@@ -103,6 +137,7 @@ const initialForm = (config) => {
     keepWindowState,
     // userExperience,
     lastCheckUpdateTime,
+    locale,
   };
   return result;
 };
@@ -117,10 +152,25 @@ export default {
       form,
       formOriginal,
       formLabelWidth: calcFormLabelWidth(locale),
+      locales: availableLanguages,
       rules: {},
     };
   },
+  computed: {
+    title() {
+      return this.$t("options.basic");
+    },
+  },
   methods: {
+    handleLocaleChange(locale) {
+      const lng = getLanguage(locale);
+      getLocaleManager().changeLanguage(lng);
+      this.$electron.ipcRenderer.send(
+        "command",
+        "application:change-locale",
+        lng
+      );
+    },
     resetForm(formName) {
       this.syncFormConfig();
     },

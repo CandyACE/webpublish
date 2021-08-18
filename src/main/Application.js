@@ -7,6 +7,7 @@ import TrayManager from './ui/TrayManager';
 import UpdateManager from './core/updateManager';
 import WindowManager from './ui/WindowManager';
 import updateType from './helper/updateType';
+import { setupLocaleManager } from './ui/Locale';
 
 export default class Application extends EventEmitter {
     constructor() {
@@ -17,6 +18,11 @@ export default class Application extends EventEmitter {
 
     init() {
         this.configManager = new ConfigManager();
+
+        this.locale = this.configManager.getLocale();
+        this.localeManager = setupLocaleManager(this.locale)
+        this.i18n = this.localeManager.getI18n()
+
         this.trayManager = new TrayManager();
         this.autoLaunchManager = new AutoLaunchManager();
         this.updateManager = new UpdateManager();
@@ -112,6 +118,13 @@ export default class Application extends EventEmitter {
     handleCommands() {
         this.on('application:check-for-updates', () => {
             this.updateManager.checkForUpdates(true);
+        })
+
+        this.on('application:change-locale', (locale) => {
+            this.localeManager.changeLanguageByLocale(locale)
+                .then(() => {
+                    // this.trayManager
+                })
         })
     }
 

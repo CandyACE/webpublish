@@ -42,7 +42,7 @@ export default class FileServer extends ServerBase {
         var port = this._app.configManager.getSystemConfig('port', "9090");
 
         this._server.on('error', function () {
-          reject(port + " 端口被占用")
+          reject(this.i18n.t('app.port-exist', { port }))
         })
 
         this._server.listen(port, () => {

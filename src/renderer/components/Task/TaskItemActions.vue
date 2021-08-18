@@ -2,27 +2,27 @@
   <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => {}">
     <li v-for="action in taskActions" :key="action" class="task-item-action">
       <i v-if="action === 'STOP'" @click.stop="onStopClick">
-        <el-tooltip content="停止">
+        <el-tooltip :content="`${$t('task.stop')}`">
           <ts-icon name="task-stop-line" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
       <i v-if="action === 'START'" @click.stop="onStartClick">
-        <el-tooltip content="启动">
+        <el-tooltip :content="`${$t('task.active')}`">
           <ts-icon name="task-start-line" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
       <i v-if="action === 'FOLDER'" @click.stop="onFolderClick">
-        <el-tooltip content="打开文件夹">
+        <el-tooltip :content="`${$t('task.show-in-folder')}`">
           <ts-icon name="folder" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
       <i v-if="action === 'INFO'" @click.stop="onInfoClick">
-        <el-tooltip content="配置">
+        <el-tooltip :content="`${$t('task.property')}`">
           <ts-icon name="node" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
       <i v-if="action === 'DELETE'" @click.stop="onDeleteClick">
-        <el-tooltip content="移除">
+        <el-tooltip :content="`${$t('task.remove')}`">
           <ts-icon name="trash" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
@@ -123,12 +123,13 @@ export default {
       shell.openExternal(`http://127.0.0.1:${port}/${this.task.id}/getMap`);
     },
     onDeleteClick() {
+      let taskName = `${this.task.name}`;
       this.$confirm(
-        `该操作将移除 <br/><span style="color:red;">[${this.task.name}]</span> 任务，是否继续？`,
-        "提示",
+        this.$t("task.remove-task-confirm", { taskName }),
+        this.$t("task.remove-task"),
         {
-          confirmButtonText: "删除",
-          cancelButtonText: "取消",
+          confirmButtonText: this.$t("app.yes"),
+          cancelButtonText: this.$t("app.no"),
           type: "warning",
           dangerouslyUseHTMLString: true,
         }
@@ -137,26 +138,32 @@ export default {
         this.application.taskManager.removeTask(this.task);
         this.$message({
           type: "success",
-          message: "移除成功！",
+          message: this.$t("task.remove-task-success", { taskName }),
         });
       });
     },
     onStartClick() {
       if (!this.task.setEnable(true)) {
-        this.$msg.error(`[${this.task.path}] 路径不存在`);
+        this.$msg.error(
+          this.$t("task.path-not-exist", { taskPath: this.task.path })
+        );
         return;
       }
       this.application.taskManager.changeTaskOptions(this.task);
-      this.$msg.success(`[${this.task.id}] 已启动`);
+      this.$msg.success(
+        this.$t("task.task-start-success", { taskName: this.task.name })
+      );
     },
     onStopClick() {
       this.task.setEnable(false);
       this.application.taskManager.changeTaskOptions(this.task);
-      this.$msg.success(`[${this.task.id}] 已停止`);
+      this.$msg.success(
+        this.$t("task.task-stop-success", { taskName: this.task.name })
+      );
     },
     onFolderClick() {
       showItemInFolder(this.task.path, {
-        errorMsg: `[${this.task.path}] 文件不存在`,
+        errorMsg: this.$t("task.path-no-exist", { taskPath: this.task.path }),
         errorFun: () => {
           this.task.setEnable(false);
         },
@@ -172,7 +179,7 @@ export default {
     },
     handleCommand(url) {
       this.$electron.clipboard.writeText(url);
-      this.$msg.success("复制成功！");
+      this.$msg.success(this.$t("task.copy-success"));
     },
   },
 };

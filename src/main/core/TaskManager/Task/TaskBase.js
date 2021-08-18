@@ -1,5 +1,6 @@
 import http from 'http'
 import { guid } from '../../../../shared/twtools'
+import { getI18n } from '../../../ui/Locale'
 
 export default class TaskBase {
     constructor(task) {
@@ -16,6 +17,8 @@ export default class TaskBase {
         this.type = task.type;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
+
+        this.i18n = getI18n()
     }
 
     setEnable(val) {
@@ -56,7 +59,7 @@ export default class TaskBase {
             result.code = 500
             result.message = JSON.stringify({
                 taskId: this.id,
-                message: `任务 [${this.id}] 已经关闭`
+                message: this.i18n.t('task.task-closed-message', { id: this.id })
             })
             return result;
         }
@@ -66,7 +69,7 @@ export default class TaskBase {
             result.code = 500
             result.message = JSON.stringify({
                 taskId: this.id,
-                message: `任务 [${this.id}] 已经超出流量限制`
+                message: this.i18n.t('task.task-out-limit-message', { id: this.id })
             })
             return result;
         }

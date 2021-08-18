@@ -11,14 +11,17 @@
   >
     <el-form ref="taskForm" label-position="left" :model="form">
       <el-row :gutter="12">
-        <el-form-item label="任务地址：" :label-width="formLabelWidth">
+        <el-form-item
+          :label="`${$t('task.task-dir-path')}`"
+          :label-width="formLabelWidth"
+        >
           <el-link @click.stop="">{{ task.path }}</el-link>
         </el-form-item>
       </el-row>
       <el-row :gutter="12">
         <el-form-item
           prop="taskName"
-          label="任务名称："
+          :label="`${$t('task.task-name')}`"
           :label-width="formLabelWidth"
         >
           <el-input v-model="form.taskName"></el-input>
@@ -27,7 +30,7 @@
       <el-row :gutter="12">
         <el-form-item
           prop="id"
-          label="二级域名："
+          :label="`${$t('task.task-base-path')}`"
           :label-width="formLabelWidth"
         >
           <el-input v-model="form.id"></el-input>
@@ -47,7 +50,10 @@
       </el-row>
       <el-row :gutter="12">
         <el-col :span="15">
-          <el-form-item label="使用流量：" :label-width="formLabelWidth">
+          <el-form-item
+            :label="`${$t('task.task-used-stream')}`"
+            :label-width="formLabelWidth"
+          >
             <ts-task-progress
               :class="[form.limit != 0 ? '' : 'no-limit']"
               id="taskProgress"
@@ -58,12 +64,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-link @click.stop="handleClearUsed">清空流量</el-link>
+          <el-link @click.stop="handleClearUsed">{{
+            $t("task.task-clear-used")
+          }}</el-link>
         </el-col>
       </el-row>
       <el-row :gutter="12">
         <el-form-item :span="24">
-          <el-checkbox v-model="form.gzip">启用 gzip</el-checkbox>
+          <el-checkbox v-model="form.gzip">{{
+            $t("task.task-enable-gzip")
+          }}</el-checkbox>
         </el-form-item>
       </el-row>
       <ts-task-limit
@@ -76,10 +86,10 @@
     <div slot="footer" class="dialog-footer">
       <el-row>
         <el-col :span="24">
-          <el-button @click="handleClosed">取消</el-button>
-          <el-button type="primary" @click="submitForm('taskForm')"
-            >提交</el-button
-          >
+          <el-button @click="handleClosed">{{ $t("app.cancel") }}</el-button>
+          <el-button type="primary" @click="submitForm('taskForm')">{{
+            $t("app.submit")
+          }}</el-button>
         </el-col>
       </el-row>
     </div>
@@ -190,11 +200,6 @@ export default {
         } catch (error) {
           this.$message.error(error.message);
         }
-      });
-    },
-    handlePathClick() {
-      showItemInFolder(this.task.path, {
-        errorMsg: `[${this.task.path}] 文件不存在`,
       });
     },
     handleClose() {

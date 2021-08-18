@@ -15,7 +15,7 @@
       <ts-icon name="inbox" width="24" height="24"></ts-icon>
     </i>
     <div class="el-upload__text">
-      将文件或文件夹拖拽到此处，或者点击选择
+      {{ $t("task.select-folder") }}
       <div class="task-name" v-if="taskName">{{ taskName }}</div>
     </div></el-upload
   >
@@ -78,7 +78,12 @@ export default {
       var hasList = this.application.taskManager.taskList.filter((f) => {
         return f.path === path;
       });
-      this.$message.warning(`[${path}] 任务已经存在【${hasList.length}】份`);
+      this.$message.warning(
+        this.$t("task.task-path-exist", {
+          taskPath: path,
+          count: hasList.length,
+        })
+      );
 
       fs.stat(file.raw.path, function (err, stats) {
         try {

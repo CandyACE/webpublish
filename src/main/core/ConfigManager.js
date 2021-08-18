@@ -21,7 +21,6 @@ export default class ConfigManager {
                 port: 9090,
                 address: '127.0.0.1',
                 'open-at-login': false,
-                'locale': app.getLocale(),
                 'auto-hide-window': false,
                 'auto-check-update': true,
                 'hide-app-menu': true,
@@ -30,6 +29,7 @@ export default class ConfigManager {
                 'last-update-version': '',
                 'last-check-update-time': 0,
                 'user-experience': true,
+                'locale': app.getLocale(),
                 api: {
                     enabled: false,
                     port: 9080
@@ -58,6 +58,10 @@ export default class ConfigManager {
 
     setSystemConfig(...args) {
         this.systemConfig.set(...args)
+    }
+
+    getLocale() {
+        return this.getSystemConfig('locale') || app.getLocale()
     }
 
     reset() {

@@ -9,7 +9,7 @@
         <i class="subnav-icon">
           <ts-icon name="preference-basic" width="20" height="20"></ts-icon
         ></i>
-        <span>通用</span>
+        <span>{{ $t("options.basic") }}</span>
       </li>
     </ul>
   </nav>
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     title: function () {
-      return "设置";
+      return this.$t("subnav.options");
     },
   },
   methods: {

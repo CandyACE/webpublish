@@ -3,11 +3,15 @@ import { autoUpdater } from "electron-updater";
 import { EventEmitter } from 'events'
 import updateType from "../helper/updateType";
 import { Notification } from 'electron'
+import { getI18n } from '../ui/Locale'
 
 class UpdateManager extends EventEmitter {
 
     constructor() {
         super()
+
+        this.i18n = getI18n()
+
         this._init()
         this.showMessage = false;
     }
@@ -53,13 +57,13 @@ class UpdateManager extends EventEmitter {
         // 发现可更新数据时
         autoUpdater.on(updateType.Available, (event, arg) => {
             this.Message(updateType.Available)
-            new Notification({ title: "有可用的更新！" }).show()
+            new Notification({ title: this.i18n.t('app.updae-available-message') }).show()
         })
         // 没有可更新数据时
         autoUpdater.on(updateType.NotAvailable, (event, arg) => {
             this.Message(updateType.NotAvailable)
             if (this.showMessage) {
-                new Notification({ title: "已经是最新的版本！" }).show()
+                new Notification({ title: this.i18n.t('app.update-not-available-message') }).show()
                 this.showMessage = false;
             }
         })

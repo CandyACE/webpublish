@@ -3,13 +3,14 @@
     <div class="checkUpdate">
       <div class="newVersion" v-if="state === stateType.hasNew">
         <span
-          >获取到新版本<el-link type="primary" @click="update"
-            >立刻更新！</el-link
-          >
-          或者
-          <el-link type="primary" @click="openChangedUrl"
-            >查看更新日志</el-link
-          ></span
+          >{{ $t("app.update-available-message")
+          }}<el-link type="primary" @click="update">{{
+            $t("app.update-now")
+          }}</el-link>
+          {{ " " + $t("app.or") + " " }}
+          <el-link type="primary" @click="openChangedUrl">{{
+            $t("about.release")
+          }}</el-link></span
         >
       </div>
       <el-progress

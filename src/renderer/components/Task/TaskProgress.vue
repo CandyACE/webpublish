@@ -18,10 +18,12 @@
   </div>
   <div v-else class="task-progress-nolimit">
     <span v-if="type === 'size'"
-      >已使用：<span>{{ this.useData | bytesToSize }}</span></span
+      >{{ $t("task.task-used") + ": "
+      }}<span>{{ this.useData | bytesToSize }}</span></span
     >
     <span v-else>
-      已使用：<span>{{ this.useData | countToSize }}</span>
+      {{ $t("task.task-used") + ": "
+      }}<span>{{ this.useData | countToSize }}</span>
     </span>
   </div>
 </template>
@@ -66,17 +68,6 @@ export default {
     },
   },
   methods: {
-    createUrl(id, url, element) {
-      var address = element.address;
-      var application = remote.getGlobal("application");
-      var port = application.configManager.getSystemConfig("port", "9090");
-      return `http://${address}:${port}/${id}/` + url;
-    },
-    copy(id, url, element) {
-      var path = this.createUrl(id, url, element);
-      this.$electron.clipboard.writeText(path);
-      this.$msg.success("复制成功！");
-    },
   },
   filters: {
     bytesToSize,
