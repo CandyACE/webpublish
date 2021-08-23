@@ -199,10 +199,10 @@ export default {
           .dispatch("options/save", data)
           .then(() => {
             this.syncFormConfig();
-            this.$message.success("设置保存成功！");
+            this.$msg.success(this.$t("options.save-success-message"));
           })
           .catch(() => {
-            this.$message.error("设置保存失败！");
+            this.$msg.error(this.$t("options.save-fail-message"));
           });
 
         if (is.renderer()) {
@@ -222,7 +222,7 @@ export default {
         "command",
         "application:check-for-updates"
       );
-      this.$message.info("正在检查更新...");
+      this.$msg.info(this.$t("app.checking-for-updates"));
       this.$store.dispatch("options/fetchOptions").then((config) => {
         const { lastCheckUpdateTime } = config;
         this.form.lastCheckUpdateTime = lastCheckUpdateTime;

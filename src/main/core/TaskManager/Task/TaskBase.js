@@ -1,6 +1,5 @@
 import http from 'http'
 import { guid } from '../../../../shared/twtools'
-import { getI18n } from '../../../ui/Locale'
 
 export default class TaskBase {
     constructor(task) {
@@ -17,8 +16,6 @@ export default class TaskBase {
         this.type = task.type;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
-
-        this.i18n = getI18n()
     }
 
     setEnable(val) {

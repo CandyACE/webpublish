@@ -165,7 +165,7 @@ export default {
         return;
       }
       if (this.taskList.find((e) => e.path === raw.path)) {
-        this.$message.error("该任务已经存在！");
+        this.$msg.error("该任务已经存在！");
         this.$store.dispatch("app/hideAddTaskDialog");
         return;
       }
@@ -191,7 +191,7 @@ export default {
     },
     addTask(options) {
       // this.$store.dispatch("task/addTask", options).catch((err) => {
-      //   this.$message.error(err.message);
+      //   this.$msg.error(err.message);
       // });
       this.application.taskManager.addTask(options);
     },
@@ -221,7 +221,7 @@ export default {
 
           this.$store.dispatch("app/hideAddTaskDialog");
         } catch (error) {
-          this.$message.error(error.message);
+          this.$msg.error(error.message);
         }
       });
     },

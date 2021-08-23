@@ -25,5 +25,7 @@ export default {
     'minute': 'm',
     'second': 's',
     'server-start-success': 'Server Start Successfully',
-    'port-exist': '"{{port}}" Port is Exist'
+    'port-exist': '"{{port}}" Port is Exist',
+    'no-task': 'No Tasks',
+    'search-task': 'Search Content'
 }

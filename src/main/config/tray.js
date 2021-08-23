@@ -1,24 +1,20 @@
-import { getI18n } from '../ui/Locale'
-
-const i18n = getI18n();
-
 export default [
     {
-        label: i18n.t('app.show'),
-        click: function () {
+        id: 'app.show',
+        command: function () {
             application.show()
         }
     },
     {
-        label: i18n.t('app.check-for-updates'),
-        click: function () {
+        id: 'app.check-for-updates',
+        command: function () {
             application.updateManager.checkForUpdates(true)
         }
     },
     { type: "separator" },
     {
-        label: i18n.t('app.quit'),
-        click: function () {
+        id: 'app.quit',
+        command: function () {
             application.quit()
         }
     }

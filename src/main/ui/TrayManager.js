@@ -3,52 +3,72 @@ import { join } from 'path'
 import { Tray, Menu } from "electron";
 import path from 'path'
 import logger from '../core/Logger';
-import { getI18n } from './Locale'
+import { flattenMenuItems, translateTemplate } from '../utils/menu'
+import { getI18n } from "./Locale";
+import cloneDeep from 'lodash.clonedeep';
 
 let tray = null
 
 export default class TrayManager extends EventEmitter {
-    constructor(options = {}) {
-        super()
+  constructor(options = {}) {
+    super()
 
-        this.i18n = getI18n()
+    this.i18n = getI18n()
+    this.menu = null;
+    this.items = null;
 
-        this.initTemplate()
-        this.setIcons()
+    this.loadTemplate()
+    this.setIcons()
+    this.init()
+    this.build()
+    this.handleEvents()
+  }
 
-        this.init()
-        this.build()
-        this.handleEvents()
+  loadTemplate() {
+    this.template = require('../config/tray').default
+  }
+
+  setIcons() {
+    this.normalIcon = path.join(__static, 'image/icon.ico')
+  }
+
+  init() {
+    tray = new Tray(this.normalIcon)
+    tray.setToolTip('快速发布工具')
+  }
+
+  build() {
+    this.buildMenu()
+
+    this.updateContextMenu()
+  }
+
+  buildMenu() {
+    const keystrokesByCommand = {}
+    for (const item in this.keymap) {
+      keystrokesByCommand[this.keymap[item]] = item
     }
+    const template = cloneDeep(this.template)
+    const tpl = translateTemplate(template, keystrokesByCommand, this.i18n)
+    this.menu = Menu.buildFromTemplate(tpl)
+    this.items = flattenMenuItems(this.menu)
+  }
 
-    initTemplate() {
-        this.template = require('../config/tray').default
-    }
+  updateContextMenu() {
+    tray.setContextMenu(this.menu)
+  }
 
-    setIcons() {
-        this.normalIcon = path.join(__static, 'image/icon.ico')
-    }
+  handleEvents() {
+    tray.on('click', function () {
+      global.application.show()
+    })
+  }
 
-    init() {
-        tray = new Tray(this.normalIcon)
-        tray.setToolTip(this.i18n.t('app.title'))
-    }
+  handleLocaleChange() {
+    this.build()
+  }
 
-    build() {
-
-        // const template = JSON.parse(JSON.stringify(this.template))
-        // const tpl = translateTemp
-        const contextMenu = Menu.buildFromTemplate(this.template)
-        tray.setContextMenu(contextMenu)
-    }
-
-    handleEvents() {
-        tray.on('click', function () {
-            global.application.show()
-        })
-    }
-
-    destory() {
-        tray.distory()
-    }
+  destory() {
+    tray.distory()
+  }
 }

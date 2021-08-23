@@ -136,7 +136,7 @@ export default {
       ).then(() => {
         // this.$store.dispatch("task/removeTask", this.task);
         this.application.taskManager.removeTask(this.task);
-        this.$message({
+        this.$msg({
           type: "success",
           message: this.$t("task.remove-task-success", { taskName }),
         });

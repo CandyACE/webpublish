@@ -12,16 +12,26 @@
     <el-form ref="taskForm" label-position="left" :model="form">
       <el-row :gutter="12">
         <el-form-item
-          :label="`${$t('task.task-dir-path')}`"
+          :label="`${$t('task.task-dir-path')}: `"
           :label-width="formLabelWidth"
         >
-          <el-link @click.stop="">{{ task.path }}</el-link>
+          <el-dropdown trigger="click" @command="handleDropDownClick"
+            ><el-link>{{ task.path }}</el-link>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="showInFolder">
+                {{ $t("task.show-in-folder") }}
+              </el-dropdown-item>
+              <el-dropdown-item command="searchSameTask">
+                {{ $t("task.task-search-same") }}
+              </el-dropdown-item>
+            </el-dropdown-menu></el-dropdown
+          >
         </el-form-item>
       </el-row>
       <el-row :gutter="12">
         <el-form-item
           prop="taskName"
-          :label="`${$t('task.task-name')}`"
+          :label="`${$t('task.task-name')}: `"
           :label-width="formLabelWidth"
         >
           <el-input v-model="form.taskName"></el-input>
@@ -30,7 +40,7 @@
       <el-row :gutter="12">
         <el-form-item
           prop="id"
-          :label="`${$t('task.task-base-path')}`"
+          :label="`${$t('task.task-base-path')}: `"
           :label-width="formLabelWidth"
         >
           <el-input v-model="form.id"></el-input>
@@ -51,7 +61,7 @@
       <el-row :gutter="12">
         <el-col :span="15">
           <el-form-item
-            :label="`${$t('task.task-used-stream')}`"
+            :label="`${$t('task.task-used-stream')}: `"
             :label-width="formLabelWidth"
           >
             <ts-task-progress
@@ -167,6 +177,15 @@ export default {
     },
   },
   methods: {
+    handleDropDownClick(command) {
+      if (command === "showInFolder") {
+        showItemInFolder(this.task.path, {
+          errorMsg: this.$t("task.path-no-exist", { taskPath: this.task.path }),
+        });
+      } else if (command === "searchSameTask") {
+        this.application.taskManager.updateSelectTaskList(this.task.path);
+      }
+    },
     handleClearUsed() {
       this.form.use = 0;
     },
@@ -198,7 +217,7 @@ export default {
 
           this.$store.dispatch("task/hideTaskItemInfoDialog");
         } catch (error) {
-          this.$message.error(error.message);
+          this.$msg.error(error.message);
         }
       });
     },

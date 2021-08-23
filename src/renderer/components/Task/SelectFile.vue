@@ -74,16 +74,18 @@ export default {
         return;
       }
 
-      var path = file.raw.path;
+      var filepath = file.raw.path;
       var hasList = this.application.taskManager.taskList.filter((f) => {
-        return f.path === path;
+        return f.path === filepath;
       });
-      this.$message.warning(
-        this.$t("task.task-path-exist", {
-          taskPath: path,
-          count: hasList.length,
-        })
-      );
+
+      if (hasList.length > 0)
+        this.$msg.warning(
+          this.$t("task.task-path-exist", {
+            taskPath: filepath,
+            count: hasList.length,
+          })
+        );
 
       fs.stat(file.raw.path, function (err, stats) {
         try {

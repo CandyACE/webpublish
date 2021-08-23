@@ -6,8 +6,11 @@ import getTask from './Task/Index';
 export default class TaskManager {
   constructor(configManager) {
     this._configManager = configManager;
-    this.taskList = []
+    this.taskList = [];
+    this.selectTaskList = [];
+    this.searchKey = null;
     this.taskListChanged = new Event()
+    this.searchKeyChanged = new Event()
     this.initTaskList();
   }
 
@@ -15,7 +18,9 @@ export default class TaskManager {
     var list = this._configManager.getSystemConfig('tasks', []);
     list.forEach(item => {
       var task = getTask(item.type);
-      this.taskList.push(new task(item))
+      var newTask = new task(item)
+      this.taskList.push(newTask)
+      this.selectTaskList.push(newTask)
     })
     this.taskListChanged.raiseEvent()
 
@@ -46,16 +51,16 @@ export default class TaskManager {
         this.taskListChanged.raiseEvent()
         break;
       }
-
     }
-    return this.taskList;
+    this.updateSelectTaskList(null, true)
   }
 
   addTask(options) {
-    this.taskListChanged.raiseEvent()
     var task = getTask(options.type)
     var item = new task(options);
     this.taskList.unshift(item);
+    this.taskListChanged.raiseEvent()
+    this.updateSelectTaskList(null, true)
     return this.taskList;
   }
 
@@ -63,11 +68,39 @@ export default class TaskManager {
     for (let i = 0; i < this.taskList.length; i++) {
       const item = this.taskList[i];
       if (item.gid == task.gid) {
-        this.taskListChanged.raiseEvent()
         this.taskList.splice(i, 1);
+        this.taskListChanged.raiseEvent()
         break;
       }
     }
+    this.updateSelectTaskList(null, true)
     return this.taskList;
+  }
+
+  /**
+   * 更新选择列表
+   * @param {*} val 
+   * @param {*} isReflash 
+   * @returns 
+   */
+  updateSelectTaskList(val, isReflash) {
+    this.selectTaskList.splice(0, this.selectTaskList.length)
+
+    if (!isReflash) {
+      this.searchKey = val;
+      this.searchKeyChanged.raiseEvent(val)
+    }
+
+    if (this.searchKey == "" || this.searchKey == null) {
+      this.selectTaskList.push(...this.taskList)
+      return;
+    }
+    const list = this.taskList.filter(f => {
+      return f.id.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1 ||
+        f.name.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1 ||
+        f.path.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1
+    })
+
+    this.selectTaskList.push(...list)
   }
 }

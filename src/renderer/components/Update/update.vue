@@ -69,7 +69,7 @@ export default {
       console.log(type);
       switch (type) {
         case updateType.NotAvailable:
-          this.state = this.stateType.None;
+          this.state = this.stateType.noNew;
           break;
         case updateType.Available:
           this.state = this.stateType.hasNew;
@@ -132,12 +132,11 @@ export default {
   .newVersion {
     background-color: blanchedalmond;
     position: absolute !important;
-    top: 35px;
-    width: 170px;
-    right: 0px;
+    bottom: 0px;
+    width: 100%;
     text-align: center;
     font-size: 14px;
-    z-index: 99999;
+    z-index: 999999999;
 
     .el-link {
       vertical-align: top !important;

@@ -26,5 +26,6 @@ export default {
     'task-base-exist': 'The secondary domain name already exists',
     'task-base-error': 'Secondary domain names cannot be empty',
     'task-closed-message': 'Task [{{id}}] is Closed',
-    'task-out-limit-message': 'Task [{{id}}] is out of limit'
+    'task-out-limit-message': 'Task [{{id}}] is out of limit',
+    'task-search-same': 'Find tasks with the same path'
 }

@@ -28,6 +28,10 @@ export default {
       version: __VERSION__,
       thanks: [
         {
+          name: "感谢 xiangzhoufeng",
+          link: "",
+        },
+        {
           name: "感谢 panweichen",
           link: "",
         },

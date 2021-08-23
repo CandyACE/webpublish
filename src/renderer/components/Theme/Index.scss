@@ -2,14 +2,24 @@
 -------------------------- */
 // @import '~normalize.css/normalize.css';
 
-/* Element UI
--------------------------- */
-// @import "~element-ui/packages/theme-chalk/src/index";
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 /* Theme Light (default)
 -------------------------- */
 @import './Default.scss';
 
+/* Element UI
+-------------------------- */
+@import "~element-ui/packages/theme-chalk/src/index";
+
 /* Theme Dark
 -------------------------- */
 // @import './Dark.scss';
+
+// /* 改变主题色变量 */
+// $--color-primary: #f56c6c;
+
+
+
+// @import "~element-ui/packages/theme-chalk/src/index";

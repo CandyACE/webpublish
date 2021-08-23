@@ -81,21 +81,6 @@ export default {
     removeTask(task) {
       this.application.taskManager.removeTask(task);
     },
-
-    // editName(task) {
-    //   task.editing = true;
-    //   this.$nextTick(() => {
-    //     this.$refs.fileTileEditor[0].focus();
-    //     this.$refs.fileTileEditor[0].select();
-    //   });
-    // },
-
-    // saveName(task) {
-    //   let index = this.taskList.indexOf(task);
-    //   task.editing = false;
-    //   this.application.taskManager.setTask(index, task);
-    // },
-
     getName() {
       return this.task.name || this.task.path.split("\\").pop();
     },
@@ -105,6 +90,7 @@ export default {
 
 <style lang="scss">
 .task-item {
+  user-select: none;
   position: relative;
   min-height: 88px;
   padding: 16px 12px;

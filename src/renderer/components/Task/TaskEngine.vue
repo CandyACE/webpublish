@@ -12,10 +12,10 @@ export default {
     var _this = this;
     this.application.serverManager.addListener("server", function (err) {
       if (err) {
-        _this.$message.error(err);
+        _this.$msg.error(err);
         return;
       }
-      _this.$message.success(_this.$t("app.server-start-success"));
+      _this.$msg.success(_this.$t("app.server-start-success"));
     });
     this.application.serverManager.start();
 

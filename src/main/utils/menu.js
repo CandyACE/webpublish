@@ -1,35 +1,35 @@
 import { parse } from 'querystring'
 
-export function concat (template, submenu, submenuToAdd) {
+export function concat(template, submenu, submenuToAdd) {
   submenuToAdd.forEach(sub => {
     let relativeItem = null
     if (sub.position) {
       switch (sub.position) {
-      case 'first':
-        submenu.unshift(sub)
-        break
-      case 'last':
-        submenu.push(sub)
-        break
-      case 'before':
-        relativeItem = findById(template, sub['relative-id'])
-        if (relativeItem) {
-          const array = relativeItem.__parent
-          const index = array.indexOf(relativeItem)
-          array.splice(index, 0, sub)
-        }
-        break
-      case 'after':
-        relativeItem = findById(template, sub['relative-id'])
-        if (relativeItem) {
-          const array = relativeItem.__parent
-          const index = array.indexOf(relativeItem)
-          array.splice(index + 1, 0, sub)
-        }
-        break
-      default:
-        submenu.push(sub)
-        break
+        case 'first':
+          submenu.unshift(sub)
+          break
+        case 'last':
+          submenu.push(sub)
+          break
+        case 'before':
+          relativeItem = findById(template, sub['relative-id'])
+          if (relativeItem) {
+            const array = relativeItem.__parent
+            const index = array.indexOf(relativeItem)
+            array.splice(index, 0, sub)
+          }
+          break
+        case 'after':
+          relativeItem = findById(template, sub['relative-id'])
+          if (relativeItem) {
+            const array = relativeItem.__parent
+            const index = array.indexOf(relativeItem)
+            array.splice(index + 1, 0, sub)
+          }
+          break
+        default:
+          submenu.push(sub)
+          break
       }
     } else {
       submenu.push(sub)
@@ -37,7 +37,7 @@ export function concat (template, submenu, submenuToAdd) {
   })
 }
 
-export function merge (template, item) {
+export function merge(template, item) {
   if (item.id) {
     const matched = findById(template, item.id)
     if (matched) {
@@ -55,7 +55,7 @@ export function merge (template, item) {
   }
 }
 
-function findById (template, id) {
+function findById(template, id) {
   for (const i in template) {
     const item = template[i]
     if (item.id === id) {
@@ -73,7 +73,7 @@ function findById (template, id) {
   return null
 }
 
-export function translateTemplate (template, keystrokesByCommand, i18n) {
+export function translateTemplate(template, keystrokesByCommand, i18n) {
   for (const i in template) {
     const item = template[i]
     if (item.command) {
@@ -101,37 +101,51 @@ export function translateTemplate (template, keystrokesByCommand, i18n) {
   return template
 }
 
-export function handleCommand (item) {
+export function handleCommand(item) {
   handleCommandBefore(item)
 
-  const args = item['command-arg']
-    ? [item.command, item['command-arg']]
-    : [item.command]
+  if (typeof item.command === 'function') {
+    item.command.call()
+  } else {
+    const args = item['command-arg']
+      ? [item.command, item['command-arg']]
+      : [item.command]
 
-  global.application.sendCommandToAll(...args)
+    global.application.sendCommandToAll(...args)
+  }
+
+
 
   handleCommandAfter(item)
 }
 
-function handleCommandBefore (item) {
+function handleCommandBefore(item) {
   if (!item['command-before']) {
     return
+  }
+  if (typeof item['command-before'] === 'function') {
+    item['command-before'].call()
+    return;
   }
   const [command, params] = item['command-before'].split('?')
   const args = parse(params)
   global.application.sendCommandToAll(command, args)
 }
 
-function handleCommandAfter (item) {
+function handleCommandAfter(item) {
   if (!item['command-after']) {
     return
+  }
+  if (typeof item['command-after'] === 'function') {
+    item['command-after'].call()
+    return;
   }
   const [command, params] = item['command-after'].split('?')
   const args = parse(params)
   global.application.sendCommandToAll(command, args)
 }
 
-function acceleratorForCommand (command, keystrokesByCommand) {
+function acceleratorForCommand(command, keystrokesByCommand) {
   const keystroke = keystrokesByCommand[command]
   if (keystroke) {
     let modifiers = keystroke.split(/-(?=.)/)
@@ -158,7 +172,7 @@ function acceleratorForCommand (command, keystrokesByCommand) {
   return null
 }
 
-export function flattenMenuItems (menu) {
+export function flattenMenuItems(menu) {
   const flattenItems = {}
   menu.items.forEach(item => {
     if (item.id) {
@@ -171,7 +185,7 @@ export function flattenMenuItems (menu) {
   return flattenItems
 }
 
-export function updateStates (itemsById, visibleStates, enabledStates, checkedStates) {
+export function updateStates(itemsById, visibleStates, enabledStates, checkedStates) {
   if (visibleStates) {
     for (const command in visibleStates) {
       const item = itemsById[command]

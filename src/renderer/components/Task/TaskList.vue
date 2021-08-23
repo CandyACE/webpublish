@@ -1,12 +1,14 @@
 <template>
   <div class="task-list" v-if="taskList.length > 0">
     <transition-group>
-    <div v-for="item in taskList" :key="item.gid" :attr="item.gid">
-      <ts-task-item :task="item"></ts-task-item>
-    </div>
+      <div v-for="item in taskList" :key="item.gid" :attr="item.gid">
+        <ts-task-item :task="item"></ts-task-item>
+      </div>
     </transition-group>
   </div>
-  <div v-else class="no-task"></div>
+  <div v-else class="no-task">
+    <el-empty :description="`${$t('app.no-task')}`"></el-empty>
+  </div>
 </template>
 
 <script>
@@ -20,7 +22,7 @@ export default {
   },
   data() {
     return {
-      taskList: this.application.taskManager.taskList,
+      taskList: this.application.taskManager.selectTaskList,
     };
   },
   computed: {

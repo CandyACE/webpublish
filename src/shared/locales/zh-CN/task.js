@@ -26,5 +26,6 @@ export default {
     'task-base-exist': '已经存在该二级域名',
     'task-base-error': '二级域名不能为空',
     'task-closed-message': '任务 [{{id}}] 已经关闭',
-    'task-out-limit-message': '任务 [{{id}}] 已经超出流量限制'
+    'task-out-limit-message': '任务 [{{id}}] 已经超出流量限制',
+    'task-search-same': '查找相同路径的项目'
 }
