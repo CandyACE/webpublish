@@ -7,7 +7,7 @@
   "main": "./dist/electron/main.js",
   "hostUpdateUrl": "http://oss.tangweitian.cn/update/webpublish/host/",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build": "npm run build:changelog && node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -16,7 +16,8 @@
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "",
-    "rebuild": "electron-rebuild -f -w sqlite3"
+    "rebuild": "electron-rebuild -f -w sqlite3",
+    "build:changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s"
   },
   "build": {
     "productName": "快速发布工具",
@@ -96,6 +97,7 @@
     "babel-register": "^6.26.0",
     "cfonts": "^2.1.2",
     "chalk": "^2.4.2",
+    "conventional-changelog-cli": "^2.1.1",
     "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^5.1.6",
     "css-loader": "^0.28.11",
