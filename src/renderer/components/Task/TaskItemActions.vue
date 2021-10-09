@@ -36,7 +36,15 @@
               :command="createUrl(address)"
               :disabled="!task.enable"
             >
-              {{ createUrl(address) }}
+              <span>{{ createUrl(address) }}</span>
+              <span
+                ><ts-icon
+                  name="arrow-up"
+                  width="10"
+                  height="10"
+                  @click.native="handleLinkOpen(createUrl(address))"
+                ></ts-icon
+              ></span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -65,6 +73,7 @@ import "@/components/Icons/info-square";
 import "@/components/Icons/node";
 import "@/components/Icons/trash";
 import "@/components/Icons/image";
+import "@/components/Icons/arrow-up";
 import os from "os";
 import api from "../../api";
 import { remote, shell } from "electron";
@@ -180,6 +189,9 @@ export default {
     handleCommand(url) {
       this.$electron.clipboard.writeText(url);
       this.$msg.success(this.$t("task.copy-success"));
+    },
+    handleLinkOpen(url) {
+      shell.openExternal(url);
     },
   },
 };

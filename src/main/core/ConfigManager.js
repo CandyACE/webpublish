@@ -23,7 +23,7 @@ export default class ConfigManager {
                 'open-at-login': false,
                 'auto-hide-window': false,
                 'auto-check-update': true,
-                'hide-app-menu': true,
+                'hide-app-menu': is.windows() || is.linux(),
                 'keep-window-state': false,
                 'window-state': {},
                 'last-update-version': '',

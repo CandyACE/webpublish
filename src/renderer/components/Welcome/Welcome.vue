@@ -53,6 +53,7 @@ export default {
   //   },
   // },
   mounted() {
+    this.visible = true;
     this.$store.dispatch("options/fetchOptions").then((config) => {
       const { lastUpdateVersion } = config;
       if (this.version !== lastUpdateVersion) {

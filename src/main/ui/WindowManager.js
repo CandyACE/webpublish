@@ -3,6 +3,7 @@ import { EventEmitter } from 'events'
 import pageConfig from '../config/page'
 import { app, shell, screen, BrowserWindow } from 'electron'
 import { debounce } from 'lodash'
+import { join } from 'path'
 
 const defaultBrowserOptions = {
   titleBarStyle: 'hiddenInset',
@@ -44,6 +45,10 @@ export default class WindowManager extends EventEmitter {
     const heightScale = height >= 800 ? 1 : 0.875
     result.attrs.width *= widthScale
     result.attrs.height *= heightScale
+
+    if (is.linux()) {
+      result.attrs.icon = join(__static, './image/twtoolsLogo.png')
+    }
 
     return result
   }

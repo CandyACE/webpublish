@@ -7,7 +7,8 @@
   "main": "./dist/electron/main.js",
   "hostUpdateUrl": "http://oss.tangweitian.cn/update/webpublish/host/",
   "scripts": {
-    "build": "npm run build:changelog && node .electron-vue/build.js && electron-builder",
+    "build": "node .electron-vue/build.js && electron-builder",
+    "build:publish": "npm run build:changelog && node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -17,30 +18,34 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": "",
     "rebuild": "electron-rebuild -f -w sqlite3",
-    "build:changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s"
+    "release": "node scripts/release.js",
+    "changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s"
   },
   "build": {
-    "productName": "快速发布工具",
+    "productName": "WebPublish",
     "appId": "com.ts.webpublish",
     "directories": {
       "output": "build"
     },
-    "publish": [{
-      "provider": "generic",
-      "url": "http://oss.tangweitian.cn/update/webpublish",
-      "updateInfos": [
-        "新增 支持多任务检索",
-        "新增 无任务的时候的默认页面",
-        "新增 任务属性中可以点击任务路径快速检索到相同路径的任务",
-        "新增 新增多语言设置，目前支持简体中文、繁体中文、英文",
-        "新增 更新设置，可以在设置界面立即更新"
-      ]
-    }],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://oss.tangweitian.cn/update/webpublish",
+        "updateInfos": [
+          "新增 支持多任务检索",
+          "新增 无任务的时候的默认页面",
+          "新增 任务属性中可以点击任务路径快速检索到相同路径的任务",
+          "新增 新增多语言设置，目前支持简体中文、繁体中文、英文",
+          "新增 更新设置，可以在设置界面立即更新"
+        ]
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "x": 410,
           "y": 150,
           "type": "link",
@@ -107,6 +112,8 @@
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
+    "enquirer": "^2.3.6",
+    "execa": "^0.7.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.4.0",
