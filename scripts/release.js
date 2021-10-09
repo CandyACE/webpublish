@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const semver = require('semver')
-const { prompt } = require('enquirer')
+const { prompt, MultiSelect } = require('enquirer')
 const execa = require('execa')
 const pkg = require('../package.json')
 
@@ -73,10 +73,34 @@ async function main() {
     return;
   }
 
+  step("\nGetUpdate Message...")
+  var updateMessage = []
+  const cherry = await run('git', ['cherry'], { stdio: 'pipe' });
+  var list = cherry.stdout.split('\n').map(e => e.replace('+ ', ''))
+  var commit = []
+  for (let i = 0; i < list.length; i++) {
+    const commitid = list[i];
+    const show = await run('git', ['show', '--quiet', commitid], { stdio: 'pipe' })
+    var commitList = show.stdout.split('\n').map(e => e.replace(/(^\s*)/g, "").replace(/(\s*$)/g, ""));
+    commitList.splice(0, 4);
+    commit.push(...commitList)
+  }
+
+  const prom = new MultiSelect({
+    name: "updateMessage",
+    message: "Select Update Messages: ",
+    choices: commit
+  })
+  updateMessage = await prom.run();
+
   // update all package versions and inter-dependencies
   step('\nUpdating cross dependencies...');
   if (!isDryRun) {
     pkg.version = targetVersion;
+    if (updateMessage.length <= 0) {
+      updateMessage.push('修复若干问题');
+    }
+    pkg.build.publish[0].updateInfos = updateMessage;
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
   } else {
     console.log(`(skipped)`);

@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -19,7 +19,9 @@
     "postinstall": "",
     "rebuild": "electron-rebuild -f -w sqlite3",
     "release": "node scripts/release.js",
-    "changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s"
+    "test": "node scripts/test.js",
+    "changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s",
+    "changelog1": "conventional-changelog -h"
   },
   "build": {
     "productName": "WebPublish",
@@ -32,11 +34,9 @@
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
         "updateInfos": [
-          "新增 支持多任务检索",
-          "新增 无任务的时候的默认页面",
-          "新增 任务属性中可以点击任务路径快速检索到相同路径的任务",
-          "新增 新增多语言设置，目前支持简体中文、繁体中文、英文",
-          "新增 更新设置，可以在设置界面立即更新"
+          "新增 发布脚本",
+          "新增 可以选择直接浏览器打开链接",
+          "修改 名称改为WebPublish"
         ]
       }
     ],
