@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import { join } from 'path'
-import { Tray, Menu } from "electron";
+import { Tray, Menu, nativeImage } from "electron";
 import path from 'path'
 import logger from '../core/Logger';
 import { flattenMenuItems, translateTemplate } from '../utils/menu'
@@ -29,7 +29,7 @@ export default class TrayManager extends EventEmitter {
   }
 
   setIcons() {
-    this.normalIcon = path.join(__static, 'image/icon.ico')
+    this.normalIcon = nativeImage.createFromPath(path.join(__static, 'image/icon.ico'))
   }
 
   init() {

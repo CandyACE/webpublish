@@ -94,7 +94,7 @@ export default {
     openChangedUrl() {
       try {
         shell.openExternal(
-          "https://gitee.com/tstwt/webpublish/blob/main/CHANGED.md"
+          "https://gitee.com/tstwt/webpublish/blob/main/CHANGELOG.md"
         );
       } catch (error) {
         console.warn(error);

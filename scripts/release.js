@@ -31,6 +31,10 @@ const dryRun = (bin, args, opts = {}) =>
 const runIfNotDry = isDryRun ? dryRun : run;
 const step = (msg) => console.log(chalk.cyan(msg));
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 async function main() {
   let targetVersion = args._[0];
 
@@ -106,6 +110,8 @@ async function main() {
     console.log(`(skipped)`);
   }
 
+  await sleep(2000)
+
   // // run tests before release
   // step('\nRunning tests...');
   // if (!skipTests && !isDryRun) {
@@ -120,6 +126,16 @@ async function main() {
     await run('npm', ['run', 'build']);
   } else {
     console.log(`(skipped)`);
+  }
+
+  const { yes } = await prompt({
+    type: 'confirm',
+    name: 'yes',
+    message: `Git Push. Confirm?`,
+  });
+
+  if (!yes) {
+    return;
   }
 
   // generate changelog
