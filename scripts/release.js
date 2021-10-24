@@ -97,6 +97,13 @@ async function main() {
   })
   updateMessage = await prom.run();
 
+  
+  const { yes1 } = await prompt({
+    type: 'confirm',
+    name: 'yes',
+    message: `Git Push. Confirm?`,
+  });
+
   // update all package versions and inter-dependencies
   step('\nUpdating cross dependencies...');
   if (!isDryRun) {
@@ -128,13 +135,7 @@ async function main() {
     console.log(`(skipped)`);
   }
 
-  const { yes } = await prompt({
-    type: 'confirm',
-    name: 'yes',
-    message: `Git Push. Confirm?`,
-  });
-
-  if (!yes) {
+  if (!yes1) {
     return;
   }
 

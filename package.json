@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -34,9 +34,9 @@
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
         "updateInfos": [
-          "新增 发布脚本",
-          "新增 可以选择直接浏览器打开链接",
-          "修改 名称改为WebPublish"
+          "修复 右键菜单的图标",
+          "修复 升级出现的错误",
+          "升级 release脚本"
         ]
       }
     ],
