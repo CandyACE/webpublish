@@ -27,5 +27,6 @@ export default {
     'task-base-error': '二級域名不能為空',
     'task-closed-message': '任務 [{{id}}] 已經關閉',
     'task-out-limit-message': '任務 [{{id}}] 已經超出流量限制',
-    'task-search-same': '查找相同路徑的項目'
+    'task-search-same': '查找相同路徑的項目',
+    'task-disenable-directory': '禁用文件夾視圖',
 }

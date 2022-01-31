@@ -6,7 +6,7 @@
         href="https://tangweitian.cn"
         rel="noopener noreferrer"
       >
-        &copy;2021 Tangweitian
+        &copy;2022 Tangweitian
       </a>
     </el-col>
     <el-col :span="18" class="copyright-right">

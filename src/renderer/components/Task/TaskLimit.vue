@@ -1,7 +1,7 @@
 <template>
   <div id="task-limit">
     <el-row :gutter="12">
-      <el-col :span="24" :xs="24">
+      <el-col :span="24">
         <el-form-item>
           <el-checkbox v-model="showLimit">
             {{ textLimit }}
@@ -10,7 +10,7 @@
       </el-col>
     </el-row>
     <el-row v-if="showLimit" :gutter="12">
-      <el-col :span="9">
+      <el-col :span="13">
         <el-form-item :label="textLimit" :label-width="labelWidth"
           ><el-input-number
             v-model.number="limitData"
@@ -19,7 +19,7 @@
           ></el-input-number
         ></el-form-item>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="11">
         <el-form-item
           ><span style="margin-left: 10px">{{
             type === "mbtiles" ? "次" : "MB"

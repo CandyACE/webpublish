@@ -45,8 +45,12 @@ export default class DirectoryTask extends TaskBase {
             FileTask.Action(req, res, info, stats1)
             taskInfo.useData += stats1.size;
         } else if (stats1.isDirectory()) {
-            var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
-            DirectoryHTML(filePath, res, { isRoot: isRoot })
+            if (!taskInfo.disenableDirectoryView) {
+                var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
+                DirectoryHTML(filePath, res, { isRoot: isRoot })
+            } else {
+                res.end("This Task disenable directory view.")
+            }
         }
     }
 

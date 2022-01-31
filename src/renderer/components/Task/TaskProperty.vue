@@ -86,12 +86,23 @@
           }}</el-checkbox>
         </el-form-item>
       </el-row>
-      <ts-task-limit
-        ref="taskLimit"
-        :showLimit="showLimit"
-        :type="form.selectTaskType"
-        :limitData="formLimitMin"
-      ></ts-task-limit>
+      <el-row :gutter="12">
+        <ts-task-limit
+          ref="taskLimit"
+          :showLimit="showLimit"
+          :type="form.selectTaskType"
+          :limitData="formLimitMin"
+        ></ts-task-limit>
+      </el-row>
+      <div v-if="form.selectTaskType == 'directory'">
+        <el-row :gutter="12">
+          <el-form-item :span="24">
+            <el-checkbox v-model="form.disenableDirectoryView">
+              {{ $t("task.task-disenable-directory") }}
+            </el-checkbox>
+          </el-form-item>
+        </el-row>
+      </div>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-row>
@@ -140,6 +151,7 @@ export default {
         use: 0,
         selectTaskType: "file",
         gzip: false,
+        disenableDirectoryView: false,
       },
       rules: [],
     };
@@ -169,6 +181,7 @@ export default {
       this.form.use = Number(val.useData);
       this.form.selectTaskType = val.type;
       this.form.gzip = val.gzip;
+      this.form.disenableDirectoryView = val.disenableDirectoryView;
 
       // if (val.type !== "mbtiles") {
       //   this.form.limit = (this.form.limit / 1024 / 1024).toFixed(1);
@@ -205,6 +218,7 @@ export default {
             gzip: this.form.gzip,
             limitData: taskLimit.showLimit ? Number(taskLimit.limitData) : 0,
             type: this.form.selectTaskType,
+            disenableDirectoryView: this.form.disenableDirectoryView,
           };
 
           if (item.type !== "mbtiles") {

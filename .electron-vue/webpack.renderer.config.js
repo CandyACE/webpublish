@@ -158,7 +158,8 @@ let rendererConfig = {
       __AUTHOR__: JSON.stringify(author),
       __UPDATEURL__: JSON.stringify(build.publish[0].url),
       __HOSTURL__: JSON.stringify(hostUpdateUrl),
-      __UPDATEINFO__: JSON.stringify(build.publish[0].updateInfos)
+      __UPDATEINFO__: JSON.stringify(build.publish[0].updateInfos),
+      __DESCRIPTION__: JSON.stringify(build.publish[0].description),
     })
   ],
   output: {

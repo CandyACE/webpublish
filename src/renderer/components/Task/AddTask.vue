@@ -58,6 +58,17 @@
             :type="form.selectTaskType"
             :limitData="form.limit"
           ></ts-task-limit>
+          <div v-if="taskType == 'directory'">
+            <el-row :gutter="12">
+              <el-col :span="24" :xs="24">
+                <el-form-item>
+                  <el-checkbox v-model="form.disenableDirectoryView">
+                    {{ $t("task.task-disenable-directory") }}
+                  </el-checkbox>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="添加代理" name="proxy" v-if="false"> </el-tab-pane>
       </el-tabs>
@@ -149,6 +160,7 @@ export default {
         selectTaskType: FILE_STATUS.FILE,
         gzip: true,
         limit: 0,
+        disenableDirectoryView: false,
       };
     },
     reset() {
@@ -174,6 +186,7 @@ export default {
       this.taskType = fileStats;
       this.showFileTypeSelection = this.taskType == FILE_STATUS.MBTILES;
       this.form.selectTaskType = FILE_STATUS.FILE;
+      this.form.disenableDirectoryView = false;
       this.form.id = guid();
     },
     handleClose() {
@@ -211,6 +224,7 @@ export default {
             gzip: this.form.gzip,
             type: this.taskType,
             limitData: limit.showLimit ? Number(limit.limitData) : 0,
+            disenableDirectoryView: this.form.disenableDirectoryView,
           };
 
           if (item.type !== "mbtiles") {

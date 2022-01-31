@@ -54,7 +54,7 @@ async function DirectoryHTML(dirPath, res, options) {
                 style += '.' + icon.className + "\n" + ' {\n ' + 'background: url("' + loadImage(icon.fileName) + '") no-repeat;' + '\n}\n'
             }
 
-            dirTemplate += `<script>addRow("${tempFile.name}","${escapehtml(tempFile.name)}",${tempFile.stat.isFile() ? 0 : 1},"${icon.className}",${tempFile.stat.size},"${escapehtml(renderSize(size))}",${tempFile.stat.mtimeMs},"${data}");</script>` + "\r\n"
+            dirTemplate += `<script>addRow("${tempFile.name}","${encodeURIComponent(escapehtml(tempFile.name))}",${tempFile.stat.isFile() ? 0 : 1},"${icon.className}",${tempFile.stat.size},"${escapehtml(renderSize(size))}",${tempFile.stat.mtimeMs},"${data}");</script>` + "\r\n"
         }
 
         dirTemplate += '<style>' + style + '</style>'

@@ -14,6 +14,7 @@ export default class TaskBase {
             this.gzip = true;
         }
         this.type = task.type;
+        this.disenableDirectoryView = task.disenableDirectoryView;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
     }

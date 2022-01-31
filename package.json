@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -29,23 +29,20 @@
     "directories": {
       "output": "build"
     },
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "http://oss.tangweitian.cn/update/webpublish",
-        "updateInfos": [
-          "修复 右键菜单的图标",
-          "修复 升级出现的错误",
-          "升级 release脚本"
-        ]
-      }
-    ],
+    "publish": [{
+      "provider": "generic",
+      "url": "http://oss.tangweitian.cn/update/webpublish",
+      "description": "20220131：牛年接近尾声，这是牛年的最后一次更新，祝愿大家虎年快乐，阖家欢乐。可喜可贺，可口可乐。新年新气象，新年新方向。",
+      "updateInfos": [
+        "文件夹任务新增是否禁用文件夹视图",
+        "修复文件夹视图中，文件名称带有'#'等特殊字符无法解析的问题"
+      ]
+    }],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "x": 410,
           "y": 150,
           "type": "link",

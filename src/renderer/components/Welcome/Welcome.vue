@@ -18,6 +18,7 @@
         </div>
       </el-header>
       <el-main class="welcome-content">
+        <div class="description">{{ description }}</div>
         <div class="updateInfos">
           <p
             class="updateInfo"
@@ -44,6 +45,7 @@ export default {
       visible: false,
       version: __VERSION__,
       updateInfo: __UPDATEINFO__,
+      description: __DESCRIPTION__,
     };
   },
   // props: {
@@ -119,6 +121,12 @@ export default {
     max-height: 300px;
     overflow-y: auto;
     height: calc(100vh - 227px - 15vh - 90px);
+
+    .description {
+      margin: auto 20px;
+      font-size: 18px;
+      color: #ff9f5f;
+    }
 
     .updateInfos {
       .updateInfo {
