@@ -143,7 +143,6 @@ export default {
           dangerouslyUseHTMLString: true,
         }
       ).then(() => {
-        // this.$store.dispatch("task/removeTask", this.task);
         this.application.taskManager.removeTask(this.task);
         this.$msg({
           type: "success",

@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, protocol } from 'electron'
 import is from 'electron-is'
+import path from 'path'
 import Launcher from './Launcher'
 
 /**
@@ -9,6 +10,7 @@ import Launcher from './Launcher'
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
+
 
 /**
  * Fix Windows notification func

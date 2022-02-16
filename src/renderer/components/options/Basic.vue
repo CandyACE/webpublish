@@ -83,6 +83,9 @@
             </div>
           </el-col>
         </el-form-item>
+        <el-form-item :label-width="formLabelWidth">
+          <el-button type="primary" @click="openDevTools">打开开发工具</el-button>
+        </el-form-item>
         <el-form-item label="其他：" :label-width="formLabelWidth" v-if="false">
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.userExperience">
@@ -179,6 +182,17 @@ export default {
         this.form = initialForm(config);
         this.formOriginal = cloneDeep(this.form);
       });
+    },
+    openDevTools() {
+      let _this = this;
+      const application = remote.getGlobal('application');
+      let windows = application.windowManager.getWindows();
+      for (const item in windows) {
+        if (Object.hasOwnProperty.call(windows, item)) {
+          const element = windows[item];
+          element.openDevTools();
+        }
+      }
     },
     submitForm(formName) {
       let _this = this;

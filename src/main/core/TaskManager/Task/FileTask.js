@@ -33,7 +33,7 @@ export default class FileTask extends TaskBase {
      * 
      * @param {http.IncomingMessage} req 
      * @param {http.ServerResponse} res 
-     * @param {Object} taskInfo
+     * @param {TaskBase} taskInfo
      * @param {fs.Stats} stats
      */
     static async Action(req, res, taskInfo, stats) {

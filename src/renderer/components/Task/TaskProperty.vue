@@ -183,10 +183,10 @@ export default {
       this.form.gzip = val.gzip;
       this.form.disenableDirectoryView = val.disenableDirectoryView;
 
-      // if (val.type !== "mbtiles") {
-      //   this.form.limit = (this.form.limit / 1024 / 1024).toFixed(1);
-      //   this.form.use = (this.form.use / 1024 / 1024).toFixed(1);
-      // }
+      if (val.type !== "mbtiles") {
+        this.form.limit = (this.form.limit / 1024 / 1024).toFixed(1);
+        this.form.use = (this.form.use / 1024 / 1024).toFixed(1);
+      }
     },
   },
   methods: {
