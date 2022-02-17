@@ -31,18 +31,18 @@
           <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
-              v-for="(address, index) in networkInterfaces"
+              v-for="(address, index) in createUrls(networkInterfaces)"
               :key="index"
-              :command="createUrl(address)"
+              :command="address"
               :disabled="!task.enable"
             >
-              <span>{{ createUrl(address) }}</span>
+              <span>{{ address }}</span>
               <span
                 ><ts-icon
                   name="arrow-up"
                   width="10"
                   height="10"
-                  @click.native="handleLinkOpen(createUrl(address))"
+                  @click.native="handleLinkOpen(address)"
                 ></ts-icon
               ></span>
             </el-dropdown-item>
@@ -50,7 +50,7 @@
         </el-dropdown>
       </i>
       <i v-if="action === 'WMTS'" @click.stop="onMapClick">
-        <el-tooltip content="地图预览">
+        <el-tooltip :content="$t('task.task-map-preview')">
           <ts-icon name="image" width="14" height="14"></ts-icon>
         </el-tooltip>
       </i>
@@ -184,6 +184,17 @@ export default {
       var address = element.address;
       var port = api.getPort();
       return `http://${address}:${port}/${this.task.id}/` + this.task.getUrl();
+    },
+    createUrls(elements) {
+      let result = [];
+      let url = this.task.getUrl();
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        let address = element.address;
+        var port = api.getPort();
+        result.push(`http://${address}:${port}/${this.task.id}/` + url);
+      }
+      return result;
     },
     handleCommand(url) {
       this.$electron.clipboard.writeText(url);

@@ -10,9 +10,7 @@
   >
     <el-container>
       <el-header class="welcome-title">
-        <img
-          :src="imagePath"
-        />
+        <img :src="imagePath" />
         <div>
           <span>{{ version }}</span>
         </div>
@@ -46,7 +44,7 @@ export default {
       version: __VERSION__,
       updateInfo: __UPDATEINFO__,
       description: __DESCRIPTION__,
-      imagePath:"static/image/newVersion.png"
+      imagePath: "static/image/newVersion.png",
     };
   },
   // props: {
@@ -56,7 +54,7 @@ export default {
   //   },
   // },
   mounted() {
-    this.visible = true;
+    this.visible = false;
     this.$store.dispatch("options/fetchOptions").then((config) => {
       const { lastUpdateVersion } = config;
       if (this.version !== lastUpdateVersion) {

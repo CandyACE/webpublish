@@ -17,6 +17,7 @@ export default class TaskBase {
         this.disenableDirectoryView = task.disenableDirectoryView;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
+        this.customProperty = {};
     }
 
     setEnable(val) {

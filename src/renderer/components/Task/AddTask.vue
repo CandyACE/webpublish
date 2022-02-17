@@ -35,12 +35,12 @@
           </el-row>
           <el-row :gutter="12" v-if="showFileTypeSelection">
             <el-form-item label="任务类别：" :label-width="formLabelWidth">
-              <el-radio v-model="form.selectTaskType" label="file"
-                >文件</el-radio
-              >
-              <el-radio v-model="form.selectTaskType" label="mbtiles"
-                >MBTiles</el-radio
-              >
+              <el-radio v-model="form.selectTaskType" label="file">{{
+                $t("task.task-file-mode-file")
+              }}</el-radio>
+              <el-radio v-model="form.selectTaskType" label="mbtiles">{{
+                $t("task.task-file-mode-mbtiles")
+              }}</el-radio>
             </el-form-item>
           </el-row>
           <el-row :gutter="12">

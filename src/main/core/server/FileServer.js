@@ -78,7 +78,6 @@ export default class FileServer extends ServerBase {
     var filePath = task.path
     try {
       var check = task.check();
-      console.log(check)
       if (!check.next) {
         res.statusCode = check.code;
         res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码

@@ -22,7 +22,7 @@
       <el-col :span="11">
         <el-form-item
           ><span style="margin-left: 10px">{{
-            type === "mbtiles" ? "次" : "MB"
+            type === "mbtiles" ? $t("task.task-count") : "MB"
           }}</span></el-form-item
         >
       </el-col>

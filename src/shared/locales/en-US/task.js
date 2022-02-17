@@ -29,4 +29,9 @@ export default {
     'task-out-limit-message': 'Task [{{id}}] is out of limit',
     'task-search-same': 'Find tasks with the same path',
     'task-disenable-directory': 'Disenable folder view',
+    'task-file-mode': 'Task type',
+    'task-file-mode-file': 'File',
+    'task-file-mode-mbtiles': 'MBTiles',
+    'task-map-preview': 'Map Preview',
+    'task-count': 'Count'
 }

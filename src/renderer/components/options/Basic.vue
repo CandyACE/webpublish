@@ -84,7 +84,9 @@
           </el-col>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
-          <el-button type="primary" @click="openDevTools">打开开发工具</el-button>
+          <el-button type="primary" @click="openDevTools" v-if="false"
+            >打开开发工具</el-button
+          >
         </el-form-item>
         <el-form-item label="其他：" :label-width="formLabelWidth" v-if="false">
           <el-col class="form-item-sub" :span="24">
@@ -185,7 +187,7 @@ export default {
     },
     openDevTools() {
       let _this = this;
-      const application = remote.getGlobal('application');
+      const application = remote.getGlobal("application");
       let windows = application.windowManager.getWindows();
       for (const item in windows) {
         if (Object.hasOwnProperty.call(windows, item)) {

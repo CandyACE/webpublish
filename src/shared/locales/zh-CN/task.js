@@ -29,4 +29,9 @@ export default {
     'task-out-limit-message': '任务 [{{id}}] 已经超出流量限制',
     'task-search-same': '查找相同路径的项目',
     'task-disenable-directory': '禁用文件夹视图',
+    'task-file-mode': '任务类别',
+    'task-file-mode-file': '文件',
+    'task-file-mode-mbtiles': 'MBTiles',
+    'task-map-preview': '地图预览',
+    'task-count': '次'
 }
