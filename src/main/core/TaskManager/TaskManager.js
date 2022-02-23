@@ -68,6 +68,7 @@ export default class TaskManager {
     for (let i = 0; i < this.taskList.length; i++) {
       const item = this.taskList[i];
       if (item.gid == task.gid) {
+        item.destroy();
         this.taskList.splice(i, 1);
         this.taskListChanged.raiseEvent()
         break;

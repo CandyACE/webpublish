@@ -75,4 +75,8 @@ export default class TaskBase {
 
         return result
     }
+
+    destroy() {
+
+    }
 }

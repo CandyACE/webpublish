@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -34,8 +34,8 @@
       "url": "http://oss.tangweitian.cn/update/webpublish",
       "description": "虎年的第一次更新，为大家带来了MBTiles的发布和预览！",
       "updateInfos": [
-        "支持MBTiles的预览和发布（目前只支持图片类型）",
-        "优化网络路径ip生成"
+        "MBTitles任务移除，解除占用",
+        "MBTiles预览，移除MAXZoom限制"
       ]
     }],
     "files": [
