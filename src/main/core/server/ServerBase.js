@@ -1,12 +1,24 @@
 import http from 'http'
+import RenderApplication from '../../RenderApplication';
 import { getI18n } from '../../ui/Locale'
+import ServerManager from '../ServerManager';
 
 /**
  * 服务基类
  */
 export default class ServerBase {
+    /**
+     * 
+     * @param {ServerManager} manager 
+     */
     constructor(manager) {
+        /**
+         * @type {ServerManager}
+         */
         this._parent = manager
+        /**
+         * @type {RenderApplication}
+         */
         this._app = manager._app;
 
         this.i18n = getI18n()

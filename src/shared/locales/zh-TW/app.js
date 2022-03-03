@@ -25,6 +25,7 @@ export default {
     'minute': '分',
     'second': '秒',
     'server-start-success': '服務啟動成功！',
+    'server-api-start-success': 'API服務啟動成功！',
     'port-exist': '"{{port}}" 端口被佔用',
     'no-task': '暫無發佈數據',
     'search-task': '請輸入檢索內容'

@@ -1,6 +1,7 @@
 import ServerManager from "./core/ServerManager";
 import TaskManager from "./core/TaskManager/TaskManager";
 import { remote } from 'electron'
+import Application from "./Application";
 
 export default class RenderApplication {
     constructor() {
@@ -8,6 +9,9 @@ export default class RenderApplication {
     }
 
     init() {
+        /**
+         * @type {Application}
+         */
         const application = remote.getGlobal("application");
         application.on("exit", () => {
             this.stop()

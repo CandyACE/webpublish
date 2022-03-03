@@ -4,6 +4,7 @@ import { promisify } from 'util'
 import electron from 'electron';
 import ServerBase from './serverBase';
 import getTask from '../TaskManager/Task/Index';
+import logger from '../Logger';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -86,8 +87,7 @@ export default class FileServer extends ServerBase {
       }
 
       task.Action(req, res).then().catch(error => {
-        console.error(error)
-        console.log(`${filePath} is not a directory or file.`)
+        logger.error('[FileServer] ${filePath} is not a directory or file.', error)
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
         res.end(JSON.stringify({
@@ -97,8 +97,7 @@ export default class FileServer extends ServerBase {
         return;
       })
     } catch (error) {
-      console.error(error)
-      console.log(`${filePath} is not a directory or file.`)
+      logger.error('[FileServer] ${filePath} is not a directory or file.', error)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
       res.end(JSON.stringify({

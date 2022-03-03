@@ -12,4 +12,7 @@ export default {
     'auto-update': 'Auto Update',
     'auto-check-update': 'Automatically check for update',
     'last-check-update-time': 'Last Time Checking for Update',
+    'api': 'API Options',
+    'api-enabled': 'Enable API',
+    'api-port': 'API used port'
 }

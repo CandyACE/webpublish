@@ -83,8 +83,26 @@
             </div>
           </el-col>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth">
-          <el-button type="primary" @click="openDevTools" v-if="false"
+        <el-form-item
+          :label="`${$t('options.api')}`"
+          :label-width="formLabelWidth"
+        >
+          <el-col class="form-item-sub" :span="24">
+            <el-checkbox v-model="form.apiEnabled">
+              {{ $t("options.api-enabled") }}
+            </el-checkbox>
+          </el-col>
+
+          <el-col class="form-item-sub" :span="24">
+            <el-input-number
+              :disabled="!form.apiEnabled"
+              v-model="form.apiPort"
+              controls-position="right"
+            ></el-input-number>
+          </el-col>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" v-if="false">
+          <el-button type="primary" @click="openDevTools"
             >打开开发工具</el-button
           >
         </el-form-item>
@@ -135,6 +153,8 @@ const initialForm = (config) => {
     userExperience,
     lastCheckUpdateTime,
     locale,
+    apiEnabled,
+    apiPort,
   } = config;
   const result = {
     port,
@@ -143,6 +163,8 @@ const initialForm = (config) => {
     // userExperience,
     lastCheckUpdateTime,
     locale,
+    apiEnabled,
+    apiPort,
   };
   return result;
 };
@@ -229,7 +251,13 @@ export default {
             application.autoLaunchManager.disable();
           }
 
-          if (data.port) _this.application.serverManager.restart();
+          if (data.port) {
+            _this.application.serverManager.restart();
+          }
+
+          if (data.apiEnabled != undefined || data.apiPort) {
+            _this.application.serverManager.apiRestart();
+          }
         }
       });
     },

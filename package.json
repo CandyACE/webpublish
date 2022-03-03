@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -32,10 +32,11 @@
     "publish": [{
       "provider": "generic",
       "url": "http://oss.tangweitian.cn/update/webpublish",
-      "description": "虎年的第一次更新，为大家带来了MBTiles的发布和预览！",
+      "description": "新增API接口，可以通过接口访问到发布的图层列表，方便远程操作",
       "updateInfos": [
-        "MBTitles任务移除，解除占用",
-        "MBTiles预览，移除MAXZoom限制"
+        "优化 任务列表打开速度",
+        "新增 API接口设置",
+        "新增 MBTiles预览窗口可以显示当前影像等级"
       ]
     }],
     "files": [

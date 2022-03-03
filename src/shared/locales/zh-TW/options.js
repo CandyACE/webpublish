@@ -12,4 +12,7 @@ export default {
     'auto-update': '自動更新',
     'auto-check-update': '自動檢查更新',
     'last-check-update-time': '上次檢查更新時間',
+    'api': 'API設置',
+    'api-enabled': '啟用API',
+    'api-port': 'API啟用端口'
 }

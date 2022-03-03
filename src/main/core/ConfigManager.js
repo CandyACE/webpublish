@@ -17,9 +17,9 @@ export default class ConfigManager {
         this.systemConfig = new ElectronStore({
             name: 'ts-webpublish',
             defaults: {
-                tasks: [],
-                port: 9090,
-                address: '127.0.0.1',
+                'tasks': [],
+                'port': 9090,
+                'address': '127.0.0.1',
                 'open-at-login': false,
                 'auto-hide-window': false,
                 'auto-check-update': true,
@@ -30,10 +30,8 @@ export default class ConfigManager {
                 'last-check-update-time': 0,
                 'user-experience': true,
                 'locale': app.getLocale(),
-                api: {
-                    enabled: false,
-                    port: 9080
-                }
+                'api-enabled': false,
+                'api-port': 9100
             }
         })
     }

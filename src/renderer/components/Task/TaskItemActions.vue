@@ -27,11 +27,15 @@
         </el-tooltip>
       </i>
       <i v-if="action === 'LINK'">
-        <el-dropdown :show-timeout="0" @command="handleCommand">
+        <el-dropdown
+          :show-timeout="0"
+          @command="handleCommand"
+          @visible-change="handleVisibleChanged"
+        >
           <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
-              v-for="(address, index) in createUrls(networkInterfaces)"
+              v-for="(address, index) in urls"
               :key="index"
               :command="address"
               :disabled="!task.enable"
@@ -90,6 +94,11 @@ export default {
     task: {
       type: Object,
     },
+  },
+  data() {
+    return {
+      urls: [],
+    };
   },
   computed: {
     taskCommonActions() {
@@ -185,13 +194,14 @@ export default {
       var port = api.getPort();
       return `http://${address}:${port}/${this.task.id}/` + this.task.getUrl();
     },
-    createUrls(elements) {
+    async createUrls(elements) {
       let result = [];
       let url = this.task.getUrl();
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
         let address = element.address;
         var port = api.getPort();
+        this.urls.push(`http://${address}:${port}/${this.task.id}/` + url);
         result.push(`http://${address}:${port}/${this.task.id}/` + url);
       }
       return result;
@@ -203,6 +213,15 @@ export default {
     handleLinkOpen(url) {
       shell.openExternal(url);
     },
+    handleVisibleChanged(e) {
+      if (e) {
+        this.urls = [];
+        this.createUrls(this.networkInterfaces);
+      }
+    },
+  },
+  mounted: function () {
+    this.createUrls(this.networkInterfaces);
   },
 };
 </script>

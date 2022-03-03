@@ -17,6 +17,17 @@ export default {
       }
       _this.$msg.success(_this.$t("app.server-start-success"));
     });
+
+    this.application.serverManager.addListener("server_api", function (err) {
+      if (err) {
+        if (err == "nouse") {
+          return;
+        }
+        _this.$msg.error(err);
+        return;
+      }
+      _this.$msg.success(_this.$t("app.server-api-start-success"));
+    });
     this.application.serverManager.start();
 
     // setTimeout(() => {
