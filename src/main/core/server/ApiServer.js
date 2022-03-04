@@ -10,7 +10,7 @@ export default class ApiServer extends ServerBase {
     }
 
     initRouter() {
-        this._router['/getList'] = (host) => {
+        this._router['/'] = (host) => {
             var list = [...this._app.taskManager.taskList]
             list.forEach(task => {
                 var url = task.getUrl();
@@ -42,8 +42,10 @@ export default class ApiServer extends ServerBase {
 
                     var fun = _this._router[req.url]
                     if (fun) {
+                        let url = new URL(req.url, `http://${req.headers.host}`);
+                        var port = _this._app.configManager.getSystemConfig('port', 9090);
                         res.setHeader('Content-Type', 'text/json;charset=UTF-8');//utf8编码，防止中文乱码
-                        res.end(fun(req.headers.host))
+                        res.end(fun(url.hostname + ":" + port))
                         return;
                     }
 
