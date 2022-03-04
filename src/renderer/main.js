@@ -7,7 +7,6 @@ import VueI18Next from '@panter/vue-i18next'
 import { getLocaleManager } from '@/components/Locale'
 import ElementUI, { Loading } from 'element-ui'
 import "@/components/Theme/Index.scss";
-// import 'element-ui/lib/theme-chalk/index.css'
 
 import Icon from '@/components/Icons/Icon'
 import Msg from "@/components/Msg"

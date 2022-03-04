@@ -32,12 +32,9 @@
     "publish": [{
       "provider": "generic",
       "url": "http://oss.tangweitian.cn/update/webpublish",
-      "description": "新增API接口，可以通过接口访问到发布的图层列表，方便远程操作。地图展示引擎替换成MapBox，效果更好！",
+      "description": "",
       "updateInfos": [
-        "优化 任务列表打开速度",
-        "新增 API接口设置",
-        "新增 MBTiles预览窗口可以显示当前影像等级",
-        "优化 地图引擎修改成MapBox"
+        "新增 小屏幕的悬浮菜单"
       ]
     }],
     "files": [
