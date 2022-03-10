@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "",
   "license": "MIT",
@@ -34,7 +34,8 @@
       "url": "http://oss.tangweitian.cn/update/webpublish",
       "description": "",
       "updateInfos": [
-        "新增 小屏幕的悬浮菜单"
+        "新增 地图预览界面属性查看",
+        "新增 任务属性切换File和MBTiles类型"
       ]
     }],
     "files": [
