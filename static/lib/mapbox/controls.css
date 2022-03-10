@@ -1,0 +1,158 @@
+.mapboxgl-ctrl button.mapboxgl-ctrl-info .mapboxgl-ctrl-image-info {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAACXBIWXMAAC4jAAAuIwF4pT92AAAGWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDggNzkuMTY0MDM2LCAyMDE5LzA4LzEzLTAxOjA2OjU3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjEuMCAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTAzLTEwVDEzOjA3OjQ2KzA4OjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wMy0xMFQxMzowOTowNCswODowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wMy0xMFQxMzowOTowNCswODowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo1NzVjMzZmYy0xMWI5LWM3NGItOTNhOC1jNjZkZGI5MmYyMzYiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDo1M2E2NDAwMS0wYjk2LTQ2NDYtODJiOS1hYzgwMGJhY2ZhMjkiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDoxM2RlMWNjMy05M2MzLWZlNGUtYWVkNS04MjVkZGNjNzlkZjgiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjEzZGUxY2MzLTkzYzMtZmU0ZS1hZWQ1LTgyNWRkY2M3OWRmOCIgc3RFdnQ6d2hlbj0iMjAyMi0wMy0xMFQxMzowNzo0NiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjb252ZXJ0ZWQiIHN0RXZ0OnBhcmFtZXRlcnM9ImZyb20gYXBwbGljYXRpb24vdm5kLmFkb2JlLnBob3Rvc2hvcCB0byBpbWFnZS9wbmciLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjU3NWMzNmZjLTExYjktYzc0Yi05M2E4LWM2NmRkYjkyZjIzNiIgc3RFdnQ6d2hlbj0iMjAyMi0wMy0xMFQxMzowOTowNCswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrQjeQsAAAIpSURBVEiJ5dc9aBRBGMbx34mK4FdIESHmCouATUq1iAa0i9iokCaQJtiksjKmErRJY5FC0cJOLDRgFfGrDfgBSkpRRAJB7RTUhJhkLWaW3cS92714pPGBYZabd5//zezs+87WkiSx1dq25URIkkSF2XZiFNOYxyoSrOEzZnARByuxSqAdmMLPCClry7iLns1CB7CQM3yHqziJOvaiG/0Yx+tc7HcMtQo9g6Vo8BGDqDVajpyO4Y1s6ceqQgewGG98gv0VYHntxJ14/yqGy6AdsiV9jB0tAvO6FX1+oLcZdEq2pM1meBqvcKFJzHbMRr9HjaCdsl06WDKL5zHuU0ncYawIz7evCDoq26Vlm2YEv3ClJI7wDieYLIJOx8FrFYxa0Uj0nSuCzsfBUxWM9uEouirE1qPvahE0TW31CkbnYuylCrE18RVMWfmEn15/q2DUitIM9RcoHSSkt3ZrTyPo19gfajOwC7tlk1oHfRv7422Gnoj9hyLo09ifbzM09XtWBH2A3zgiVIt2qBtn4/W9IugC7sfrm0K1aKRl4TVYKoHewC68FPJw0IaE3yNs70QoT/+iieizIiSSpvV0SEjQCW4L1aJVjctOERPpj2UnhzFZhpoVqkUVdeNhDng9P1jljDQsFOB0iWaE5F23vgodEHboPdmJYwWXNxpWPQ32CgU4Xe60LeJL7k/l2wvxGW4WmqoPk5iTLXva1vBe2Kn9zUxSVu2/+az4A5Pjc8G9Vgk9AAAAAElFTkSuQmCC);
+    display: block;
+    width: 29px;
+    height: 29px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: cover;
+}
+
+.show {
+    display: block !important;
+}
+
+#infoBox {
+    display: none;
+    width: 400px;
+    max-height: 700px;
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    overflow-y: auto;
+    background-color: rgb(45, 58, 66);
+    padding: 10px;
+    border-radius: 5px;
+    color: rgb(237, 255, 255);
+}
+
+#infoBox ul {
+    display: none;
+    text-align: center;
+}
+
+#infoBox ul ul {
+    display: block;
+    border: 1px solid #014f67;
+    margin: 5px 8px 10px 8px;
+    border-radius: 4px;
+    background: rgba(1, 78, 103, 0.3);
+}
+
+#infoBox ul ul span>a:hover {
+    border: 1px solid #3cfffc;
+    box-shadow: #3cfffc 0 0 5px;
+}
+
+#infoBox ul span>a {
+    text-decoration: none;
+}
+
+#infoBox ul ul span>a {
+    display: inline-block;
+    height: 30px;
+    width: 80px;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    float: right;
+}
+
+#infoBox ul:nth-of-type(1) {
+    display: block;
+}
+
+/* 属性样式修改 */
+
+#infoBox ul,
+#infoBox li,
+#infoBox tr,
+#infoBox td {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#infoBox ul li,
+#infoBox tr td,
+#infoBox tr th {
+    height: auto;
+    line-height: 34px;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+
+#infoBox tr:nth-child(odd) {
+    background: #014f67;
+}
+
+/* #infoBox ul>li:nth-child(1) {
+    background: url('../img/blueAndWhite.png') no-repeat;
+    background-size: 100% 100%;
+    margin-top: 10px;
+    color: #fff;
+} */
+
+#infoBox ul>li:nth-child(n + 1) {
+    border: 1px solid transparent;
+    /* padding: 1px; */
+    border-image: -webkit-linear-gradient(left,
+            #214c60 0%,
+            transparent 50%,
+            transparent 55%,
+            #214c60 100%);
+    border-image-slice: 1;
+    color: rgb(237, 255, 255);
+}
+
+#infoBox ul>li:nth-child(n + 1):hover {
+    border: 1px solid transparent;
+    /* padding: 0px; */
+    border-image: -webkit-linear-gradient(left,
+            #0d91c0 0%,
+            transparent 50%,
+            transparent 55%,
+            #0d91c0 100%);
+    border-image-slice: 1;
+    color: rgb(237, 255, 255);
+}
+
+#infoBox ul>li {
+    margin: 0px 5px;
+    margin-bottom: 5px;
+}
+
+#infoBox table {
+    width: 100%;
+}
+
+#infoBox th {
+    min-width: 100px;
+}
+
+#infoBox ul li span {
+    display: inline-block;
+    width: 65%;
+    height: auto;
+    /* vertical-align: top; */
+    vertical-align: middle;
+    /* padding: 8px 5px; */
+    padding: 0px 4px;
+    box-sizing: border-box;
+    line-height: 20px;
+    word-break: break-all;
+    user-select: text;
+    vertical-align: middle;
+    text-align: left;
+}
+
+#infoBox ul li span:nth-child(1) {
+    width: 32%;
+}

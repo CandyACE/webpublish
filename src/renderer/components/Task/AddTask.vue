@@ -20,7 +20,7 @@
                 :label="`${$t('task.task-name')}: `"
                 :label-width="formLabelWidth"
               >
-                <el-input v-model="form.taskName"></el-input>
+                <el-input v-model="form.taskName" spellcheck="false"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24" :xs="24">
@@ -29,7 +29,7 @@
                 prop="id"
                 :label-width="formLabelWidth"
               >
-                <el-input v-model="form.id"></el-input>
+                <el-input v-model="form.id" spellcheck="false"></el-input>
               </el-form-item>
             </el-col>
           </el-row>

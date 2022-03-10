@@ -34,7 +34,7 @@
           :label="`${$t('task.task-name')}: `"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="form.taskName"></el-input>
+          <el-input v-model="form.taskName" spellcheck="false"></el-input>
         </el-form-item>
       </el-row>
       <el-row :gutter="12">
@@ -43,7 +43,7 @@
           :label="`${$t('task.task-base-path')}: `"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="form.id"></el-input>
+          <el-input v-model="form.id" spellcheck="false"></el-input>
         </el-form-item>
       </el-row>
       <el-row :gutter="12">
@@ -160,8 +160,8 @@ export default {
   },
   computed: {
     showTypeRadio() {
-      return false;
-      // return path.extname(this.task.path) === ".mbtiles";
+      // return false;
+      return path.extname(this.task.path) === ".mbtiles";
     },
     formLimitMin() {
       return this.form.selectTaskType === "mbtiles"

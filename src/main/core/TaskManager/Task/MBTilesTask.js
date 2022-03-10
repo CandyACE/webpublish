@@ -79,10 +79,53 @@ export default class MBTilesTask extends TaskBase {
 
     static GetMapTemplete(req, res, task) {
         task._mbtiles.getInfo(function (err, info) {
+            logger.info(info)
             let center = info.center;
             let minzoom = info.minzoom;
             let maxzoom = info.maxzoom;
+            let tilesize = Number(info.tilesize || 256);
+            let description = info.description;
             let ext = info.format;
+
+            let type = "raster"
+            if (ext === "pbf") {
+                type = "vector";
+                tilesize = 512;
+            }
+
+            let setting = {
+                container: 'map', // container id
+                style: {
+                    "version": 8,
+                    "sources": {
+                        "osm-tiles": {
+                            "type": "raster",
+                            'tiles': [
+                                "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            ],
+                            'tileSize': 256
+                        },
+                        "webpublish-tiles": {
+                            "type": type,
+                            'tiles': [
+                                `http://127.0.0.1:${req.headers.host.split(':').pop()}/${task.id}/{z}/{x}/{y}.${ext}`
+                            ],
+                            'tileSize': tilesize
+                        }
+                    },
+                    "layers": [{
+                        "id": "webpublish-tiles",
+                        "type": type,
+                        "source": "webpublish-tiles",
+                        "source-layer": "dist-layer",
+                        "minzoom": minzoom,
+                        "maxzoom": 23
+                    }]
+                }, // stylesheet location
+                center: [center[0], center[1]], // starting position [lng, lat]
+                zoom: center[2] // starting zoom
+            }
+
             let htmlTemplete = `
 <!DOCTYPE html>
 <html>
@@ -90,9 +133,10 @@ export default class MBTilesTask extends TaskBase {
   <title>Map Preview</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="static/lib/mapbox/mapbox-gl.css"/>
   <script src="static/lib/mapbox/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="static/lib/mapbox/controls.css"/>
+  <script src="static/lib/mapbox/controls.js"></script>
   <style type="text/css">
   #map {
         position: absolute;
@@ -117,43 +161,18 @@ export default class MBTilesTask extends TaskBase {
 </head>
 <body>
   <div id="map"></div>
-    <div class="mapbox-attribution-container">
-        <strong id="zoom_level">Level: ${center[2]} </strong>|
-        Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a>
-    </div>
+  <div class="mapbox-attribution-container">
+      <strong id="zoom_level">Level: ${center[2]} </strong>|
+      Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
+      ${description}
+  </div>
+  <div id="infoBox"></div>
+
   <script>
 
-      var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: {
-            "version": 8,
-            "sources": {
-                "osm-tiles": {
-                    "type": "raster",
-                    'tiles': [
-                        "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    ],
-                    'tileSize': 256
-                },
-                "webpublish-tiles": {
-                    "type": "raster",
-                    'tiles': [
-                        'http://127.0.0.1:${req.headers.host.split(':').pop()}/${task.id}/{z}/{x}/{y}.${ext}'
-                    ],
-                    'tileSize': 256
-                }
-            },
-            "layers": [{
-                "id": "webpublish-tiles",
-                "type": "raster",
-                "source": "webpublish-tiles",
-                "minzoom": ${minzoom},
-                "maxzoom": 23
-            }]
-        }, // stylesheet location
-        center: [ ${center[0]}, ${center[1]}], // starting position [lng, lat]
-        zoom: ${center[2]} // starting zoom
-    });
+    var mbInfo = ${JSON.stringify(info)};
+
+    var map = new mapboxgl.Map(${JSON.stringify(setting)});
 
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-left');
