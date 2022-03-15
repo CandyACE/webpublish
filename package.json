@@ -29,20 +29,23 @@
     "directories": {
       "output": "build"
     },
-    "publish": [{
-      "provider": "generic",
-      "url": "http://oss.tangweitian.cn/update/webpublish",
-      "description": "",
-      "updateInfos": [
-        "新增 地图预览界面属性查看",
-        "新增 任务属性切换File和MBTiles类型"
-      ]
-    }],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://oss.tangweitian.cn/update/webpublish",
+        "description": "",
+        "updateInfos": [
+          "新增 地图预览界面属性查看",
+          "新增 任务属性切换File和MBTiles类型"
+        ]
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "x": 410,
           "y": 150,
           "type": "link",

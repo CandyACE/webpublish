@@ -2,7 +2,7 @@ import http from 'http'
 import fs from 'fs'
 import { promisify } from 'util'
 import electron from 'electron';
-import ServerBase from './serverBase';
+import ServerBase from './ServerBase';
 import getTask from '../TaskManager/Task/Index';
 import logger from '../Logger';
 
