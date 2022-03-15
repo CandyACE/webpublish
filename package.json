@@ -2,10 +2,11 @@
   "name": "webpublish",
   "version": "1.4.7",
   "author": "tangweitian <tstwt@qq.com>",
-  "description": "",
+  "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "hostUpdateUrl": "http://oss.tangweitian.cn/update/webpublish/host/",
+  "homepage": "http://webpublish.tangweitian.cn",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:publish": "npm run build:changelog && node .electron-vue/build.js && electron-builder",
@@ -65,7 +66,9 @@
       "icon": "build/icons/icon.ico"
     },
     "linux": {
-      "icon": "build/icons"
+      "category": "Network",
+      "icon": "build/icons",
+      "target": "deb"
     }
   },
   "dependencies": {

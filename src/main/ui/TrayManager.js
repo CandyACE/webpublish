@@ -29,7 +29,7 @@ export default class TrayManager extends EventEmitter {
   }
 
   setIcons() {
-    this.normalIcon = nativeImage.createFromPath(path.join(__static, 'image/icon.ico'))
+    this.normalIcon = nativeImage.createFromPath(path.join(__static, 'image/twtoolsLogo.png'))
   }
 
   init() {
