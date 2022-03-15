@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -36,8 +36,7 @@
         "url": "http://oss.tangweitian.cn/update/webpublish",
         "description": "",
         "updateInfos": [
-          "新增 地图预览界面属性查看",
-          "新增 任务属性切换File和MBTiles类型"
+          "修复若干BUG"
         ]
       }
     ],

@@ -170,9 +170,10 @@ window.addEventListener('DOMContentLoaded', onLoad);
   }
 
   a.icon {
-    -webkit-padding-start: 1.5em;
+    /*-webkit-padding-start: 1.5em;*/
     text-decoration: none;
     user-select: auto;
+    padding-left: 1.5em;
   }
 
   a.icon:hover {
