@@ -166,7 +166,10 @@ export default class MBTilesTask extends TaskBase {
       Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
       ${description}
   </div>
-  <div id="infoBox"></div>
+  <div class="blur infoBox-father">
+    <div id="infoBox"></div>
+  </div>
+  
 
   <script>
 

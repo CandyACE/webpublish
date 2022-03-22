@@ -16,7 +16,7 @@
 
         var button = document.querySelector("#map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div > button.mapboxgl-ctrl-info");
         button.onclick = function () {
-            var box = document.getElementById("infoBox");
+            var box = document.getElementById("infoBox").parentElement;
             if (box.classList.contains('show')) {
                 box.classList.remove('show')
             } else {
