@@ -52,14 +52,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: cleanup artifacts
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'macos-latest'
         run: |
           npx rimraf "build/!(*.dmg)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: cleanup artifacts
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'ubuntu-latest'
         run: |
           npx rimraf "build/!(*.deb)"
         env:
