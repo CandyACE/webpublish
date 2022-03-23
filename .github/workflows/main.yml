@@ -87,7 +87,7 @@ jobs:
       # step8: push to oss
       - name: init oss env
         if: startsWith(matrix.os,'windows')
-        uses: manyuanrong/setup-ossutil@v2.0
+        uses: yizhoumo/setup-ossutil@v1.0.2
         with:
           endpoint: "oss-cn-beijing.aliyuncs.com"
           access-key-id: ${{ secrets.OSS_KEY_ID }}
