@@ -62,7 +62,8 @@ jobs:
       - name: cleanup artifacts ubuntu
         if: startsWith(matrix.os,'ubuntu')
         run: |
-          npx rimraf "build/!(*.deb)"
+          cp ./build/latest-linux.yml ./
+          npx rimraf "build/!(*.deb|*.AppImage)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -88,6 +89,11 @@ jobs:
         if: startsWith(matrix.os,'windows')
         run: |
           mv ./latest.yml ./build/
+
+      - name: move back ./latest-linux.yml
+        if: startsWith(matrix.os,'ubuntu')
+        run: |
+          cp ./latest-linux.yml ./build/
 
       # step8: push to oss
       - name: init oss env

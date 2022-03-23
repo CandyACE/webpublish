@@ -66,8 +66,7 @@
     },
     "linux": {
       "category": "Network",
-      "icon": "icons",
-      "target": "deb"
+      "icon": "icons"
     }
   },
   "dependencies": {
