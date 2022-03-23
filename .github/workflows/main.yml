@@ -26,6 +26,8 @@ jobs:
       # step2: install node env
       - name: Install Node.js
         uses: actions/setup-node@v3.0.0
+        with:
+          node-version: 12.21.0
 
       # step3: Npm install
       - name: npm install
