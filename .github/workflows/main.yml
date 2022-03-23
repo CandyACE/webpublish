@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: ["windows-latest", "macos-latest", "ubuntu-latest"]
+        os: ["windows-latest", "ubuntu-latest"]
 
     steps:
       # step1: check out repository
@@ -44,22 +44,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # step5: cleanup artifacts in build
-      - name: cleanup artifacts
-        if: matrix.os == 'windows-latest'
+      - name: cleanup artifacts windows
+        if: startsWith(matrix.os,'windows')
         run: |
+          mv ./build/latest.yml ./
           npx rimraf "build/!(*.exe)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: cleanup artifacts
-        if: matrix.os == 'macos-latest'
+      - name: cleanup artifacts macos
+        if: startsWith(matrix.os,'macos')
         run: |
           npx rimraf "build/!(*.dmg)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: cleanup artifacts
-        if: matrix.os == 'ubuntu-latest'
+      - name: cleanup artifacts ubuntu
+        if: startsWith(matrix.os,'ubuntu')
         run: |
           npx rimraf "build/!(*.deb)"
         env:
@@ -82,3 +83,15 @@ jobs:
           files: "build/**"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # step8: push to oss
+      - name: push to oss
+        if: startsWith(matrix.os,'windows')
+        uses: manyuanrong/setup-ossutil@master
+        with:
+          endpoint: oss-cn-beijing.aliyuncs.com
+          access-key-id: ${{ secrets.OSS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
+        run: |
+          mv ./latest.yml ./build/
+          ossutil cp -rf ./build/ oss://oss-ts/update/webpublish/
