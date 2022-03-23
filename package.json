@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
