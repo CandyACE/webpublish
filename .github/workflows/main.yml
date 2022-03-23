@@ -85,13 +85,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # step8: push to oss
-      - name: push to oss
+      - name: init oss env
         if: startsWith(matrix.os,'windows')
         uses: manyuanrong/setup-ossutil@master
         with:
           endpoint: oss-cn-beijing.aliyuncs.com
           access-key-id: ${{ secrets.OSS_KEY_ID }}
           access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
+      
+      - name: push to oss
+        if: startsWith(matrix.os,'windows')
         run: |
           mv ./latest.yml ./build/
           ossutil cp -rf ./build/ oss://oss-ts/update/webpublish/
