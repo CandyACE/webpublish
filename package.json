@@ -30,23 +30,20 @@
     "directories": {
       "output": "build"
     },
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "http://oss.tangweitian.cn/update/webpublish",
-        "description": "1.5.0 添加开发经常会遇到的反代理，可以减少配置的困难，让前端轻松跨域。",
-        "updateInfos": [
-          "新增 支持添加代理任务",
-          "修复部分bug"
-        ]
-      }
-    ],
+    "publish": [{
+      "provider": "generic",
+      "url": "http://oss.tangweitian.cn/update/webpublish",
+      "description": "1.5.0 添加开发经常会遇到的反代理，可以减少配置的困难，让前端轻松跨域。",
+      "updateInfos": [
+        "新增 支持添加代理任务",
+        "修复部分bug"
+      ]
+    }],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [
-        {
+      "contents": [{
           "x": 410,
           "y": 150,
           "type": "link",
@@ -67,7 +64,8 @@
     },
     "linux": {
       "category": "Network",
-      "icon": "icons"
+      "icon": "icons",
+      "target": ["deb", "AppImage"]
     }
   },
   "dependencies": {
