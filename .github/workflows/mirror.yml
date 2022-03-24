@@ -13,6 +13,8 @@ jobs:
         uses: Yikun/hub-mirror-action@master
         with:
           src: github/CandyACE
-          dst: gitee天才无敌小逗比
+          dst: gitee/天才无敌小逗比
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_KEY }}
+          static_list: 'webpublish'
+          force_update: true
