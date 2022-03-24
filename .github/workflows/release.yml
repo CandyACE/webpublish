@@ -4,7 +4,7 @@ name: Build WebPublish For Win/Mac/Linux
 on:
   push:
     tags:
-      - "v*"
+      - "*"
 
 # jobs
 jobs:
