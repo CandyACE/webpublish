@@ -1,0 +1,19 @@
+name: "Sync to gitee"
+
+on: [push, delete]
+
+jobs:
+  sync_to_gitee:
+    runs-on: windows-latest
+    steps:
+      - name: check out
+        uses: actions/checkout@v2
+
+      - name: Sync to gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: CandyACE/webpublish
+          dst: 天才无敌小逗比/webpublish
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_KEY }}
+          account_type: org
