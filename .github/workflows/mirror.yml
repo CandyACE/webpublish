@@ -18,3 +18,4 @@ jobs:
           dst_token: ${{ secrets.GITEE_KEY }}
           static_list: 'webpublish'
           force_update: true
+          debug: true
