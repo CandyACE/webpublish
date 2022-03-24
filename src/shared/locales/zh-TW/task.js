@@ -33,5 +33,8 @@ export default {
     'task-file-mode-file': '文件',
     'task-file-mode-mbtiles': 'MBTiles',
     'task-map-preview': '地圖預覽',
-    'task-count': '次'
+    'task-count': '次',
+    'task-proxy-path': '代理路徑',
+    'task-proxy-error-empty': '代理路徑不能為空',
+    'task-proxy-error': '代理路徑格式不正確，應該以 "http" 開頭'
 }

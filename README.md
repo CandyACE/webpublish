@@ -1,5 +1,7 @@
 # Web Publish
 
+[![Build WebPublish For Win/Mac/Linux](https://github.com/CandyACE/webpublish/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/CandyACE/webpublish/actions/workflows/release.yml)
+
 获取[稳定版](http://webpublish.tangweitian.cn)
 
 在工作中，经常会遇到需要发布一个页面，或者发布一个数据。这个时候配置nginx或者其他的就有点费劲，需要有个快速的工具来发布这些内容。

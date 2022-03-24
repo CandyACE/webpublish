@@ -33,5 +33,8 @@ export default {
     'task-file-mode-file': 'File',
     'task-file-mode-mbtiles': 'MBTiles',
     'task-map-preview': 'Map Preview',
-    'task-count': 'Count'
+    'task-count': 'Count',
+    'task-proxy-path': 'Proxy Path',
+    'task-proxy-error-empty': 'Proxy must be not empty.',
+    'task-proxy-error': 'Proxy path is not require，it shuld start with "http"'
 }
