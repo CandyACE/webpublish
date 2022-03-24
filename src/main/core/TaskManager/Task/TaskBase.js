@@ -3,18 +3,40 @@ import { guid } from '../../../../shared/twtools'
 
 export default class TaskBase {
     constructor(task) {
+        /**
+         * 唯一ID
+         * @type {string}
+         */
         this.gid = task.gid || task.id || guid();
+        /**
+         * 二级域名ID
+         */
         this.id = task.id;
+        /**
+         * 任务名称
+         */
         this.name = task.name;
+        /**
+         * 任务路径
+         */
         this.path = task.path;
+        /**
+         * 是否启用
+         */
         this.enable = false;
         this.setEnable(Boolean(task.enable));
+        /**
+         * 是否启用gzip
+         */
         this.gzip = Boolean(task.gzip);
         if (task.gzip === undefined) {
             this.gzip = true;
         }
+        /**
+         * 任务类型
+         * @type {Tasks}
+         */
         this.type = task.type;
-        this.disenableDirectoryView = task.disenableDirectoryView;
         this.useData = Number(task.useData) || 0;
         this.limitData = Number(task.limitData) || 0;
         this.customProperty = {};

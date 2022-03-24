@@ -1,5 +1,5 @@
 <template>
-  <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => {}">
+  <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => { }">
     <li v-for="action in taskActions" :key="action" class="task-item-action">
       <i v-if="action === 'STOP'" @click.stop="onStopClick">
         <el-tooltip :content="`${$t('task.stop')}`">
@@ -32,7 +32,9 @@
           @command="handleCommand"
           @visible-change="handleVisibleChanged"
         >
-          <span><ts-icon name="link" width="14" height="14"></ts-icon></span>
+          <span>
+            <ts-icon name="link" width="14" height="14"></ts-icon>
+          </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="(address, index) in urls"
@@ -41,14 +43,14 @@
               :disabled="!task.enable"
             >
               <span>{{ address }}</span>
-              <span
-                ><ts-icon
+              <span>
+                <ts-icon
                   name="arrow-up"
                   width="10"
                   height="10"
                   @click.native="handleLinkOpen(address)"
-                ></ts-icon
-              ></span>
+                ></ts-icon>
+              </span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -63,7 +65,7 @@
 </template>
 
 <script>
-import { FILE_STATUS } from "../../../shared/constants";
+import { TASK_STATUS } from "../../../shared/constants";
 import is from "electron-is";
 import "@/components/Icons/delete";
 import "@/components/Icons/link";
@@ -85,7 +87,7 @@ import { showItemInFolder } from "../Native/utils";
 import { cloneDeep } from "lodash";
 
 // const taskActionsMap = {
-//   [FILE_STATUS.FILE]: [],
+//   [TASK_STATUS.FILE]: [],
 // };
 
 export default {
@@ -103,14 +105,18 @@ export default {
   computed: {
     taskCommonActions() {
       let result = this.task.enable ? ["STOP"] : ["START"];
-      if (this.task.type === FILE_STATUS.MBTILES) {
+      if (this.task.type === TASK_STATUS.MBTILES) {
         result.push("WMTS");
+      }
+      result.push('LINK');
+      if (this.task.type !== TASK_STATUS.PROXY) {
+        result.push("FOLDER");
       }
       return result;
     },
     taskActions() {
       const { taskCommonActions } = this;
-      const defaultActions = ["LINK", "FOLDER", "INFO", "DELETE"];
+      const defaultActions = ["INFO", "DELETE"];
       const result = [...taskCommonActions, ...defaultActions].reverse();
       return result;
     },

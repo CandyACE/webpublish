@@ -3,7 +3,7 @@ import http from 'http'
 import fs from 'fs'
 import { promisify } from 'util'
 import getMime from '../../../helper/mime'
-import { FILE_STATUS } from '../../../../shared/constants'
+import { TASK_STATUS } from '../../../../shared/constants'
 import { basename } from 'path'
 import AsyncLock from "async-lock";
 import zlib from 'zlib'

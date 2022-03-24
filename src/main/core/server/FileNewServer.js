@@ -1,17 +1,16 @@
 import ServerBase from "./serverBase";
-// import { Express } from 'express'
-import http from 'http'
+import { Express } from 'express'
 import path from 'path'
 import fs from 'fs'
-import { FILE_STATUS } from "@shared/constants";
+import { TASK_STATUS } from "@shared/constants";
 import { promisify } from 'util'
 import getMime from '../../helper/mime'
 import electron from 'electron';
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
-// const express = require('express')
-// const serveIndex = require('serve-index')
+const express = require('express')
+const serveIndex = require('serve-index')
 
 export default class FileNewServer extends ServerBase {
     constructor(manager) {
@@ -22,31 +21,33 @@ export default class FileNewServer extends ServerBase {
         var _this = this;
         this.stop()
 
-        /**
-         * @type {Express}
-         */
-        this._server = express()
-        this._server.use('/:id/', async function (req, res) {
-            let id = req.params.id;
-            if (!id) {
-                _this._error(res, 'id is require')
-                return;
-            }
-            var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
-            if (!task) {
-                _this._error(res, "no Found this id")
-                return;
-            }
-            _this._readFiles(req, res, task)
-        })
+        return new Promise((resolve, reject) => {
+            /**
+             * @type {Express}
+             */
+            this._server = express()
+            this._server.use('/:id/', async function (req, res) {
+                let id = req.params.id;
+                if (!id) {
+                    _this._error(res, 'id is require')
+                    return;
+                }
+                var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
+                if (!task) {
+                    _this._error(res, "no Found this id")
+                    return;
+                }
+                _this._readFiles(req, res, task)
+            })
 
-        this._server.on('error', () => {
-            electron.remote.dialog.showErrorBox('端口占用', port + " 端口被占用")
-        })
+            this._server.on('error', () => {
+                reject(this.i18n.t('app.port-exist', { port }))
+            })
 
-        var port = this._app.configManager.getSystemConfig('port', "9090");
-        this._server.listen(port, () => {
-            global.vue.$msg.success(`服务启动成功，端口：${port}`);
+            var port = this._app.configManager.getSystemConfig('port', "9090");
+            this._server.listen(port, () => {
+                resolve();
+            })
         })
     }
 
@@ -75,7 +76,7 @@ export default class FileNewServer extends ServerBase {
         }
         var filePath = "", paramPath = ""
         try {
-            if (task.type === FILE_STATUS.FILE) {
+            if (task.type === TASK_STATUS.FILE) {
                 // 如果是文件，就直接找到这个文件发出去
                 filePath = task.path;
             } else {

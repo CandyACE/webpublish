@@ -6,10 +6,7 @@ import ServerBase from './ServerBase';
 import getTask from '../TaskManager/Task/Index';
 import logger from '../Logger';
 
-const readdir = promisify(fs.readdir);
-const stat = promisify(fs.stat)
-
-export default class FileServer extends ServerBase {
+export default class MainServer extends ServerBase {
   constructor(manager) {
     super(manager);
   }
@@ -50,7 +47,7 @@ export default class FileServer extends ServerBase {
           resolve()
         })
       } catch (error) {
-        console.log('FileServer', error)
+        console.log('MainServer', error)
       }
     })
 
@@ -76,6 +73,7 @@ export default class FileServer extends ServerBase {
    * @param {*} task 
    */
   async _readFiles(req, res, task) {
+    logger.info(req, res, task)
     var filePath = task.path
     try {
       var check = task.check();
@@ -87,7 +85,7 @@ export default class FileServer extends ServerBase {
       }
 
       task.Action(req, res).then().catch(error => {
-        logger.error('[FileServer] ${filePath} is not a directory or file.', error)
+        logger.error('[MainServer] ${filePath} is not a directory or file.', error)
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
         res.end(JSON.stringify({
@@ -97,7 +95,7 @@ export default class FileServer extends ServerBase {
         return;
       })
     } catch (error) {
-      logger.error('[FileServer] ${filePath} is not a directory or file.', error)
+      logger.error('[MainServer] ${filePath} is not a directory or file.', error)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
       res.end(JSON.stringify({

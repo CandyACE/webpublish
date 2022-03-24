@@ -1,6 +1,12 @@
 import ServerBase from "./ServerBase";
 import http from 'http'
 import logger from "../Logger";
+import { promisify } from "util";
+import fs from 'fs';
+import { guid } from "../../../shared/twtools";
+import path from "path";
+
+const stat = promisify(fs.stat)
 
 export default class ApiServer extends ServerBase {
     constructor(manager) {
@@ -10,7 +16,7 @@ export default class ApiServer extends ServerBase {
     }
 
     initRouter() {
-        this._router['/'] = (host) => {
+        this._router['/getList'] = (req, host) => {
             var list = [...this._app.taskManager.taskList]
             list.forEach(task => {
                 var url = task.getUrl();
@@ -20,6 +26,20 @@ export default class ApiServer extends ServerBase {
                 taskList: list
             })
         };
+
+        this._router['/addTask'] = async (req, host) => {
+            let url = new URL(req.url, `http://${req.headers.host}`);
+            let pathname = url.searchParams.get("path");
+            if (pathname) {
+                let filename = path.basename(pathname, path.extname(pathname))
+                var stats = await stat(pathname);
+                let item = {
+                    id: guid(),
+                    path: pathname,
+                    name: filename,
+                }
+            }
+        }
     }
 
     start() {
@@ -40,12 +60,13 @@ export default class ApiServer extends ServerBase {
                         return;
                     }
 
-                    var fun = _this._router[req.url]
+                    let url = new URL(req.url, `http://${req.headers.host}`);
+                    var fun = _this._router[url.pathname]
                     if (fun) {
-                        let url = new URL(req.url, `http://${req.headers.host}`);
+
                         var port = _this._app.configManager.getSystemConfig('port', 9090);
                         res.setHeader('Content-Type', 'text/json;charset=UTF-8');//utf8编码，防止中文乱码
-                        res.end(fun(url.hostname + ":" + port))
+                        res.end(fun(req, url.hostname + ":" + port))
                         return;
                     }
 

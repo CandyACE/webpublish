@@ -11,7 +11,7 @@
       <el-tabs :value="type" @tab-click="handleTabClick">
         <el-tab-pane :label="`${$t('task.new-folder-task')}`" name="default">
           <el-form-item>
-            <ts-select-files v-on:change="handleTaskChange" />
+            <ts-select-files v-on:change="handleTaskChange" ref="selectFiles" />
           </el-form-item>
           <el-row :gutter="12">
             <el-col :span="24" :xs="24">
@@ -35,20 +35,20 @@
           </el-row>
           <el-row :gutter="12" v-if="showFileTypeSelection">
             <el-form-item label="任务类别：" :label-width="formLabelWidth">
-              <el-radio v-model="form.selectTaskType" label="file">{{
-                $t("task.task-file-mode-file")
-              }}</el-radio>
-              <el-radio v-model="form.selectTaskType" label="mbtiles">{{
-                $t("task.task-file-mode-mbtiles")
-              }}</el-radio>
+              <el-radio v-model="form.selectTaskType" label="file">
+                {{ $t("task.task-file-mode-file") }}
+              </el-radio>
+              <el-radio v-model="form.selectTaskType" label="mbtiles">
+                {{ $t("task.task-file-mode-mbtiles") }}
+              </el-radio>
             </el-form-item>
           </el-row>
           <el-row :gutter="12">
             <el-col :span="24" :xs="24">
               <el-form-item>
-                <el-checkbox v-model="form.gzip">{{
-                  $t("task.task-enable-gzip")
-                }}</el-checkbox>
+                <el-checkbox v-model="form.gzip">
+                  {{ $t("task.task-enable-gzip") }}
+                </el-checkbox>
               </el-form-item>
             </el-col>
           </el-row>
@@ -62,24 +62,54 @@
             <el-row :gutter="12">
               <el-col :span="24" :xs="24">
                 <el-form-item>
-                  <el-checkbox v-model="form.disenableDirectoryView">
-                    {{ $t("task.task-disenable-directory") }}
-                  </el-checkbox>
+                  <el-checkbox v-model="form.disenableDirectoryView">{{
+                    $t("task.task-disenable-directory")
+                  }}</el-checkbox>
                 </el-form-item>
               </el-col>
             </el-row>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="添加代理" name="proxy" v-if="false"> </el-tab-pane>
+        <el-tab-pane label="添加反代理" name="proxy">
+          <el-row :gutter="12">
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                prop="taskName"
+                :label="`${$t('task.task-name')}`"
+                :label-width="formLabelWidth"
+              >
+                <el-input v-model="form.taskName" spellcheck="false"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                :label="`${$t('task.task-base-path')}: `"
+                prop="id"
+                :label-width="formLabelWidth"
+              >
+                <el-input v-model="form.id" spellcheck="false"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                :label="`${$t('task.task-proxy-path')}: `"
+                prop="taskPath"
+                :label-width="formLabelWidth"
+              >
+                <el-input v-model="form.taskPath" spellcheck="false"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-row>
         <el-col :span="24">
           <el-button @click="handleCancel()">{{ $t("app.cancel") }}</el-button>
-          <el-button type="primary" @click="submitForm('taskForm')">{{
-            $t("app.submit")
-          }}</el-button>
+          <el-button type="primary" @click="submitForm('taskForm')">
+            {{ $t("app.submit") }}
+          </el-button>
         </el-col>
       </el-row>
     </div>
@@ -87,7 +117,7 @@
 </template>
 
 <script>
-import { ADD_TASK_TYPE, FILE_STATUS } from "../../../shared/constants";
+import { ADD_TASK_TYPE, TASK_STATUS } from "../../../shared/constants";
 import SelectFileVue from "./SelectFile.vue";
 import { guid } from "../../../shared/twtools";
 import { bytesToSize } from "../../../shared/utils";
@@ -136,6 +166,17 @@ export default {
       callback();
     };
 
+    var checkProxyPath = (rule, value, callback) => {
+      if (this.type == ADD_TASK_TYPE.DEFAULT) return callback();
+      if (!value) {
+        return callback(new Error(this.$t("task.task-proxy-error-empty")));
+      }
+      if (!value.startsWith("http")) {
+        return callback(new Error(this.$t("task.task-proxy-error")));
+      }
+      callback();
+    };
+
     return {
       formLabelWidth: "100px",
       showFileTypeSelection: false,
@@ -145,6 +186,7 @@ export default {
       rules: {
         taskName: [{ validator: checkName, trigger: "blur" }],
         id: [{ validator: checkId, trigger: "blur" }],
+        taskPath: [{ validator: checkProxyPath, trigger: "blur" }],
       },
     };
   },
@@ -157,7 +199,7 @@ export default {
         taskPath: "",
         taskName: "",
         id: "",
-        selectTaskType: FILE_STATUS.FILE,
+        selectTaskType: TASK_STATUS.FILE,
         gzip: true,
         limit: 0,
         disenableDirectoryView: false,
@@ -184,8 +226,8 @@ export default {
       this.form.taskPath = raw.path;
       this.form.taskName = raw.name;
       this.taskType = fileStats;
-      this.showFileTypeSelection = this.taskType == FILE_STATUS.MBTILES;
-      this.form.selectTaskType = FILE_STATUS.FILE;
+      this.showFileTypeSelection = this.taskType == TASK_STATUS.MBTILES;
+      this.form.selectTaskType = TASK_STATUS.FILE;
       this.form.disenableDirectoryView = false;
       this.form.id = guid();
     },
@@ -194,6 +236,9 @@ export default {
       this.$store.dispatch("app/updateAddTaskOptions", {});
     },
     handleTabClick(tab, event) {
+      this.reset();
+      this.$refs["selectFiles"].handleTrashClick();
+      this.form.id = guid();
       this.$store.dispatch("app/changeAddTaskType", tab.name);
     },
     handleClosed() {
@@ -214,10 +259,14 @@ export default {
           return false;
         }
 
+        if (this.type === ADD_TASK_TYPE.PROXY) {
+          this.taskType = TASK_STATUS.PROXY;
+        }
+
         try {
           var limit = this.$refs["taskLimit"];
           var item = {
-            id: this.form.id,
+            id: this.form.id || guid(),
             name: this.form.taskName,
             path: this.form.taskPath,
             enable: true,

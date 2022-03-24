@@ -2,7 +2,7 @@ import http from 'http'
 import fs from 'fs'
 import { promisify } from 'util'
 import TaskBase from './TaskBase'
-import { FILE_STATUS } from '../../../../shared/constants'
+import { TASK_STATUS } from '../../../../shared/constants'
 import path from 'path'
 import DirectoryHTML from '../../../helper/DirectoryHtml'
 import FileTask from './FileTask'
@@ -11,6 +11,11 @@ const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
 
 export default class DirectoryTask extends TaskBase {
+
+    constructor(task) {
+        super(task);
+        this.disenableDirectoryView = task.disenableDirectoryView;
+    }
 
     setEnable(val) {
         var result = false;

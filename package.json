@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.4.9",
+  "version": "1.5.0",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -34,9 +34,10 @@
       {
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
-        "description": "",
+        "description": "1.5.0 添加开发经常会遇到的反代理，可以减少配置的困难，让前端轻松跨域。",
         "updateInfos": [
-          "修复若干BUG"
+          "新增 支持添加代理任务",
+          "修复部分bug"
         ]
       }
     ],
@@ -113,13 +114,14 @@
     "devtron": "^1.4.0",
     "electron": "^10.4.7",
     "electron-builder": "^20.19.2",
-    "electron-rebuild": "^3.2.7",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^3.2.7",
     "enquirer": "^2.3.6",
     "execa": "^0.7.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "http-proxy": "^1.18.1",
     "mini-css-extract-plugin": "^0.4.0",
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",

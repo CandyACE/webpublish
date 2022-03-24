@@ -16,14 +16,14 @@
     <ts-task-progress
       :useData="Number(task.useData)"
       :limitData="Number(task.limitData)"
-      :type="task.type === 'mbtiles' ? 'count' : 'size'"
+      :type="countItems.some(item => item === task.type) ? 'count' : 'size'"
     />
   </div>
 </template>
 
 <script>
 import fs from "fs";
-import { FILE_STATUS } from "@shared/constants";
+import { TASK_STATUS } from "@shared/constants";
 import { remote } from "electron";
 import TaskProgressVue from "./TaskProgress";
 import TaskItemActionsVue from "./TaskItemActions.vue";
@@ -38,20 +38,7 @@ export default {
   },
   data() {
     return {
-      taskType: {
-        [FILE_STATUS.FILE]: {
-          text: "FILE",
-          color: "rgba(204,102,0,.2)",
-        },
-        [FILE_STATUS.DIRECTORY]: {
-          text: "DIRECTORY",
-          color: "rgba(204,102,0,.2)",
-        },
-        [FILE_STATUS.MBTILES]: {
-          text: "MBTiles",
-          color: "rgba(204,102,0,.2)",
-        },
-      },
+      countItems: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY]
     };
   },
   props: {
@@ -70,11 +57,11 @@ export default {
     },
     isFileOrDirectory: function (file) {
       let stat = fs.statSync(file.path);
-      let result = FILE_STATUS.UNKNOW;
+      let result = TASK_STATUS.UNKNOW;
       if (stat.isFile()) {
-        result = FILE_STATUS.FILE;
+        result = TASK_STATUS.FILE;
       } else if (stat.isDirectory()) {
-        result = FILE_STATUS.DIRECTORY;
+        result = TASK_STATUS.DIRECTORY;
       }
       return result;
     },

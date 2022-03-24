@@ -3,36 +3,38 @@
     <el-row :gutter="12">
       <el-col :span="24">
         <el-form-item>
-          <el-checkbox v-model="showLimit">
-            {{ textLimit }}
-          </el-checkbox>
+          <el-checkbox v-model="showLimit">{{ textLimit }}</el-checkbox>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row v-if="showLimit" :gutter="12">
       <el-col :span="13">
-        <el-form-item :label="textLimit" :label-width="labelWidth"
-          ><el-input-number
-            v-model.number="limitData"
-            controls-position="right"
-            size="mini"
-          ></el-input-number
-        ></el-form-item>
+        <el-form-item :label="textLimit" :label-width="labelWidth">
+          <el-input-number v-model.number="limitData" controls-position="right" size="mini"></el-input-number>
+        </el-form-item>
       </el-col>
       <el-col :span="11">
-        <el-form-item
-          ><span style="margin-left: 10px">{{
-            type === "mbtiles" ? $t("task.task-count") : "MB"
-          }}</span></el-form-item
-        >
+        <el-form-item>
+          <span style="margin-left: 10px">
+            {{
+              countType.some(item => item === type) ? $t("task.task-count") : "MB"
+            }}
+          </span>
+        </el-form-item>
       </el-col>
     </el-row>
   </div>
 </template>
 
-<script>
+<script>import { TASK_STATUS } from "../../../shared/constants";
+
 export default {
   name: "ts-task-limit",
+  data() {
+    return {
+      countType: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY]
+    }
+  },
   props: {
     showLimit: {
       type: Boolean,
@@ -52,7 +54,7 @@ export default {
   },
   computed: {
     textLimit() {
-      return this.type === "mbtiles" ? "限制次数" : this.$t("task.task-limit");
+      return this.countType.some(item => item === this.type) ? "限制次数" : this.$t("task.task-limit");
     },
   },
 };

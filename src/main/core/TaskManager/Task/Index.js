@@ -1,13 +1,15 @@
-import { FILE_STATUS } from "../../../../shared/constants";
+import { TASK_STATUS } from "../../../../shared/constants";
 import DirectoryTask from "./DirectoryTask";
 import FileTask from "./FileTask";
 import TaskBase from "./TaskBase";
 import MBTilesTask from "./MBTilesTask";
+import ProxyTask from "./ProxyTask";
 
 const Tasks = {
-    [FILE_STATUS.FILE]: FileTask,
-    [FILE_STATUS.DIRECTORY]: DirectoryTask,
-    [FILE_STATUS.MBTILES]: MBTilesTask
+    [TASK_STATUS.FILE]: FileTask,
+    [TASK_STATUS.DIRECTORY]: DirectoryTask,
+    [TASK_STATUS.MBTILES]: MBTilesTask,
+    [TASK_STATUS.PROXY]: ProxyTask
 }
 
 function getTask(type) {

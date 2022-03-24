@@ -14,6 +14,7 @@ export default class MBTilesTask extends TaskBase {
     constructor(task) {
         super(task);
         var _this = this;
+        _this.format = "";
         this._mbtiles = null;
         try {
             fs.accessSync(this.path, fs.constants.F_OK);
@@ -25,7 +26,7 @@ export default class MBTilesTask extends TaskBase {
                 _this._mbtiles = mbtiles;
                 _this.setEnable(Boolean(task.enable))
                 mbtiles.getInfo(function (err, info) {
-                    _this.customProperty['format'] = info.format;
+                    _this.format = info.format;
                 })
             })
         } catch (e) {
@@ -49,7 +50,8 @@ export default class MBTilesTask extends TaskBase {
     }
 
     destroy() {
-        this._mbtiles._db.close();
+        if (this._mbtiles && this._mbtiles._db)
+            this._mbtiles._db.close();
     }
 
     /**
@@ -231,7 +233,7 @@ export default class MBTilesTask extends TaskBase {
     }
 
     getUrl() {
-        var format = this.customProperty['format'] || 'png';
+        var format = this.format || 'png';
         return '{z}/{x}/{y}.' + format;
     }
 }

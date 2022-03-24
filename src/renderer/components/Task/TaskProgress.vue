@@ -32,7 +32,7 @@
 import os from "os";
 import { remote } from "electron";
 import path from "path";
-import { FILE_STATUS } from "../../../shared/constants";
+import { TASK_STATUS } from "../../../shared/constants";
 import { bytesToSize, calcProgress, countToSize } from "../../../shared/utils";
 import { mapState } from "vuex";
 

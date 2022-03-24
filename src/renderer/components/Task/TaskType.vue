@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { FILE_STATUS } from "../../../shared/constants";
+import { TASK_STATUS } from "../../../shared/constants";
 
 export default {
   name: "ts-task-type",
@@ -23,18 +23,22 @@ export default {
   data() {
     return {
       taskType: {
-        [FILE_STATUS.FILE]: {
-          text: "FILE",
+        [TASK_STATUS.FILE]: {
+          text: "File",
           color: "rgba(204,102,0,.2)",
         },
-        [FILE_STATUS.DIRECTORY]: {
-          text: "DIRECTORY",
+        [TASK_STATUS.DIRECTORY]: {
+          text: "Directory",
           color: "rgba(204,102,0,.2)",
         },
-        [FILE_STATUS.MBTILES]: {
+        [TASK_STATUS.MBTILES]: {
           text: "MBTiles",
           color: "rgba(204,102,0,.2)",
         },
+        [TASK_STATUS.PROXY]: {
+          text: 'Proxy',
+          color: "rgba(204,102,0,.2)",
+        }
       },
     };
   },

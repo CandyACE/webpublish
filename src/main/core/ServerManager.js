@@ -1,4 +1,4 @@
-import FileServer from "./server/FileServer";
+import MainServer from "./server/MainServer";
 import { EventEmitter } from 'events'
 import RenderApplication from "../RenderApplication";
 import ApiServer from "./server/ApiServer";
@@ -15,9 +15,9 @@ export default class ServerManager extends EventEmitter {
      */
     this._app = application;
     /**
-     * @type {FileServer}
+     * @type {MainServer}
      */
-    this._server = new FileServer(this);
+    this._server = new MainServer(this);
 
     /**
      * @type {ApiServer}

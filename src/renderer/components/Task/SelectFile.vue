@@ -42,7 +42,7 @@ import "../Icons/inbox";
 import "../Icons/trash";
 import fs from "fs";
 import path from "path";
-import { FILE_STATUS } from "../../../shared/constants";
+import { TASK_STATUS } from "../../../shared/constants";
 
 export default {
   name: "ts-select-files",
@@ -89,13 +89,13 @@ export default {
 
       fs.stat(file.raw.path, function (err, stats) {
         try {
-          var fileStats = FILE_STATUS.DIRECTORY;
+          var fileStats = TASK_STATUS.DIRECTORY;
 
           if (stats.isFile()) {
             if (path.extname(file.raw.name) === ".mbtiles") {
-              fileStats = FILE_STATUS.MBTILES;
+              fileStats = TASK_STATUS.MBTILES;
             } else {
-              fileStats = FILE_STATUS.FILE;
+              fileStats = TASK_STATUS.FILE;
             }
           }
 

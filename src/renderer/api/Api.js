@@ -1,5 +1,5 @@
 import { remote } from 'electron'
-import { FILE_STATUS } from '../../shared/constants'
+import { TASK_STATUS } from '../../shared/constants'
 import is from 'electron-is'
 import { cloneDeep } from 'lodash';
 import { changeKeysToCamelCase, changeKeysToKebabCase } from '../../shared/utils';
