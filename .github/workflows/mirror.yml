@@ -12,8 +12,7 @@ jobs:
       - name: Sync to gitee
         uses: Yikun/hub-mirror-action@master
         with:
-          src: CandyACE/webpublish
-          dst: 天才无敌小逗比/webpublish
+          src: github/CandyACE
+          dst: gitee天才无敌小逗比
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           dst_token: ${{ secrets.GITEE_KEY }}
-          account_type: org
