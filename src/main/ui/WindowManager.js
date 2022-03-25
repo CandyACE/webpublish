@@ -47,7 +47,7 @@ export default class WindowManager extends EventEmitter {
     result.attrs.height *= heightScale
 
     if (is.linux()) {
-      result.attrs.icon = join(__static, './image/twtoolsLogo.png')
+      result.attrs.icon = join(__static, './image/logo.png')
     }
 
     return result

@@ -5,7 +5,7 @@
       :class="['aside', 'hidden-sm-and-close', { draggable: asideDraggable }]"
     >
       <div class="aside-inner">
-        <ts-logo-mini class="logo-mini" />
+        <ts-logo-mini class="logo-mini" :width="30" :height="30" />
         <ul class="menu top-menu">
           <li @click="nav('/task')" class="non-draggable">
             <ts-icon name="menu-task" width="20" height="20" />
