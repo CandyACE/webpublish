@@ -14,5 +14,7 @@ export default {
     'last-check-update-time': 'Last Time Checking for Update',
     'api': 'API Options',
     'api-enabled': 'Enable API',
-    'api-port': 'API used port'
+    'api-port': 'API used port',
+    'view': 'Interface',
+    'view-type': 'Display category menu'
 }

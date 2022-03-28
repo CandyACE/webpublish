@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -33,10 +33,9 @@
     "publish": [{
       "provider": "generic",
       "url": "http://oss.tangweitian.cn/update/webpublish",
-      "description": "1.5.0 添加开发经常会遇到的反代理，可以减少配置的困难，让前端轻松跨域。",
+      "description": "新增分类视图，可以进入“设置->启用分类视图”来感受一下吧",
       "updateInfos": [
-        "新增 支持添加代理任务",
-        "更新 LOGO",
+        "新增 分类视图",
         "修复部分bug"
       ]
     }],

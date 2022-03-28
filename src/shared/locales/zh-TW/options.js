@@ -14,5 +14,7 @@ export default {
     'last-check-update-time': '上次檢查更新時間',
     'api': 'API設置',
     'api-enabled': '啟用API',
-    'api-port': 'API啟用端口'
+    'api-port': 'API啟用端口',
+    'view': '界面',
+    'view-type': '顯示分類菜單'
 }

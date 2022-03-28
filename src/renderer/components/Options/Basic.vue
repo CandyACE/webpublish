@@ -59,6 +59,34 @@
           </el-col>
         </el-form-item>
         <el-form-item
+          :label="`${$t('options.view')}`"
+          :label-width="formLabelWidth"
+        >
+        <el-col class="form-item-sub" :span="24">
+          <el-checkbox v-model="form.viewType">
+            {{$t("options.view-type")}}
+          </el-checkbox>
+        </el-col>
+        </el-form-item>
+        <el-form-item
+          :label="`${$t('options.api')}`"
+          :label-width="formLabelWidth"
+        >
+          <el-col class="form-item-sub" :span="24">
+            <el-checkbox v-model="form.apiEnabled">
+              {{ $t("options.api-enabled") }}
+            </el-checkbox>
+          </el-col>
+
+          <el-col class="form-item-sub" :span="24">
+            <el-input-number
+              :disabled="!form.apiEnabled"
+              v-model="form.apiPort"
+              controls-position="right"
+            ></el-input-number>
+          </el-col>
+        </el-form-item>
+        <el-form-item
           :label="`${$t('options.auto-update')}: `"
           :label-width="formLabelWidth"
         >
@@ -83,24 +111,7 @@
             </div>
           </el-col>
         </el-form-item>
-        <el-form-item
-          :label="`${$t('options.api')}`"
-          :label-width="formLabelWidth"
-        >
-          <el-col class="form-item-sub" :span="24">
-            <el-checkbox v-model="form.apiEnabled">
-              {{ $t("options.api-enabled") }}
-            </el-checkbox>
-          </el-col>
 
-          <el-col class="form-item-sub" :span="24">
-            <el-input-number
-              :disabled="!form.apiEnabled"
-              v-model="form.apiPort"
-              controls-position="right"
-            ></el-input-number>
-          </el-col>
-        </el-form-item>
         <el-form-item :label-width="formLabelWidth" v-if="false">
           <el-button type="primary" @click="openDevTools"
             >打开开发工具</el-button
@@ -155,6 +166,7 @@ const initialForm = (config) => {
     locale,
     apiEnabled,
     apiPort,
+    viewType
   } = config;
   const result = {
     port,
@@ -165,6 +177,7 @@ const initialForm = (config) => {
     locale,
     apiEnabled,
     apiPort,
+    viewType
   };
   return result;
 };

@@ -84,7 +84,7 @@ export default class TaskManager {
    * @param {*} isReflash 
    * @returns 
    */
-  updateSelectTaskList(val, isReflash) {
+  updateSelectTaskList(val, isReflash, type = 'all') {
     this.selectTaskList.splice(0, this.selectTaskList.length)
 
     if (!isReflash) {
@@ -92,11 +92,13 @@ export default class TaskManager {
       this.searchKeyChanged.raiseEvent(val)
     }
 
+    let currentList = this.taskList.filter(f => (type != 'all' ? type == f.type : true));
+
     if (this.searchKey == "" || this.searchKey == null) {
-      this.selectTaskList.push(...this.taskList)
+      this.selectTaskList.push(...currentList)
       return;
     }
-    const list = this.taskList.filter(f => {
+    const list = currentList.filter(f => {
       return f.id.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1 ||
         f.name.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1 ||
         f.path.toLocaleLowerCase().indexOf(this.searchKey.toLocaleLowerCase()) != -1

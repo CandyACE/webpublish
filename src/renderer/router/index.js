@@ -19,6 +19,14 @@ export default new Router({
           path: '/task',
           alias: '/',
           component: require('@/components/Task/Index').default,
+          props: {
+            status: 'all'
+          }
+        },
+        {
+          path: '/task/:status',
+          alias: 'task',
+          component: require('@/components/Task/Index').default,
           props: true
         },
         {
