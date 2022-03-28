@@ -1,8 +1,25 @@
-# Web Publish
+<div align="center">
+<img align="center" width=200 src="./icons/256x256.png"/>
+</div>
 
-[![Build WebPublish For Win/Mac/Linux](https://github.com/CandyACE/webpublish/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/CandyACE/webpublish/actions/workflows/release.yml)
+<div align="center">
+    <h1>WebPublish</h1>
+    <img alt="release" src="https://img.shields.io/github/package-json/v/CandyAce/webpublish" />
+     <a href="https://github.com/CandyAce/webpublish/actions">
+   <img alt=building src=https://github.com/CandyACE/webpublish/actions/workflows/release.yml/badge.svg>
+    <a href="https://github.com/CandyACE/webpublish/blob/master/LICENSE">
+    <img alt="npm" src="https://img.shields.io/github/license/CandyACE/webpublish" />
+ </a>
+ </a>
+</div>
 
-获取[稳定版](http://webpublish.tangweitian.cn)
+一个快速发布文件夹、文件、MBTiles和代理的开发工具
+
+## 安装包
+* [WebPublish Windows](https://github.com/CandyACE/webpublish/releases)
+* [WebPublish Linux](https://github.com/CandyACE/webpublish/releases)
+
+## 背景
 
 在工作中，经常会遇到需要发布一个页面，或者发布一个数据。这个时候配置nginx或者其他的就有点费劲，需要有个快速的工具来发布这些内容。
 
@@ -14,28 +31,64 @@
 
 ![](images/2022-03-15-23-14-00.png)
 
-不仅仅是发布上来。而是看到网络上没有相似的工具，希望能够好好的维护起来，也欢迎大家更新提交。
+## 支持能力
 
-路线图：
-
-- [ ] 支持插件**（2.0大版本实现）
-- [x] 关于和设置页面
 - [x] 开机自启
 - [x] 支持设置gzip
 - [x] 支持设置端口
 - [x] 支持选择ip
-- [ ] ~~支持每个服务单独设置端口~~（脱离了开发这个工具的意义）
 - [x] 支持公用端口的服务单独设置二级路径（id）
-- [x] 界面美化
 - [x] 支持服务关闭和开启
-- [ ] 支持批量操作
-- [ ] 支持代理
+- [x] 支持代理
 - [x] 支持设置跨域(目前默认开启)
-- [ ] 支持api调试模式（自定义接口返回）
 - [x] 支持最小化到托盘
-- [ ] 支持悬浮窗
-- [ ] 减小依赖打包，缩小体积
 - [x] 支持MBTiles
 - [x] 多语言支持
 - [x] 任务检索
 - [x] 支持Linux
+
+## 使用文档
+
+正在搭建中...
+
+## 开始
+
+一下说明将为你提供在本地计算机上启动并运行该项目源代码。
+
+### 先决条件
+
+> Nodejs 12.21
+
+### 安装
+
+#### 克隆项目
+
+首先下载项目到本地
+
+``` bash
+https://github.com/CandyACE/webpublish.git
+```
+
+国内的用户可以采取这种
+
+``` bash
+git clone https://gitee.com/tstwt/webpublish.git
+```
+
+#### 初始化项目
+``` bash
+npm install
+```
+
+#### 调试项目
+``` bash
+npm run dev
+```
+
+#### 打包项目
+``` bash
+npm run build
+```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/CandyACE/webpublish/blob/master/LICENSE) file for details.
