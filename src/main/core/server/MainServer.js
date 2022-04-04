@@ -73,7 +73,6 @@ export default class MainServer extends ServerBase {
    * @param {*} task 
    */
   async _readFiles(req, res, task) {
-    logger.info(req, res, task)
     var filePath = task.path
     try {
       var check = task.check();

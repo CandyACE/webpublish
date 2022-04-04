@@ -81,7 +81,6 @@ export default class MBTilesTask extends TaskBase {
 
     static GetMapTemplete(req, res, task) {
         task._mbtiles.getInfo(function (err, info) {
-            logger.info(info)
             let center = info.center;
             let minzoom = info.minzoom;
             let maxzoom = info.maxzoom;
