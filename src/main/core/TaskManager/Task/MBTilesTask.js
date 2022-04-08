@@ -65,6 +65,9 @@ export default class MBTilesTask extends TaskBase {
         asyncLock.acquire('fileTask-size-write', function () {
             ++task.useData
         })
+
+        res.setHeader('Content-Type', mime);
+        res.setHeader('Access-Control-Allow-Origin', "*")
         if (req.url.split('/').pop() === "getMap") {
             MBTilesTask.GetMapTemplete(req, res, task)
             return;

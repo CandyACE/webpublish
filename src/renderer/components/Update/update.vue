@@ -120,7 +120,9 @@ export default {
 
 <style lang="scss">
 .checkUpdate {
-  .el-progress-bar__outer {
+  width: 100%;
+ 
+ .el-progress-bar__outer {
     border-radius: 0 !important;
     background-color: #3a3e63;
   }
