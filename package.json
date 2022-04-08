@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -35,6 +35,7 @@
       "url": "http://oss.tangweitian.cn/update/webpublish",
       "description": "新增分类视图，可以进入“设置->启用分类视图”来感受一下吧",
       "updateInfos": [
+        "修复 地图预览界面请求的瓦片始终是127.0.0.1",
         "修复 任务属性中已使用量显示错误的问题。"
       ]
     }],

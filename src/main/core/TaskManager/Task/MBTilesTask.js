@@ -109,7 +109,7 @@ export default class MBTilesTask extends TaskBase {
                         "webpublish-tiles": {
                             "type": type,
                             'tiles': [
-                                `http://127.0.0.1:${req.headers.host.split(':').pop()}/${task.id}/{z}/{x}/{y}.${ext}`
+                                `http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${ext}`
                             ],
                             'tileSize': tilesize
                         }
