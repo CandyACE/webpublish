@@ -16,5 +16,6 @@ export default {
     'api-enabled': 'Enable API',
     'api-port': 'API used port',
     'view': 'Interface',
-    'view-type': 'Display category menu'
+    'view-type': 'Display category menu',
+    'map-engine': 'Map Engine'
 }

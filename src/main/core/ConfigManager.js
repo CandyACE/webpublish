@@ -1,6 +1,7 @@
 import ElectronStore from "electron-store";
 import is from 'electron-is'
 import { app } from "electron";
+import { MAP_TYPE } from "../../shared/constants";
 
 export default class ConfigManager {
     constructor() {
@@ -32,7 +33,8 @@ export default class ConfigManager {
                 'locale': app.getLocale(),
                 'api-enabled': false,
                 'api-port': 9100,
-                'view-type': false
+                'view-type': false,
+                'map-engine': 'mapbox'
             }
         })
     }

@@ -1,20 +1,33 @@
 (function () {
     window.onload = function () {
-        var rootDiv = document.querySelector("#map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div");
+        var rootDiv = document.body;
         if (!rootDiv) console.error("can't find the root div");
 
-        var html = `
-        <button class="mapboxgl-ctrl-info" type="button" title="Show this map's info." aria-label="Show this map's info.">
-            <span class="mapboxgl-ctrl-image-info" aria-hidden="true"></span>
-        </button>
-        `
+        let div = document.createElement('div');
+        div.className = "webpublish-div";
+        let button = document.createElement('button')
+        button.className = "ctrl-info"
+        button.id = "ctrl-info"
+        button.type = "button"
+        button.title = "Show this map's info."
+        let span = document.createElement('span')
+        span.className = "ctrl-image-info"
+        button.appendChild(span)
+        div.appendChild(button)
 
-        rootDiv.innerHTML += html;
+        rootDiv.appendChild(div)
+
+        var infoDiv = document.createElement('div')
+        infoDiv.className = 'blur infoBox-father'
+        var infoboxDiv = document.createElement('div')
+        infoboxDiv.id = "infoBox"
+        infoDiv.appendChild(infoboxDiv)
+
+        rootDiv.appendChild(infoDiv)
 
         var html = objectToHtml({ object: mbInfo });
         document.getElementById("infoBox").innerHTML += html;
 
-        var button = document.querySelector("#map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div > button.mapboxgl-ctrl-info");
         button.onclick = function () {
             var box = document.getElementById("infoBox").parentElement;
             if (box.classList.contains('show')) {

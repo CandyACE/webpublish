@@ -40,6 +40,8 @@ export default {
 .app-about-dialog {
   max-width: 632px;
   min-width: 380px;
+  overflow: hidden;
+  border-radius: 10px !important;
   .el-dialog__header {
     padding-top: 0;
     padding-bottom: 0;

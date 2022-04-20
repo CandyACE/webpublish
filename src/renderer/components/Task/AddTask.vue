@@ -296,6 +296,8 @@ export default {
 .el-dialog.add-task-dialog {
   max-width: 632px;
   min-width: 380px;
+  overflow: hidden;
+  border-radius: 10px;
   .task-advanced-options .el-form-item:last-of-type {
     margin-bottom: 0;
   }

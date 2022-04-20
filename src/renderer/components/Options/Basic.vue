@@ -30,8 +30,8 @@
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.openAtLogin">
               {{ $t("options.open-at-login") }}</el-checkbox
-            ></el-col
-          >
+            >
+          </el-col>
           <el-col class="form-item-sub" :span="24">
             <el-checkbox v-model="form.keepWindowState">
               {{ $t("options.keep-window-state") }}
@@ -45,7 +45,6 @@
           <el-col class="form-item-sub" :span="16">
             <el-select
               v-model="form.locale"
-              @change="handleLocaleChange"
               :placeholder="$t('options.change-language')"
             >
               <el-option
@@ -62,11 +61,27 @@
           :label="`${$t('options.view')}`"
           :label-width="formLabelWidth"
         >
-        <el-col class="form-item-sub" :span="24">
-          <el-checkbox v-model="form.viewType">
-            {{$t("options.view-type")}}
-          </el-checkbox>
-        </el-col>
+          <el-col class="form-item-sub" :span="24">
+            <el-checkbox v-model="form.viewType">
+              {{ $t("options.view-type") }}
+            </el-checkbox>
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          :label="`${$t('options.map-engine')}`"
+          :label-width="formLabelWidth"
+        >
+          <el-col class="form-item-sub" :span="16">
+            <el-select v-model="form.mapEngine">
+              <el-option
+                v-for="item in mapEngines"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-col>
         </el-form-item>
         <el-form-item
           :label="`${$t('options.api')}`"
@@ -83,7 +98,8 @@
               :disabled="!form.apiEnabled"
               v-model="form.apiPort"
               controls-position="right"
-            ></el-input-number>
+            >
+            </el-input-number>
           </el-col>
         </el-form-item>
         <el-form-item
@@ -129,11 +145,10 @@
                   此计划会收集用户在打开软件的次数，并且发送回指定服务器进行存储，方便统计使用人数量和分布。为后期优化提供数据参考。
                 </p>
                 <p>只会发送登录地址，不会发送隐私数据和本地文件名等。</p>
-                <i
-                  slot="reference"
-                  class="el-icon-warning-outline"
-                ></i></el-popover></el-checkbox
-          ></el-col>
+                <i slot="reference" class="el-icon-warning-outline"></i>
+              </el-popover>
+            </el-checkbox>
+          </el-col>
         </el-form-item>
       </el-form>
       <div class="form-actions">
@@ -155,6 +170,7 @@ import is from "electron-is";
 import { remote } from "electron";
 import { availableLanguages, getLanguage } from "../../../shared/locales";
 import { getLocaleManager } from "../Locale";
+import { MAP_ENGINE } from "../../../shared/constants";
 
 const initialForm = (config) => {
   const {
@@ -166,7 +182,8 @@ const initialForm = (config) => {
     locale,
     apiEnabled,
     apiPort,
-    viewType
+    viewType,
+    mapEngine,
   } = config;
   const result = {
     port,
@@ -177,7 +194,8 @@ const initialForm = (config) => {
     locale,
     apiEnabled,
     apiPort,
-    viewType
+    viewType,
+    mapEngine,
   };
   return result;
 };
@@ -188,12 +206,18 @@ export default {
     const { locale } = this.$store.state.options.config;
     const form = initialForm(this.$store.state.options.config);
     const formOriginal = cloneDeep(form);
+    const mapEngines = [];
+    Object.keys(MAP_ENGINE).forEach((e) => {
+      mapEngines.push({ value: MAP_ENGINE[e], label: e });
+    });
+
     return {
       form,
       formOriginal,
       formLabelWidth: calcFormLabelWidth(locale),
       locales: availableLanguages,
       rules: {},
+      mapEngines: mapEngines,
     };
   },
   computed: {
@@ -210,6 +234,9 @@ export default {
         "application:change-locale",
         lng
       );
+    },
+    handleMapTypeChange(mapType) {
+      const type = MAP_TYPE[mapType];
     },
     resetForm(formName) {
       this.syncFormConfig();
@@ -266,6 +293,10 @@ export default {
 
           if (data.port) {
             _this.application.serverManager.restart();
+          }
+
+          if (data.locale) {
+            this.handleLocaleChange(data.locale);
           }
 
           if (data.apiEnabled != undefined || data.apiPort) {

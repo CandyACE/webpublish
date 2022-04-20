@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -30,21 +30,23 @@
     "directories": {
       "output": "build"
     },
-    "publish": [{
-      "provider": "generic",
-      "url": "http://oss.tangweitian.cn/update/webpublish",
-      "description": "新增分类视图，可以进入“设置->启用分类视图”来感受一下吧",
-      "updateInfos": [
-        "修复 MBTiles不支持跨域的问题",
-        "修复 地图预览界面请求的瓦片始终是127.0.0.1",
-        "修复 任务属性中已使用量显示错误的问题。"
-      ]
-    }],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://oss.tangweitian.cn/update/webpublish",
+        "description": "新增地图引擎切换设置，目前支持MapBox、OpenLayers，切换到设置感受一下吧！",
+        "updateInfos": [
+          "新增 地图引擎切换设置",
+          "修复 修改语言的时候，会在没有保存设置的时候直接切换到问题。"
+        ]
+      }
+    ],
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
-      "contents": [{
+      "contents": [
+        {
           "x": 410,
           "y": 150,
           "type": "link",
@@ -66,7 +68,10 @@
     "linux": {
       "category": "Network",
       "icon": "icons",
-      "target": ["deb", "AppImage"]
+      "target": [
+        "deb",
+        "AppImage"
+      ]
     }
   },
   "dependencies": {

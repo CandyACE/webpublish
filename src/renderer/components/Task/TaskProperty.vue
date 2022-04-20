@@ -342,6 +342,8 @@ export default {
 <style lang="scss">
 .task-info-dialog {
   min-width: 380px;
+  overflow: hidden;
+  border-radius: 10px !important;
   .el-dialog__header {
     padding-right: 60px;
   }

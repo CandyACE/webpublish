@@ -2,6 +2,7 @@ import { ADD_TASK_TYPE } from "../../../shared/constants";
 
 const state = {
   aboutPanelVisible: false,
+  howtousePanelVisible: false,
   addTaskVisible: false,
   addTaskType: ADD_TASK_TYPE.DEFAULT,
   addTaskFiles: [],
@@ -12,6 +13,9 @@ const state = {
 const getters = {}
 
 const mutations = {
+  CHANGE_HOWTOUSE_PANEL_VISIBLE(state, visbile) {
+    state.howtousePanelVisible = visbile;
+  },
   CHANGE_ABOUT_PANEL_VISIBLE(state, visible) {
     state.aboutPanelVisible = visible;
   },
@@ -33,6 +37,12 @@ const mutations = {
 }
 
 const actions = {
+  showHowtousePanel({ commit }) {
+    commit('CHANGE_HOWTOUSE_PANEL_VISIBLE', true);
+  },
+  hideHowtousePanel({ commit }) {
+    commit('CHANGE_HOWTOUSE_PANEL_VISIBLE', false)
+  },
   showAboutPanel({ commit }) {
     commit('CHANGE_ABOUT_PANEL_VISIBLE', true)
   },

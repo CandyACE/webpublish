@@ -69,6 +69,9 @@ export default {
     handleClosed() {},
     handleClick() {
       this.visible = false;
+      if (this.application.taskManager.selectTaskList.length == 0) {
+        this.$store.dispatch("app/showHowtousePanel");
+      }
     },
   },
 };

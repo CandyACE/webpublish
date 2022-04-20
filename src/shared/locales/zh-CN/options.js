@@ -16,5 +16,6 @@ export default {
     'api-enabled': '启用API',
     'api-port': 'API启用端口',
     'view': '界面',
-    'view-type': '显示分类菜单'
+    'view-type': '显示分类菜单',
+    'map-engine': '地图引擎'
 }

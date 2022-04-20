@@ -3,6 +3,7 @@
     <ts-aside></ts-aside>
     <router-view></router-view>
     <ts-welcome></ts-welcome>
+    <ts-howtouse :visible="howtousePanelVisible"></ts-howtouse>
     <ts-add-task :visible="addTaskVisible" :type="addTaskType" />
     <ts-about-panel :visible="aboutPanelVisible" />
     <ts-task-item-property
@@ -21,6 +22,7 @@ import AddTaskVue from "./Task/AddTask.vue";
 import Dragger from "./Dragger/Index";
 import TaskPropertyVue from "./Task/TaskProperty.vue";
 import WelcomeVue from "./Welcome/Welcome.vue";
+import HowTuUseVue from "./HowToUse/index.vue";
 
 export default {
   name: "ts-main",
@@ -31,12 +33,14 @@ export default {
     [Dragger.name]: Dragger,
     [TaskPropertyVue.name]: TaskPropertyVue,
     [WelcomeVue.name]: WelcomeVue,
+    [HowTuUseVue.name]: HowTuUseVue,
   },
   computed: {
     ...mapState("app", {
       aboutPanelVisible: (state) => state.aboutPanelVisible,
       addTaskVisible: (state) => state.addTaskVisible,
       addTaskType: (state) => state.addTaskType,
+      howtousePanelVisible: (state) => state.howtousePanelVisible,
     }),
     ...mapState("task", {
       taskItemInfoVisible: (state) => state.taskItemInfoVisible,

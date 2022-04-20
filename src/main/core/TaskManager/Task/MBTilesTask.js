@@ -7,6 +7,9 @@ import { dialog } from "electron";
 import path from "path";
 import FileTask from "./FileTask";
 import logger from "../../Logger";
+import showMapbox from "../../../helper/HtmlTemplate/Mapbox";
+import showOpenLayers from "../../../helper/HtmlTemplate/OpenLayers";
+import { MAP_ENGINE } from "../../../../shared/constants";
 
 const asyncLock = new AsyncLock();
 
@@ -65,7 +68,7 @@ export default class MBTilesTask extends TaskBase {
         asyncLock.acquire('fileTask-size-write', function () {
             ++task.useData
         })
-        
+
         res.setHeader('Access-Control-Allow-Origin', "*")
         if (req.url.split('/').pop() === "getMap") {
             MBTilesTask.GetMapTemplete(req, res, task)
@@ -83,120 +86,29 @@ export default class MBTilesTask extends TaskBase {
 
     static GetMapTemplete(req, res, task) {
         task._mbtiles.getInfo(function (err, info) {
-            let center = info.center;
-            let minzoom = info.minzoom;
-            let maxzoom = info.maxzoom;
-            let tilesize = Number(info.tilesize || 256);
-            let description = info.description;
-            let ext = info.format;
+            let options = { info: info }
+            options.info.tilesize = Number(info.tilesize || 256);
+            options.ext = info.format;
 
-            let type = "raster"
-            if (ext === "pbf") {
-                type = "vector";
-                tilesize = 512;
+            options.type = "raster"
+            if (options.ext === "pbf") {
+                options.type = "vector";
+                options.info.tilesize = 512;
             }
 
-            let setting = {
-                container: 'map', // container id
-                style: {
-                    "version": 8,
-                    "sources": {
-                        "osm-tiles": {
-                            "type": "raster",
-                            'tiles': [
-                                "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            ],
-                            'tileSize': 256
-                        },
-                        "webpublish-tiles": {
-                            "type": type,
-                            'tiles': [
-                                `http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${ext}`
-                            ],
-                            'tileSize': tilesize
-                        }
-                    },
-                    "layers": [{
-                        "id": "webpublish-tiles",
-                        "type": type,
-                        "source": "webpublish-tiles",
-                        "source-layer": "dist-layer",
-                        "minzoom": minzoom,
-                        "maxzoom": 23
-                    }]
-                }, // stylesheet location
-                center: [center[0], center[1]], // starting position [lng, lat]
-                zoom: center[2] // starting zoom
+            var htmlTemplete = '';
+
+            var type = global.application.configManager.getSystemConfig("map-engine", MAP_ENGINE.MapBox);
+            switch (type) {
+                case MAP_ENGINE.OpenLayers:
+                    htmlTemplete = showOpenLayers(options, req, res, task);
+                    break;
+                case MAP_ENGINE.MapBox:
+                default:
+                    htmlTemplete = showMapbox(options, req, res, task);
+                    break;
             }
 
-            let htmlTemplete = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Map Preview</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="static/lib/mapbox/mapbox-gl.css"/>
-  <script src="static/lib/mapbox/mapbox-gl.js"></script>
-  <link rel="stylesheet" href="static/lib/mapbox/controls.css"/>
-  <script src="static/lib/mapbox/controls.js"></script>
-  <style type="text/css">
-  #map {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .mapbox-attribution-container {
-        bottom: 0;
-        right: 0;
-        position: absolute;
-        display: block;
-        margin: 0;
-        background-color: hsla(0, 0%, 100%, .5);
-        color: #333;
-        font: 12px/20px Helvetica Neue, Arial, Helvetica, sans-serif;
-        padding: 0 5px;
-    }
-  </style>
-</head>
-<body>
-  <div id="map"></div>
-  <div class="mapbox-attribution-container">
-      <strong id="zoom_level">Level: ${center[2]} </strong>|
-      Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
-      ${description}
-  </div>
-  <div class="blur infoBox-father">
-    <div id="infoBox"></div>
-  </div>
-  
-
-  <script>
-
-    var mbInfo = ${JSON.stringify(info)};
-
-    var map = new mapboxgl.Map(${JSON.stringify(setting)});
-
-    const nav = new mapboxgl.NavigationControl();
-    map.addControl(nav, 'top-left');
-
-    const scale = new mapboxgl.ScaleControl({
-        maxWidth: 80,
-        unit: 'imperial'
-    });
-    map.addControl(scale);
-    scale.setUnit('metric');
-
-    map.on('zoom', () => {
-        document.getElementById('zoom_level').innerHTML = "Level: " + Math.floor(map.getZoom()) + " ";
-    })
-  </script>
-</body>
-</html>
-        `
             res.end(htmlTemplete)
         })
     }

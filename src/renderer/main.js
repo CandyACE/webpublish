@@ -48,6 +48,7 @@ function init(config) {
   sync(store, router)
 
   var application = new RenderApplication()
+  global.application = application;
   Vue.prototype.application = application
 
 

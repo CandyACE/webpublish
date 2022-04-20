@@ -16,5 +16,6 @@ export default {
     'api-enabled': '啟用API',
     'api-port': 'API啟用端口',
     'view': '界面',
-    'view-type': '顯示分類菜單'
+    'view-type': '顯示分類菜單',
+    'map-engine': '地圖引擎'
 }

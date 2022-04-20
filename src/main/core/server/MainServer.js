@@ -84,7 +84,7 @@ export default class MainServer extends ServerBase {
       }
 
       task.Action(req, res).then().catch(error => {
-        logger.error('[MainServer] ${filePath} is not a directory or file.', error)
+        logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
         res.end(JSON.stringify({
@@ -94,7 +94,7 @@ export default class MainServer extends ServerBase {
         return;
       })
     } catch (error) {
-      logger.error('[MainServer] ${filePath} is not a directory or file.', error)
+      logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
       res.end(JSON.stringify({

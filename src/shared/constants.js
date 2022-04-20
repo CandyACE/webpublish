@@ -10,3 +10,9 @@ export const ADD_TASK_TYPE = {
   DEFAULT: 'default',
   PROXY: 'proxy'
 }
+
+export const MAP_ENGINE = {
+  MapBox: 'mapbox',
+  OpenLayers: 'openlayers',
+  // Cesium: 'cesium'
+}
