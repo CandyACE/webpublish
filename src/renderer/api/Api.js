@@ -1,14 +1,16 @@
-import { remote } from 'electron'
 import { TASK_STATUS } from '../../shared/constants'
 import is from 'electron-is'
 import { cloneDeep } from 'lodash';
 import { changeKeysToCamelCase, changeKeysToKebabCase } from '../../shared/utils';
+const remote = require('@electron/remote')
 
-const application = remote.getGlobal('application')
+let application = null;
 
 export default class Api {
   constructor(options = {}) {
     this.options = options;
+
+    application = remote.getGlobal('application');
 
     this.init()
   }

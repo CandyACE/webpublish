@@ -82,7 +82,7 @@ import "@/components/Icons/image";
 import "@/components/Icons/arrow-up";
 import os from "os";
 import api from "../../api";
-import { remote, shell } from "electron";
+import { shell } from "electron";
 import { showItemInFolder } from "../Native/utils";
 import { cloneDeep } from "lodash";
 

@@ -31,7 +31,8 @@
 <script>
 import updateType from "../../../main/helper/updateType";
 import { shell } from "electron";
-import { remote } from "electron";
+
+const remote = require("@electron/remote");
 
 export default {
   name: "ts-update",

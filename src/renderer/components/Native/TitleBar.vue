@@ -16,33 +16,36 @@
 </template>
 
 <script>
-import "@/components/Icons/win-minimize"
-import "@/components/Icons/win-maximize"
-import "@/components/Icons/win-close"
+import "@/components/Icons/win-minimize";
+import "@/components/Icons/win-maximize";
+import "@/components/Icons/win-close";
+
+const remote = require("@electron/remote");
 
 export default {
   name: "ts-title-bar",
   computed: {
-    win: function() {
-      return this.$electron.remote.getCurrentWindow()
-    }
+    win: function () {
+      return remote.getCurrentWindow();
+      // return this.$electron.remote.getCurrentWindow()
+    },
   },
   methods: {
-    handleMinimize: function() {
-      this.win.minimize()
+    handleMinimize: function () {
+      this.win.minimize();
     },
-    handleMaximize: function() {
+    handleMaximize: function () {
       if (this.win.isMaximized()) {
-        this.win.unmaximize()
+        this.win.unmaximize();
       } else {
-        this.win.maximize()
+        this.win.maximize();
       }
     },
-    handleClose: function() {
-      this.win.close()
-    }
-  }
-}
+    handleClose: function () {
+      this.win.close();
+    },
+  },
+};
 </script>
 
 <style>

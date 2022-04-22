@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { remote } from "electron";
+const remote = require('@electron/remote')
 export default {
   name: "ts-check-update",
   methods: {

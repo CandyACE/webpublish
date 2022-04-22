@@ -167,10 +167,11 @@
 import { calcFormLabelWidth, diffConfig } from "../../../shared/utils";
 import { cloneDeep } from "lodash";
 import is from "electron-is";
-import { remote } from "electron";
 import { availableLanguages, getLanguage } from "../../../shared/locales";
 import { getLocaleManager } from "../Locale";
 import { MAP_ENGINE } from "../../../shared/constants";
+
+const remote = require('@electron/remote')
 
 const initialForm = (config) => {
   const {
