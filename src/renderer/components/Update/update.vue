@@ -121,8 +121,8 @@ export default {
 <style lang="scss">
 .checkUpdate {
   width: 100%;
- 
- .el-progress-bar__outer {
+
+  .el-progress-bar__outer {
     border-radius: 0 !important;
     background-color: #3a3e63;
   }
@@ -135,7 +135,7 @@ export default {
     background-color: blanchedalmond;
     position: absolute !important;
     bottom: 0px;
-    width: 100%;
+    width: calc(100% - 78px);
     text-align: center;
     font-size: 14px;
     z-index: 999999999;
