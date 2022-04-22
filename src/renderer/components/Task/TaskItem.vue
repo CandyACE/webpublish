@@ -24,10 +24,11 @@
 <script>
 import fs from "fs";
 import { TASK_STATUS } from "@shared/constants";
-import { remote } from "electron";
 import TaskProgressVue from "./TaskProgress";
 import TaskItemActionsVue from "./TaskItemActions.vue";
 import TaskTypeVue from "./TaskType.vue";
+
+const remote = require('@electron/remote')
 
 export default {
   name: "ts-task-item",

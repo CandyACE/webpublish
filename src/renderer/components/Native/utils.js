@@ -1,6 +1,6 @@
 import { access, constants } from 'fs'
 import { Message } from 'element-ui'
-import { remote } from 'electron'
+const remote = require('@electron/remote')
 
 export function showItemInFolder(fullPath, { errorMsg, errorFun }) {
     if (!fullPath) {

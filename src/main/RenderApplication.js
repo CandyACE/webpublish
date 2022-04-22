@@ -1,7 +1,8 @@
 import ServerManager from "./core/ServerManager";
 import TaskManager from "./core/TaskManager/TaskManager";
-import { remote } from 'electron'
 import Application from "./Application";
+
+const remote = require('@electron/remote')
 
 export default class RenderApplication {
     constructor() {

@@ -100,6 +100,7 @@
     "zlib": "^1.0.5"
   },
   "devDependencies": {
+    "@electron/remote": "^2.0.8",
     "ajv": "^6.5.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
@@ -116,7 +117,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^10.4.7",
+    "electron": "^18.1.0",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",

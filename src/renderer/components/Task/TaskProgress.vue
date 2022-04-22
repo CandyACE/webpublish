@@ -29,10 +29,6 @@
 </template>
 
 <script>
-import os from "os";
-import { remote } from "electron";
-import path from "path";
-import { TASK_STATUS } from "../../../shared/constants";
 import { bytesToSize, calcProgress, countToSize } from "../../../shared/utils";
 import { mapState } from "vuex";
 

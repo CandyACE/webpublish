@@ -4,6 +4,7 @@ import pageConfig from '../config/page'
 import { app, shell, screen, BrowserWindow } from 'electron'
 import { debounce } from 'lodash'
 import { join } from 'path'
+const remote = require("@electron/remote/main")
 
 const defaultBrowserOptions = {
   titleBarStyle: 'hiddenInset',
@@ -12,7 +13,8 @@ const defaultBrowserOptions = {
   height: 768,
   webPreferences: {
     nodeIntegration: true,
-    enableRemoteModule: true
+    enableRemoteModule: true,
+    contextIsolation: false
   }
 }
 
@@ -27,6 +29,8 @@ export default class WindowManager extends EventEmitter {
     this.windows = {}
 
     this.willQuit = false
+
+    remote.initialize();
   }
 
   setWillQuit(flag) {
@@ -79,6 +83,8 @@ export default class WindowManager extends EventEmitter {
       ...defaultBrowserOptions,
       ...pageOptions.attrs,
     })
+
+    remote.enable(window.webContents)
 
     const bounds = this.getPageBounds(page)
     if (bounds) {
