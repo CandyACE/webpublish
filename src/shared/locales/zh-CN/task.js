@@ -36,5 +36,6 @@ export default {
     'task-count': '次',
     'task-proxy-path': '代理路径',
     'task-proxy-error-empty': '代理路径不能为空',
-    'task-proxy-error': '代理路径格式不正确，应该以 "http" 开头'
+    'task-proxy-error': '代理路径格式不正确，应该以 "http" 开头',
+    'new-proxy-task': '添加代理任务'
 }

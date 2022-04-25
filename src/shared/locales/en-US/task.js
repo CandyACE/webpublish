@@ -36,5 +36,6 @@ export default {
     'task-count': 'Count',
     'task-proxy-path': 'Proxy Path',
     'task-proxy-error-empty': 'Proxy must be not empty.',
-    'task-proxy-error': 'Proxy path is not require，it shuld start with "http"'
+    'task-proxy-error': 'Proxy path is not require，it shuld start with "http"',
+    'new-proxy-task': 'Add Proxy Task'
 }

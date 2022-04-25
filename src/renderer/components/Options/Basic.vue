@@ -13,7 +13,7 @@
         :rules="rules"
       >
         <el-form-item
-          :label="`${$t('options.port')}: `"
+          :label="`${$t('options.port')}`"
           :label-width="formLabelWidth"
         >
           <el-col class="form-item-sub" :span="24">
@@ -24,7 +24,7 @@
           </el-col>
         </el-form-item>
         <el-form-item
-          :label="`${$t('options.startup')}: `"
+          :label="`${$t('options.startup')}`"
           :label-width="formLabelWidth"
         >
           <el-col class="form-item-sub" :span="24">

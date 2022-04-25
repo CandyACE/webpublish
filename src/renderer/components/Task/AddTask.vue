@@ -34,14 +34,19 @@
             </el-col>
           </el-row>
           <el-row :gutter="12" v-if="showFileTypeSelection">
-            <el-form-item label="任务类别：" :label-width="formLabelWidth">
-              <el-radio v-model="form.selectTaskType" label="file">
-                {{ $t("task.task-file-mode-file") }}
-              </el-radio>
-              <el-radio v-model="form.selectTaskType" label="mbtiles">
-                {{ $t("task.task-file-mode-mbtiles") }}
-              </el-radio>
-            </el-form-item>
+            <el-col :span="24" :xs="24">
+              <el-form-item
+                :label="`${$t('task.task-file-mode')}： `"
+                :label-width="formLabelWidth"
+              >
+                <el-radio v-model="form.selectTaskType" label="file">
+                  {{ $t("task.task-file-mode-file") }}
+                </el-radio>
+                <el-radio v-model="form.selectTaskType" label="mbtiles">
+                  {{ $t("task.task-file-mode-mbtiles") }}
+                </el-radio>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row :gutter="12">
             <el-col :span="24" :xs="24">
@@ -70,7 +75,7 @@
             </el-row>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="添加反代理" name="proxy">
+        <el-tab-pane :label="`${$t('task.new-proxy-task')}`" name="proxy">
           <el-row :gutter="12">
             <el-col :span="24" :xs="24">
               <el-form-item
