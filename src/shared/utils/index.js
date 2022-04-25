@@ -11,7 +11,11 @@ import {
   parseInt,
   pick,
 } from 'lodash'
-import { resolve } from 'path'
+import path, { resolve } from 'path'
+import { guid } from '../twtools'
+import fs from 'fs'
+import { TASK_STATUS } from '../constants'
+import { AddTaskInfo } from './addTask'
 
 /**
  * 转换文件大小
@@ -133,6 +137,19 @@ export function buildFileList(rawFile) {
   }
   const fileList = [file]
   return fileList
+}
+
+export function buildFile(rawFile) {
+  rawFile.uid = Date.now()
+  const file = {
+    status: 'ready',
+    name: rawFile.name,
+    size: rawFile.size,
+    percentage: 0,
+    uid: rawFile.uid,
+    raw: rawFile
+  }
+  return file
 }
 
 

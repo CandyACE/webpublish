@@ -1337,3 +1337,12 @@ iframe {
 }
 
 
+.ts-table-wrapper{
+  border: 1px solid $--table-border-color;
+  border-bottom: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  .el-table th {
+    padding: 2px 0;
+  }
+}

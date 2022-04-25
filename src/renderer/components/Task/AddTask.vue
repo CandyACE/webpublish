@@ -10,101 +10,124 @@
     <el-form ref="taskForm" label-position="left" :model="form" :rules="rules">
       <el-tabs :value="type" @tab-click="handleTabClick">
         <el-tab-pane :label="`${$t('task.new-folder-task')}`" name="default">
-          <el-form-item>
-            <ts-select-files v-on:change="handleTaskChange" ref="selectFiles" />
-          </el-form-item>
-          <el-row :gutter="12">
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                prop="taskName"
-                :label="`${$t('task.task-name')}: `"
-                :label-width="formLabelWidth"
-              >
-                <el-input v-model="form.taskName" spellcheck="false"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                :label="`${$t('task.task-base-path')}: `"
-                prop="id"
-                :label-width="formLabelWidth"
-              >
-                <el-input v-model="form.id" spellcheck="false"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="12" v-if="showFileTypeSelection">
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                :label="`${$t('task.task-file-mode')}： `"
-                :label-width="formLabelWidth"
-              >
-                <el-radio v-model="form.selectTaskType" label="file">
-                  {{ $t("task.task-file-mode-file") }}
-                </el-radio>
-                <el-radio v-model="form.selectTaskType" label="mbtiles">
-                  {{ $t("task.task-file-mode-mbtiles") }}
-                </el-radio>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="12">
-            <el-col :span="24" :xs="24">
-              <el-form-item>
-                <el-checkbox v-model="form.gzip">
-                  {{ $t("task.task-enable-gzip") }}
-                </el-checkbox>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <ts-task-limit
-            ref="taskLimit"
-            :showLimit="showLimit"
-            :type="form.selectTaskType"
-            :limitData="form.limit"
-          ></ts-task-limit>
-          <div v-if="taskType == 'directory'">
+          <div v-if="type === 'default'">
+            <el-form-item>
+              <ts-select-files
+                v-on:change="handleTaskChange"
+                ref="selectFiles"
+              />
+              <ts-task-grid
+                ref="taskGrid"
+                :files="form.addTaskList"
+                :height="200"
+              ></ts-task-grid>
+            </el-form-item>
+            <div v-if="isSingle">
+              <el-row :gutter="12">
+                <el-col :span="24" :xs="24">
+                  <el-form-item
+                    prop="taskName"
+                    :label="`${$t('task.task-name')}: `"
+                    :label-width="formLabelWidth"
+                  >
+                    <el-input
+                      v-model="form.taskName"
+                      spellcheck="false"
+                    ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24" :xs="24">
+                  <el-form-item
+                    :label="`${$t('task.task-base-path')}: `"
+                    prop="id"
+                    :label-width="formLabelWidth"
+                  >
+                    <el-input v-model="form.id" spellcheck="false"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="12" v-if="showFileTypeSelection">
+                <el-col :span="24" :xs="24">
+                  <el-form-item
+                    :label="`${$t('task.task-file-mode')}： `"
+                    :label-width="formLabelWidth"
+                  >
+                    <el-radio v-model="form.selectTaskType" label="file">
+                      {{ $t("task.task-file-mode-file") }}
+                    </el-radio>
+                    <el-radio v-model="form.selectTaskType" label="mbtiles">
+                      {{ $t("task.task-file-mode-mbtiles") }}
+                    </el-radio>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="12">
+                <el-col :span="24" :xs="24">
+                  <el-form-item>
+                    <el-checkbox v-model="form.gzip">
+                      {{ $t("task.task-enable-gzip") }}
+                    </el-checkbox>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <ts-task-limit
+                ref="taskLimit"
+                :showLimit="showLimit"
+                :type="form.selectTaskType"
+                :limitData="form.limit"
+              ></ts-task-limit>
+              <div v-if="taskType == 'directory'">
+                <el-row :gutter="12">
+                  <el-col :span="24" :xs="24">
+                    <el-form-item>
+                      <el-checkbox v-model="form.disenableDirectoryView">{{
+                        $t("task.task-disenable-directory")
+                      }}</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane :label="`${$t('task.new-proxy-task')}`" name="proxy">
+          <div v-if="type === 'proxy'">
             <el-row :gutter="12">
               <el-col :span="24" :xs="24">
-                <el-form-item>
-                  <el-checkbox v-model="form.disenableDirectoryView">{{
-                    $t("task.task-disenable-directory")
-                  }}</el-checkbox>
+                <el-form-item
+                  prop="taskName"
+                  :label="`${$t('task.task-name')}`"
+                  :label-width="formLabelWidth"
+                >
+                  <el-input
+                    v-model="form.taskName"
+                    spellcheck="false"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" :xs="24">
+                <el-form-item
+                  :label="`${$t('task.task-base-path')}: `"
+                  prop="id"
+                  :label-width="formLabelWidth"
+                >
+                  <el-input v-model="form.id" spellcheck="false"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" :xs="24">
+                <el-form-item
+                  :label="`${$t('task.task-proxy-path')}: `"
+                  prop="taskPath"
+                  :label-width="formLabelWidth"
+                >
+                  <el-input
+                    v-model="form.taskPath"
+                    spellcheck="false"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
           </div>
-        </el-tab-pane>
-        <el-tab-pane :label="`${$t('task.new-proxy-task')}`" name="proxy">
-          <el-row :gutter="12">
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                prop="taskName"
-                :label="`${$t('task.task-name')}`"
-                :label-width="formLabelWidth"
-              >
-                <el-input v-model="form.taskName" spellcheck="false"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                :label="`${$t('task.task-base-path')}: `"
-                prop="id"
-                :label-width="formLabelWidth"
-              >
-                <el-input v-model="form.id" spellcheck="false"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" :xs="24">
-              <el-form-item
-                :label="`${$t('task.task-proxy-path')}: `"
-                prop="taskPath"
-                :label-width="formLabelWidth"
-              >
-                <el-input v-model="form.taskPath" spellcheck="false"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
         </el-tab-pane>
       </el-tabs>
     </el-form>
@@ -128,12 +151,15 @@ import { guid } from "../../../shared/twtools";
 import { bytesToSize } from "../../../shared/utils";
 import { mapState } from "vuex";
 import TaskLimitVue from "./TaskLimit.vue";
+import TaskFileGrid from "./TaskFileGrid.vue";
+import task from "../../store/modules/task";
 
 export default {
   name: "ts-add-task",
   components: {
     [SelectFileVue.name]: SelectFileVue,
     [TaskLimitVue.name]: TaskLimitVue,
+    [TaskFileGrid.name]: TaskFileGrid,
   },
   props: {
     visible: {
@@ -187,6 +213,10 @@ export default {
       showFileTypeSelection: false,
       showLimit: false,
       taskType: "",
+      /**
+       * 是否是独立任务，是独立任务就显示全
+       */
+      isSingle: false,
       form: {},
       rules: {
         taskName: [{ validator: checkName, trigger: "blur" }],
@@ -204,37 +234,43 @@ export default {
         taskPath: "",
         taskName: "",
         id: "",
-        selectTaskType: TASK_STATUS.FILE,
+        selectTaskType: TASK_STATUS.MBTILES,
         gzip: true,
         limit: 0,
         disenableDirectoryView: false,
+        addTaskList: [],
       };
     },
     reset() {
       this.form = this.initForm();
+      this.isSingle = false;
       this.showLimit = false;
       this.showFileTypeSelection = false;
     },
     formatTooltip(val) {
       return bytesToSize(val);
     },
-    handleTaskChange(raw, fileStats) {
-      if (raw === "") {
+    handleTaskChange(addTasks) {
+      if (addTasks.length === 0) {
         this.reset();
         return;
       }
-      if (this.taskList.find((e) => e.path === raw.path)) {
-        this.$msg.error("该任务已经存在！");
-        this.$store.dispatch("app/hideAddTaskDialog");
+      if (addTasks.length === 1) {
+        const addTask = addTasks[0];
+
+        this.form.taskPath = addTask.path;
+        this.form.taskName = addTask.name;
+        this.taskType = addTask.type;
+        this.showFileTypeSelection = this.taskType == TASK_STATUS.MBTILES;
+        this.form.selectTaskType = TASK_STATUS.MBTILES;
+        this.form.disenableDirectoryView = addTask.disenableDirectoryView;
+        this.form.id = guid();
+        this.isSingle = true;
         return;
+      } else {
+        this.form.addTaskList = addTasks;
+        this.isSingle = false;
       }
-      this.form.taskPath = raw.path;
-      this.form.taskName = raw.name;
-      this.taskType = fileStats;
-      this.showFileTypeSelection = this.taskType == TASK_STATUS.MBTILES;
-      this.form.selectTaskType = TASK_STATUS.FILE;
-      this.form.disenableDirectoryView = false;
-      this.form.id = guid();
     },
     handleClose() {
       this.$store.dispatch("app/hideAddTaskDialog");
@@ -242,7 +278,7 @@ export default {
     },
     handleTabClick(tab, event) {
       this.reset();
-      this.$refs["selectFiles"].handleTrashClick();
+      this.$refs["selectFiles"] && this.$refs["selectFiles"].handleTrashClick();
       this.form.id = guid();
       this.$store.dispatch("app/changeAddTaskType", tab.name);
     },
@@ -264,32 +300,52 @@ export default {
           return false;
         }
 
-        if (this.type === ADD_TASK_TYPE.PROXY) {
-          this.taskType = TASK_STATUS.PROXY;
-        }
-
-        try {
-          var limit = this.$refs["taskLimit"];
-          var item = {
-            id: this.form.id || guid(),
-            name: this.form.taskName,
-            path: this.form.taskPath,
-            enable: true,
-            gzip: this.form.gzip,
-            type: this.taskType,
-            limitData: limit.showLimit ? Number(limit.limitData) : 0,
-            disenableDirectoryView: this.form.disenableDirectoryView,
-          };
-
-          if (item.type !== "mbtiles") {
-            item.limitData = item.limitData * 1024 * 1024;
+        if (this.isSingle || this.type === ADD_TASK_TYPE.PROXY) {
+          if (this.type === ADD_TASK_TYPE.PROXY) {
+            this.taskType = TASK_STATUS.PROXY;
           }
 
-          this.addTask(item);
+          try {
+            var limit = this.$refs["taskLimit"] || { showLimit: false };
+            var item = {
+              id: this.form.id || guid(),
+              name: this.form.taskName,
+              path: this.form.taskPath,
+              enable: true,
+              gzip: this.form.gzip,
+              type: this.taskType,
+              limitData: limit.showLimit ? Number(limit.limitData) : 0,
+              disenableDirectoryView: this.form.disenableDirectoryView,
+            };
+
+            if (item.type !== "mbtiles") {
+              item.limitData = item.limitData * 1024 * 1024;
+            }
+
+            this.addTask(item);
+
+            this.$store.dispatch("app/hideAddTaskDialog");
+          } catch (error) {
+            this.$msg.error(error.message);
+          }
+        } else {
+          for (let i = 0; i < this.form.addTaskList.length; i++) {
+            const task = this.form.addTaskList[i];
+            var item = {
+              id: task.uid,
+              name: task.name,
+              path: task.path,
+              enable: true,
+              gzip: true,
+              type: task.type,
+              limitData: 0,
+              disenableDirectoryView: task.disenableDirectoryView,
+            };
+
+            this.addTask(item);
+          }
 
           this.$store.dispatch("app/hideAddTaskDialog");
-        } catch (error) {
-          this.$msg.error(error.message);
         }
       });
     },

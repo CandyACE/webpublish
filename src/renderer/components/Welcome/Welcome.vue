@@ -62,6 +62,10 @@ export default {
         this.$store.dispatch("options/save", {
           lastUpdateVersion: this.version,
         });
+      } else {
+        if (this.application.taskManager.selectTaskList.length == 0) {
+          this.$store.dispatch("app/showHowtousePanel");
+        }
       }
     });
   },

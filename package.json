@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.5.9",
+  "version": "1.5.10-alpha",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -34,12 +34,10 @@
       {
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
-        "description": "新增地图引擎切换设置，目前支持MapBox、OpenLayers，切换到设置感受一下吧！",
+        "description": "新增批量添加任务，尝试一下吧",
         "updateInfos": [
           "升级 升级Electron核心版本到18",
-          "新增 地图引擎切换设置",
-          "修复 修改语言的时候，会在没有保存设置的时候直接切换到问题。",
-          "修复 更新进度条会超出主窗口的范围"
+          "重构 添加任务流程，支持多个任务同时添加"
         ]
       }
     ],

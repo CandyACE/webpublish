@@ -17,8 +17,8 @@
     <div class="el-upload__text">
       {{ $t("task.select-folder") }}
       <div class="task-name" v-if="taskName">{{ taskName }}</div>
-    </div></el-upload
-  >
+    </div>
+  </el-upload>
   <div v-else class="selective-task">
     <el-row class="task-info" :gutter="12">
       <el-col class="task-name" :span="20">
@@ -37,18 +37,19 @@
 
 <script>
 import { mapState } from "vuex";
-import { buildFileList } from "../../../shared/utils";
+import { buildFile, buildFileList } from "../../../shared/utils";
 import "../Icons/inbox";
 import "../Icons/trash";
-import fs from "fs";
+import fs, { fstatSync } from "fs";
 import path from "path";
 import { TASK_STATUS } from "../../../shared/constants";
+import { AddTaskInfo } from "../../../shared/utils/addTask";
 
 export default {
   name: "ts-select-files",
   data() {
     return {
-      taskName: "",
+      tasks: [],
     };
   },
   computed: {
@@ -57,6 +58,18 @@ export default {
     }),
     isFilesEmpty: function () {
       return this.taskFiles.length === 0;
+    },
+    taskName: function () {
+      let result = undefined;
+      if (this.tasks.length == 1) {
+        result = this.tasks[0].name;
+      } else if (this.tasks.length > 1) {
+        result = "准备添加 {count} 个文件".replace(
+          "{count}",
+          this.tasks.length
+        );
+      }
+      return result;
     },
   },
   watch: {
@@ -69,25 +82,27 @@ export default {
         return;
       }
 
-      const file = fileList[0];
-      if (!file.raw) {
-        return;
-      }
+      _this.tasks = [];
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        if (!file.raw) {
+          return;
+        }
 
-      var filepath = file.raw.path;
-      var hasList = this.application.taskManager.taskList.filter((f) => {
-        return f.path === filepath;
-      });
+        var filepath = file.raw.path;
+        var hasList = this.application.taskManager.taskList.filter((f) => {
+          return f.path === filepath;
+        });
 
-      if (hasList.length > 0)
-        this.$msg.warning(
-          this.$t("task.task-path-exist", {
-            taskPath: filepath,
-            count: hasList.length,
-          })
-        );
+        if (hasList.length > 0)
+          this.$msg.warning(
+            this.$t("task.task-path-exist", {
+              taskPath: filepath,
+              count: hasList.length,
+            })
+          );
 
-      fs.stat(file.raw.path, function (err, stats) {
+        var stats = fs.statSync(file.raw.path);
         try {
           var fileStats = TASK_STATUS.DIRECTORY;
 
@@ -99,13 +114,21 @@ export default {
             }
           }
 
-          _this.taskName = file.raw.name;
-          console.log("check change");
-          _this.$emit("change", file.raw, fileStats);
+          // _this.taskName = file.raw.name;
+          let addTaskInfo = new AddTaskInfo();
+          addTaskInfo.name = file.raw.name;
+          addTaskInfo.path = file.raw.path;
+          addTaskInfo.type = fileStats;
+
+          _this.tasks.push(addTaskInfo);
         } catch (error) {
           console.log(error);
         }
-      });
+      }
+
+      _this.tasks = _this.tasks.sort((a, b) => a.type.length - b.type.length);
+      console.log("check change");
+      _this.$emit("change", _this.tasks);
     },
   },
   methods: {
@@ -113,13 +136,17 @@ export default {
       this.$store.dispatch("app/addTaskAddFiles", { fileList: [] });
     },
     reset() {
-      this.taskName = "";
+      this.tasks = [];
     },
     handleChange(file, fileList) {
       this.$store.dispatch("app/addTaskAddFiles", { fileList });
     },
     handleExceed(files) {
-      var fileList = buildFileList(files[0]);
+      var fileList = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        fileList.push(buildFile(file));
+      }
       this.$store.dispatch("app/addTaskAddFiles", { fileList });
     },
   },
@@ -129,19 +156,23 @@ export default {
 <style lang="scss">
 .upload-task {
   width: 100%;
+
   .el-upload,
   .el-upload-dragger {
     width: 100%;
   }
+
   .el-upload-dragger {
     border-radius: 4px;
     padding: 24px;
     height: auto;
   }
+
   .upload-inbox-icon {
     display: inline-block;
     margin-bottom: 12px;
   }
+
   .task-name {
     margin-top: 4px;
     font-size: 13px;
@@ -149,20 +180,24 @@ export default {
     line-height: 16px;
   }
 }
+
 .selective-task {
   .task-name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
   .task-info {
     margin-bottom: 15px;
     font-size: 12px;
     line-height: 16px;
   }
+
   .task-actions {
     text-align: right;
     line-height: 16px;
+
     & > span {
       cursor: pointer;
       display: inline-block;
@@ -172,6 +207,7 @@ export default {
     }
   }
 }
+
 .file-filters {
   button {
     font-size: 0;
