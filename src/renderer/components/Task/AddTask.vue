@@ -270,6 +270,7 @@ export default {
       } else {
         this.form.addTaskList = addTasks;
         this.isSingle = false;
+        return;
       }
     },
     handleClose() {

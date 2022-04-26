@@ -9,19 +9,23 @@
         tooltip-effect="dark"
         style="width: 100%"
       >
-        <el-table-column label="名称" max-width="100" show-overflow-tooltip>
+        <el-table-column
+          :label="`${$t('task.task-name')}`"
+          max-width="100"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             <el-input
               v-model="scope.row.name"
               spellcheck="false"
             ></el-input></template
         ></el-table-column>
-        <el-table-column label="二级域名">
+        <el-table-column :label="`${$t('task.task-base-path')}`">
           <template slot-scope="scope"
             ><el-input v-model="scope.row.uid" spellcheck="false"></el-input
           ></template>
         </el-table-column>
-        <el-table-column label="类型" width="80">
+        <el-table-column :label="`${$t('task.task-file-mode')}`" width="80">
           <template slot-scope="scope"
             ><span>{{ scope.row.type }}</span></template
           >
@@ -48,5 +52,10 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="scss">
+.ts-task-grid {
+  input {
+    border-color: transparent;
+  }
+}
 </style>
