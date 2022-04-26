@@ -14,7 +14,7 @@ export default function showMapbox(options, req, res, task) {
                 "webpublish-tiles": {
                     "type": options.type,
                     'tiles': [
-                        `http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${options.ext}`
+                        `http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${options.format}`
                     ],
                     'tileSize': options.info.tilesize
                 }

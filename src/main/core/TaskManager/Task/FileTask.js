@@ -7,6 +7,7 @@ import { TASK_STATUS } from '../../../../shared/constants'
 import { basename } from 'path'
 import AsyncLock from "async-lock";
 import zlib from 'zlib'
+import logger from "../../Logger";
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -43,6 +44,7 @@ export default class FileTask extends TaskBase {
         }
         if (fileStats && fileStats.isFile()) {
             var mime = getMime(taskInfo.path);
+            logger.info(taskInfo.path, mime)
             let encoding = req.headers['accept-encoding']
             asyncLock.acquire('fileTask-size-write', function () {
                 taskInfo.useData += fileStats.size

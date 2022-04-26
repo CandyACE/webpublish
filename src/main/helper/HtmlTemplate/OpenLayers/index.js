@@ -49,7 +49,7 @@ export default function showOpenLayers(options, req, res, task) {
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                    url: 'http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${options.ext}',
+                    url: 'http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${options.format}',
                     attributions:' <strong id="zoom_level">Level: ${options.info.center[2]} </strong>|Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a>|${options.info.description}'
                 })
             })

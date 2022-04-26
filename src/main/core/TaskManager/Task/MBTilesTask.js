@@ -10,6 +10,8 @@ import logger from "../../Logger";
 import showMapbox from "../../../helper/HtmlTemplate/Mapbox";
 import showOpenLayers from "../../../helper/HtmlTemplate/OpenLayers";
 import { MAP_ENGINE } from "../../../../shared/constants";
+import getMime from '../../../helper/mime'
+import zlib from "zlib";
 
 const asyncLock = new AsyncLock();
 
@@ -88,10 +90,10 @@ export default class MBTilesTask extends TaskBase {
         task._mbtiles.getInfo(function (err, info) {
             let options = { info: info }
             options.info.tilesize = Number(info.tilesize || 256);
-            options.ext = info.format;
+            options.format = info.format;
 
             options.type = "raster"
-            if (options.ext === "pbf") {
+            if (options.format === "pbf") {
                 options.type = "vector";
                 options.info.tilesize = 512;
             }
@@ -117,27 +119,48 @@ export default class MBTilesTask extends TaskBase {
      * 
      * @param {*} req 
      * @param {http.ServerResponse} res 
+     * @param {TaskBase} task
      */
     static GetTileRESTFul(req, res, task) {
         var urlParam1 = req.url.split('.')
         var urlParam2 = urlParam1[0].split('/')
-        var ext = urlParam1[1] || 'png'
-        var z = urlParam2[2],
-            x = urlParam2[3],
-            y = urlParam2[4]
+        var format = urlParam1[1] || 'png'
+        var z = urlParam2[2] | 0,
+            x = urlParam2[3] | 0,
+            y = urlParam2[4] | 0
 
         task._mbtiles.getTile(z, x, y, function (err, data, headers) {
+            let isGzipped;
             if (err) {
-                res.statusCode = 404;
-                res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-                res.end("Tile rendering error: " + err)
-                return;
+                if (/does not exist/.test(err.message)) {
+                    return res.status(204).send();
+                } else {
+                    return res.status(500).send(err.message);
+                }
             }
-            res.setHeader('Content-Type', headers ? headers['Content-Type'] : "image/png")
+
+            if (data == null) {
+                return res.status(404).send('Not found');
+            }
+            res.setHeader('Content-Type', getMime(format) || "application/x-protobuf")
             res.setHeader('Access-Control-Allow-Origin', "*")
             const bufferStream = new stream.PassThrough();
             bufferStream.end(data)
-            bufferStream.pipe(res)
+            let compress, compressType;
+            let encoding = req.headers['accept-encoding']
+            if (task.gzip && encoding && encoding.match(/\bgzip\b/)) {
+                compress = zlib.createGzip();
+                compressType = "gzip";
+            } else if (task.gzip && encoding && encoding.match(/\bdeflate\b/)) {
+                compress = zlib.createDeflate();
+                compressType = "deflate";
+            } else {
+                return bufferStream.pipe(res)
+            }
+
+            // 将压缩流返回并设置响应头
+            res.setHeader("Content-Encoding", compressType);
+            bufferStream.pipe(compress).pipe(res);
         })
     }
 

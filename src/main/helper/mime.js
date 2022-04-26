@@ -34,5 +34,5 @@ const mimeType = {
 // }
 
 export default (filePath) => {
-    return mime.lookup(filePath)
+    return mime.contentType(filePath)
 }
