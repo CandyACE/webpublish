@@ -25,6 +25,11 @@ export default class TaskBase {
          */
         this.enable = false;
         this.setEnable(Boolean(task.enable));
+
+        /**
+         * 缩略图
+         */
+        this.thumbnail = undefined;
         /**
          * 是否启用gzip
          */

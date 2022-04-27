@@ -2,10 +2,14 @@ import Vue from 'vue'
 import { Event } from '../../../shared/twtools';
 import logger from '../Logger';
 import getTask from './Task/Index';
+import TaskBase from './Task/TaskBase';
 
 export default class TaskManager {
   constructor(configManager) {
     this._configManager = configManager;
+    /**
+     * @type {TaskBase[]}
+     */
     this.taskList = [];
     this.selectTaskList = [];
     this.searchKey = null;

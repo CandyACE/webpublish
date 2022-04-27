@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Map Preview</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/lib/mapbox/mapbox-gl.css" />
+  <script src="static/lib/mapbox/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="static/lib/infoBox/controls.css" />
+  <script src="static/lib/infoBox/controls.js"></script>
+  <% if(is_vector) { %>
+  <script src="static/lib/mapbox/mapbox-gl-inspect.min.js"></script>
+  <link rel="stylesheet" href="static/lib/mapbox/mapbox-gl-inspect.css">
+  <% } %>
+  <style type="text/css">
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .mapbox-attribution-container {
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      display: block;
+      margin: 0;
+      background-color: hsla(0, 0%, 100%, .5);
+      color: #333;
+      font: 12px/20px Helvetica Neue, Arial, Helvetica, sans-serif;
+      padding: 0 5px;
+    }
+
+    #layerList {
+      position: absolute;
+      top: 35px;
+      right: 0;
+      bottom: 0;
+      width: 240px;
+      overflow: auto;
+    }
+
+    #layerList div div {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    var mbInfo = <%-JSON.stringify(task.tileJSON)%>;
+  </script>
+  <% if(is_vector) { %>
+
+  <div id="map"></div>
+  <div id="layerList"></div>
+  <pre id="propertyList"></pre>
+  <div class="mapbox-attribution-container">
+    <strong id="zoom_level">Level: <%=task.tileJSON.center[2]%> </strong>|
+    Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
+    <%=task.tileJSON.description%>
+  </div>
+
+  <script>
+    var map = new mapboxgl.Map({
+      container: 'map',
+      hash: true,
+      style: {
+        version: 8,
+        sources: {
+          'vector_layer': {
+            type: 'vector',
+            url: 'http://<%=req.headers.host%>/<%=task.id%>/metadata.json'
+          }
+        },
+        layers: []
+      }
+    })
+
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+    const scale = new mapboxgl.ScaleControl({
+      maxWidth: 80,
+      unit: 'imperial'
+    });
+    map.addControl(scale);
+    scale.setUnit('metric');
+
+    map.on('zoom', () => {
+      document.getElementById('zoom_level').innerHTML = "Level: " + Math.floor(map.getZoom()) + " ";
+    })
+    var inspect = new MapboxInspect({
+      showInspectMap: true,
+      showInspectButton: false
+    });
+    map.addControl(inspect);
+    map.on('styledata', function() {
+      var layerList = document.getElementById('layerList');
+      layerList.innerHTML = '';
+      Object.keys(inspect.sources).forEach(function(sourceId) {
+        var layerIds = inspect.sources[sourceId];
+        layerIds.forEach(function(layerId) {
+          var item = document.createElement('div');
+          item.innerHTML = '<div style="' +
+            'background:' + inspect.assignLayerColor(layerId) + ';' +
+            '"></div> ' + layerId;
+          layerList.appendChild(item);
+        });
+      })
+    });
+  </script>
+
+  <% } else { %>
+
+  <div id="map"></div>
+  <div class="mapbox-attribution-container">
+    <strong id="zoom_level">Level: <%=task.tileJSON.center[2]%> </strong>|
+    Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
+    <%=task.tileJSON.description%>
+  </div>
+
+  <script>
+    var map = new mapboxgl.Map({
+      container: 'map', // container id
+      hash: true,
+      style: {
+        "version": 8,
+        "sources": {
+          "webpublish-tiles": {
+            "type": "<%=task.tileJSON.tileType %>",
+            'tiles': [
+              `http://<%=req.headers.host%>/<%=task.id%>/{z}/{x}/{y}.<%=task.tileJSON.format%>`
+            ],
+            'tileSize': <%=task.tileJSON.tilesize%>
+          }
+        },
+        "layers": [{
+          "id": "webpublish-tiles",
+          "type": '<%=task.tileJSON.tileType%>',
+          "source": "webpublish-tiles",
+          "source-layer": "dist-layer",
+          "minzoom": <%=task.tileJSON.minzoom%>,
+          "maxzoom": 23
+        }]
+      }, // stylesheet location
+      center: [<%=task.tileJSON.center[0]%>, <%=task.tileJSON.center[1]%>], // starting position [lng, lat]
+      zoom: <%=task.tileJSON.center[2]%> // starting zoom
+    });
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+
+    const scale = new mapboxgl.ScaleControl({
+      maxWidth: 80,
+      unit: 'imperial'
+    });
+    map.addControl(scale);
+    scale.setUnit('metric');
+
+    map.on('zoom', () => {
+      document.getElementById('zoom_level').innerHTML = "Level: " + Math.floor(map.getZoom()) + " ";
+    })
+  </script>
+  <% } %>
+</body>
+
+</html>

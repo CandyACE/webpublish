@@ -1,10 +1,8 @@
-import http from 'http'
-import fs from 'fs'
-import { promisify } from 'util'
-import electron from 'electron';
 import ServerBase from './ServerBase';
-import getTask from '../TaskManager/Task/Index';
 import logger from '../Logger';
+import express from 'express'
+import path from 'path'
+import enableShutdown from 'http-shutdown'
 
 export default class MainServer extends ServerBase {
   constructor(manager) {
@@ -17,24 +15,49 @@ export default class MainServer extends ServerBase {
 
     return new Promise((resolve, reject) => {
       try {
-        this._server = new http.createServer(async function (req, res, next) {
-          if (!req.url) {
-            _this._error(res, 'error url')
-            return;
+        /**
+         * @type {express.Express}
+         */
+        this._server = express();
+        this._server.set('x-powered-by', false);
+        this._server.set('view engine', 'ejs');
+
+        this._server.get('/', function (req, res, next) {
+          res.setHeader('Access-Control-Allow-Origin', "*")
+          next();
+        });
+        this._server.use("/:id/", async function (req, res) {
+          try {
+            let id = req.params.id;
+            if (!id) {
+              return res.status(404).end('id is require.');
+            }
+            let task = _this._app.taskManager.taskList.find(f => f.id == id);
+            if (!task) {
+              return res.status(404).end('Not Found This ID.');
+            }
+
+            // ReadFile
+            let filePath = task.path;
+            let check = task.check();
+            if (!check.next) {
+              return res.status(check.code).end(check.message);
+            }
+
+            task.Action(req, res).then().catch(error => {
+              logger.error(`[MainServer] ${filePath} is not a directory or file.`, error);
+              return res.status(404).end(JSON.stringify({
+                task: task,
+                message: `${filePath} is not a directory or file.`
+              }))
+            })
+          } catch (error) {
+            logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
+            return res.status(404).end(JSON.stringify({
+              task: task,
+              message: `${filePath} is not a directory or file.`
+            }))
           }
-          // 获取 id
-          var param = req.url.split('/');
-          var id = param[1];
-          if (!id) {
-            _this._error(res, 'id is require')
-            return;
-          }
-          var task = _this._app.taskManager.taskList.find(f => { return f.id == id });
-          if (!task) {
-            _this._error(res, "no Found this id")
-            return;
-          }
-          _this._readFiles(req, res, task, next)
         })
 
         var port = this._app.configManager.getSystemConfig('port', "9090");
@@ -42,10 +65,11 @@ export default class MainServer extends ServerBase {
         this._server.on('error', function () {
           reject(this.i18n.t('app.port-exist', { port }))
         })
-
         this._server.listen(port, () => {
           resolve()
         })
+
+        enableShutdown(this._server)
       } catch (error) {
         console.log('MainServer', error)
       }
@@ -55,7 +79,7 @@ export default class MainServer extends ServerBase {
 
   stop() {
     if (this._server) {
-      this._server.close();
+      this._server.shutdown();
       this._server = undefined;
     }
   }
@@ -64,44 +88,5 @@ export default class MainServer extends ServerBase {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
     res.end(message)
-  }
-
-  /**
-   * 
-   * @param {http.IncomingMessage} req 
-   * @param {http.ServerResponse} res 
-   * @param {*} task 
-   */
-  async _readFiles(req, res, task) {
-    var filePath = task.path
-    try {
-      var check = task.check();
-      if (!check.next) {
-        res.statusCode = check.code;
-        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-        res.end(check.message)
-        return;
-      }
-
-      task.Action(req, res).then().catch(error => {
-        logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
-        res.statusCode = 404;
-        res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-        res.end(JSON.stringify({
-          task: task,
-          message: `${filePath} is not a directory or file.`
-        }))
-        return;
-      })
-    } catch (error) {
-      logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
-      res.statusCode = 404;
-      res.setHeader('Content-Type', 'text/javascript;charset=UTF-8');//utf8编码，防止中文乱码
-      res.end(JSON.stringify({
-        task: task,
-        message: `${filePath} is not a directory or file.`
-      }))
-      return;
-    }
   }
 }

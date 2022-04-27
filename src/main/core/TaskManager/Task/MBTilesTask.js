@@ -1,17 +1,21 @@
 import AsyncLock from "async-lock";
 import TaskBase from "./TaskBase";
 import MBTiles from "@mapbox/mbtiles";
-import stream from "stream"
 import fs from 'fs';
-import { dialog } from "electron";
-import path from "path";
-import FileTask from "./FileTask";
+import path from 'path'
+import { Request, Response } from 'express'
 import logger from "../../Logger";
-import showMapbox from "../../../helper/HtmlTemplate/Mapbox";
-import showOpenLayers from "../../../helper/HtmlTemplate/OpenLayers";
 import { MAP_ENGINE } from "../../../../shared/constants";
 import getMime from '../../../helper/mime'
 import zlib from "zlib";
+import { fixTileJSONCenter } from "../../../utils/tiles"
+import FileTask from "./FileTask";
+import VectorTile from "@mapbox/vector-tile/lib/vectortile";
+import Pbf from "pbf";
+import { clone } from "lodash";
+import sphericalmercator from "@mapbox/sphericalmercator"
+
+const mercator = new sphericalmercator();
 
 const asyncLock = new AsyncLock();
 
@@ -19,8 +23,8 @@ export default class MBTilesTask extends TaskBase {
     constructor(task) {
         super(task);
         var _this = this;
-        _this.format = "";
         this._mbtiles = null;
+        this.tileJSON = {}
         try {
             fs.accessSync(this.path, fs.constants.F_OK);
             new MBTiles(encodeURIComponent(this.path.replaceAll("\\", "/")), function (err, mbtiles) {
@@ -31,7 +35,29 @@ export default class MBTilesTask extends TaskBase {
                 _this._mbtiles = mbtiles;
                 _this.setEnable(Boolean(task.enable))
                 mbtiles.getInfo(function (err, info) {
-                    _this.format = info.format;
+                    if (err) {
+                        _this.enable = false;
+                    }
+                    _this.tileJSON['id'] = _this.id;
+                    _this.tileJSON['name'] = _this.name;
+                    _this.tileJSON['tilesize'] = 256;
+
+                    info.format === "pbf" ? _this.tileJSON['tileType'] = "vector" : _this.tileJSON['tileType'] = "raster";
+
+                    Object.assign(_this.tileJSON, info);
+
+                    _this.tileJSON['tilejson'] = '2.0.0';
+                    delete _this.tileJSON['filesize'];
+                    delete _this.tileJSON['mtime'];
+                    delete _this.tileJSON['scheme'];
+
+                    fixTileJSONCenter(_this.tileJSON);
+
+                    logger.info(_this.tileJSON)
+                    let center = _this.tileJSON.center;
+                    _this.tileJSON['viewer_hash'] = `#${center[2]}/${center[1].toFixed(5)}/${center[0].toFixed(5)}`
+                    const centerPx = mercator.px([center[0], center[1]], center[2]);
+                    _this.thumbnail = `${center[2]}/${Math.floor(centerPx[0] / 256)}/${Math.floor(centerPx[1] / 256)}.png`
                 })
             })
         } catch (e) {
@@ -61,8 +87,8 @@ export default class MBTilesTask extends TaskBase {
 
     /**
      * 
-     * @param {http.IncomingMessage} req 
-     * @param {http.ServerResponse} res 
+     * @param {Request} req 
+     * @param {Response} res 
      * @param {TaskBase} task
      * @param {fs.Stats} stats
      */
@@ -72,12 +98,19 @@ export default class MBTilesTask extends TaskBase {
         })
 
         res.setHeader('Access-Control-Allow-Origin', "*")
-        if (req.url.split('/').pop() === "getMap") {
+        if (req.path.split('/').pop() === "map-preview") {
             MBTilesTask.GetMapTemplete(req, res, task)
             return;
-        } else if (req.url.split('/')[2] === 'static') {
+        } else if (req.path.split('/')[1] === 'metadata.json') {
+            const info = clone(task.tileJSON);
+            info.tiles = [`http://${req.headers.host}/${task.id}/{z}/{x}/{y}.${task.tileJSON.format}`]
+            return res.send(info)
+        }
+        else if (req.path.split('/')[1] === 'style.json') {
+            // const style = require(__static,'style/')
+        } else if (req.path.split('/')[1] === 'static') {
             var task = {};
-            task.path = path.join(__static, req.url.split('/').slice(3).join('/'));
+            task.path = path.join(__static, req.url.split('/').slice(2).join('/'));
             task.gzip = true;
             task.useData = 0;
             FileTask.Action(req, res, task)
@@ -86,54 +119,46 @@ export default class MBTilesTask extends TaskBase {
         MBTilesTask.GetTileRESTFul(req, res, task)
     }
 
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @param {TaskBase} task 
+     */
     static GetMapTemplete(req, res, task) {
-        task._mbtiles.getInfo(function (err, info) {
-            let options = { info: info }
-            options.info.tilesize = Number(info.tilesize || 256);
-            options.format = info.format;
-
-            options.type = "raster"
-            if (options.format === "pbf") {
-                options.type = "vector";
-                options.info.tilesize = 512;
-            }
-
-            var htmlTemplete = '';
-
-            var type = global.application.configManager.getSystemConfig("map-engine", MAP_ENGINE.MapBox);
-            switch (type) {
-                case MAP_ENGINE.OpenLayers:
-                    htmlTemplete = showOpenLayers(options, req, res, task);
-                    break;
-                case MAP_ENGINE.MapBox:
-                default:
-                    htmlTemplete = showMapbox(options, req, res, task);
-                    break;
-            }
-
-            res.end(htmlTemplete)
+        var type = global.application.configManager.getSystemConfig("map-engine", MAP_ENGINE.MapBox);
+        res.render(type, {
+            task,
+            req,
+            is_vector: task.tileJSON.tileType === "vector"
         })
     }
 
     /**
      * 
-     * @param {*} req 
-     * @param {http.ServerResponse} res 
+     * @param {Request} req 
+     * @param {Response} res 
      * @param {TaskBase} task
      */
     static GetTileRESTFul(req, res, task) {
-        var urlParam1 = req.url.split('.')
+        var urlParam1 = req.path.split('.')
         var urlParam2 = urlParam1[0].split('/')
         var format = urlParam1[1] || 'png'
-        var z = urlParam2[2] | 0,
-            x = urlParam2[3] | 0,
-            y = urlParam2[4] | 0
+        var z = urlParam2[1] | 0,
+            x = urlParam2[2] | 0,
+            y = urlParam2[3] | 0
+
+        if (z < task.tileJSON.minzoom || 0 || x < 0 || y < 0 ||
+            z > task.tileJSON.maxzoom ||
+            x >= Math.pow(2, z) || y >= Math.pow(2, z)) {
+            return res.status(404).send('Out of bounds');
+        }
 
         task._mbtiles.getTile(z, x, y, function (err, data, headers) {
-            let isGzipped;
+            let isGzipped = false;
             if (err) {
                 if (/does not exist/.test(err.message)) {
-                    return res.status(204).send();
+                    return res.status(404).send();
                 } else {
                     return res.status(500).send(err.message);
                 }
@@ -142,25 +167,67 @@ export default class MBTilesTask extends TaskBase {
             if (data == null) {
                 return res.status(404).send('Not found');
             }
-            res.setHeader('Content-Type', getMime(format) || "application/x-protobuf")
+
             res.setHeader('Access-Control-Allow-Origin', "*")
-            const bufferStream = new stream.PassThrough();
-            bufferStream.end(data)
-            let compress, compressType;
+
+            if (task.tileJSON.format === "pbf") {
+                isGzipped = data.slice(0, 2).indexOf(
+                    Buffer.from([0x1f, 0x8b])) === 0;
+
+                if (format === 'pbf') {
+                    res.setHeader('Content-Type', "application/x-protobuf")
+                } else if (format === 'geojson') {
+                    res.setHeader('Content-Type', 'application/json')
+
+                    if (isGzipped) {
+                        data = zlib.unzipSync(data)
+                        isGzipped = false;
+                    }
+
+                    const tile = new VectorTile(new Pbf(data))
+                    const geojson = {
+                        "type": "FeatureCollection",
+                        "features": []
+                    }
+                    for (let layerName in tile.layers) {
+                        const layer = tile.layers[layerName];
+                        for (let i = 0; i < layer.length; i++) {
+                            const feature = layer.feature(i);
+                            const featureGeoJSON = feature.toGeoJSON(x, y, z);
+                            featureGeoJSON.properties.layer = layerName;
+                            geojson.features.push(featureGeoJSON);
+                        }
+                    }
+                    data = JSON.stringify(geojson)
+                }
+            } else {
+                res.setHeader('Content-Type', getMime(format))
+            }
+
+            delete headers['ETag']
             let encoding = req.headers['accept-encoding']
-            if (task.gzip && encoding && encoding.match(/\bgzip\b/)) {
-                compress = zlib.createGzip();
+            let compressType;
+
+            if (!isGzipped && !task.gzip) {
+                data = zlib.unzipSync(data)
+            }
+
+            if (!isGzipped && task.gzip && encoding && encoding.match(/\bgzip\b/)) {
+                data = zlib.gzipSync(data)
                 compressType = "gzip";
-            } else if (task.gzip && encoding && encoding.match(/\bdeflate\b/)) {
-                compress = zlib.createDeflate();
+            } else if (!isGzipped && task.gzip && encoding && encoding.match(/\bdeflate\b/)) {
+                data = zlib.deflateSync(data)
                 compressType = "deflate";
             } else {
-                return bufferStream.pipe(res)
+                if (isGzipped) {
+                    res.setHeader("Content-Encoding", "gzip");
+                }
+                return res.status(200).send(data)
             }
 
             // 将压缩流返回并设置响应头
             res.setHeader("Content-Encoding", compressType);
-            bufferStream.pipe(compress).pipe(res);
+            return res.status(200).send(data)
         })
     }
 
@@ -169,7 +236,7 @@ export default class MBTilesTask extends TaskBase {
     }
 
     getUrl() {
-        var format = this.format || 'png';
+        var format = this.tileJSON.format || 'png';
         return '{z}/{x}/{y}.' + format;
     }
 }

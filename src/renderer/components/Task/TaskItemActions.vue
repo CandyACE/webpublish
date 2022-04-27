@@ -1,5 +1,5 @@
 <template>
-  <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => { }">
+  <ul :key="task.id" class="task-item-actions" v-on:dbclick.stop="() => {}">
     <li v-for="action in taskActions" :key="action" class="task-item-action">
       <i v-if="action === 'STOP'" @click.stop="onStopClick">
         <el-tooltip :content="`${$t('task.stop')}`">
@@ -108,7 +108,7 @@ export default {
       if (this.task.type === TASK_STATUS.MBTILES) {
         result.push("WMTS");
       }
-      result.push('LINK');
+      result.push("LINK");
       if (this.task.type !== TASK_STATUS.PROXY) {
         result.push("FOLDER");
       }
@@ -144,7 +144,10 @@ export default {
   methods: {
     onMapClick() {
       var port = api.getPort();
-      shell.openExternal(`http://127.0.0.1:${port}/${this.task.id}/getMap`);
+      shell.openExternal(
+        `http://127.0.0.1:${port}/${this.task.id}/map-preview` +
+          this.task.tileJSON.viewer_hash
+      );
     },
     onDeleteClick() {
       let taskName = `${this.task.name}`;
