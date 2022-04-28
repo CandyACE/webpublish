@@ -11,12 +11,13 @@
     <div class="task-name" :title="taskName">
       <span>{{ taskName }}</span>
     </div>
+    <ts-task-thumbnail :task="task"></ts-task-thumbnail>
     <ts-task-type :task="task" />
     <ts-task-item-actions :task="task"></ts-task-item-actions>
     <ts-task-progress
       :useData="Number(task.useData)"
       :limitData="Number(task.limitData)"
-      :type="countItems.some(item => item === task.type) ? 'count' : 'size'"
+      :type="countItems.some((item) => item === task.type) ? 'count' : 'size'"
     />
   </div>
 </template>
@@ -27,8 +28,9 @@ import { TASK_STATUS } from "@shared/constants";
 import TaskProgressVue from "./TaskProgress";
 import TaskItemActionsVue from "./TaskItemActions.vue";
 import TaskTypeVue from "./TaskType.vue";
+import TaskThumbnail from "./TaskThumbnail.vue";
 
-const remote = require('@electron/remote')
+const remote = require("@electron/remote");
 
 export default {
   name: "ts-task-item",
@@ -36,10 +38,11 @@ export default {
     [TaskProgressVue.name]: TaskProgressVue,
     [TaskItemActionsVue.name]: TaskItemActionsVue,
     [TaskTypeVue.name]: TaskTypeVue,
+    [TaskThumbnail.name]: TaskThumbnail,
   },
   data() {
     return {
-      countItems: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY]
+      countItems: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY],
     };
   },
   props: {

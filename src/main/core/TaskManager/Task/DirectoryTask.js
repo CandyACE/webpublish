@@ -6,6 +6,7 @@ import { TASK_STATUS } from '../../../../shared/constants'
 import path from 'path'
 import DirectoryHTML from '../../../helper/DirectoryHtml'
 import FileTask from './FileTask'
+import express from 'express'
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -59,8 +60,18 @@ export default class DirectoryTask extends TaskBase {
         }
     }
 
-    Action(req, res, stats) {
-        return DirectoryTask.Action(req, res, this, stats)
+    static InitRouter() {
+        const app = express().disable('x-powered-by');
+
+        app.get('*', function (req, res, next) {
+            if (!req.task || req.task.type !== TASK_STATUS.DIRECTORY) {
+                return next('route')
+            }
+
+            DirectoryTask.Action(req, res, req.task);
+        })
+
+        return app;
     }
 
     getUrl() {

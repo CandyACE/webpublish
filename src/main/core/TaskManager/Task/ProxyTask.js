@@ -3,6 +3,8 @@ import ProxyUtil from "../../../utils/proxyUtil";
 import logger from "../../Logger";
 import url from 'url'
 import AsyncLock from "async-lock";
+import express from 'express'
+import { TASK_STATUS } from "../../../../shared/constants";
 
 const asyncLock = new AsyncLock();
 
@@ -29,7 +31,6 @@ export default class ProxyTask extends TaskBase {
             asyncLock.acquire('proxyTask-size-write', function () {
                 ++taskInfo.useData;
             })
-            res.setHeader('Access-Control-Allow-Origin', "*")
             req.url = req.url.replace('/' + taskInfo.id, "")
             ProxyUtil.getInstance().web(req, res, {
                 target: taskInfo.path
@@ -39,7 +40,17 @@ export default class ProxyTask extends TaskBase {
         }
     }
 
-    Action(req, res, stats) {
-        return ProxyTask.Action(req, res, this, stats)
+    static InitRouter() {
+        const app = express().disable('x-powered-by');
+
+        app.get("*", function (req, res, next) {
+            if (!req.task || req.task.type !== TASK_STATUS.PROXY) {
+                return next('route')
+            }
+
+            ProxyTask.Action(req, res, req.task)
+        })
+
+        return app;
     }
 }

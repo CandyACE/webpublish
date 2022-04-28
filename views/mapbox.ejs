@@ -43,6 +43,10 @@
       overflow: auto;
     }
 
+    .hide {
+      display: none;
+    }
+
     #layerList div div {
       width: 15px;
       height: 15px;
@@ -58,8 +62,7 @@
   <% if(is_vector) { %>
 
   <div id="map"></div>
-  <div id="layerList"></div>
-  <pre id="propertyList"></pre>
+  <div id="layerList" class="hide"></div>
   <div class="mapbox-attribution-container">
     <strong id="zoom_level">Level: <%=task.tileJSON.center[2]%> </strong>|
     Design by <a href="http://webpublish.tangweitian.cn"><strong>WebPublish</strong></a> |
@@ -67,19 +70,26 @@
   </div>
 
   <script>
+    // var map = new mapboxgl.Map({
+    //   container: 'map',
+    //   hash: true,
+    //   style: {
+    //     version: 8,
+    //     sources: {
+    //       'vector_layer': {
+    //         type: 'vector',
+    //         url: 'metadata.json'
+    //       }
+    //     },
+    //     layers: []
+    //   }
+    // })
+
+    mapboxgl.setRTLTextPlugin('static/lib/mapbox/mapbox-gl-rtl-text.js')
     var map = new mapboxgl.Map({
       container: 'map',
       hash: true,
-      style: {
-        version: 8,
-        sources: {
-          'vector_layer': {
-            type: 'vector',
-            url: 'http://<%=req.headers.host%>/<%=task.id%>/metadata.json'
-          }
-        },
-        layers: []
-      }
+      style: 'style.json'
     })
 
     const nav = new mapboxgl.NavigationControl();
@@ -94,9 +104,18 @@
     map.on('zoom', () => {
       document.getElementById('zoom_level').innerHTML = "Level: " + Math.floor(map.getZoom()) + " ";
     })
+
     var inspect = new MapboxInspect({
-      showInspectMap: true,
-      showInspectButton: false
+      showInspectMap: false,
+      showInspectButton: true,
+      sources: {
+        openmaptiles: mbInfo.vector_layers.map(e => e.id)
+      },
+      onModeChanged: (show) => {
+        var layerList = document.getElementById('layerList');
+
+        layerList.classList[show ? 'remove' : 'add']('hide')
+      }
     });
     map.addControl(inspect);
     map.on('styledata', function() {

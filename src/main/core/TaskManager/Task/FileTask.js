@@ -8,6 +8,7 @@ import { basename } from 'path'
 import AsyncLock from "async-lock";
 import zlib from 'zlib'
 import logger from "../../Logger";
+import express from 'express'
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -53,7 +54,6 @@ export default class FileTask extends TaskBase {
             let rs = fs.createReadStream(taskInfo.path)
             res.statusCode = 200;
             res.setHeader('Content-Type', mime);
-            res.setHeader('Access-Control-Allow-Origin', "*")
 
             let compress, compressType;
 
@@ -75,8 +75,18 @@ export default class FileTask extends TaskBase {
         }
     }
 
-    Action(req, res, stats) {
-        return FileTask.Action(req, res, this, stats)
+    static InitRouter() {
+        const app = express().disable('x-powered-by');
+
+        app.get('*', function (req, res, next) {
+            if (!req.task || req.task.type !== TASK_STATUS.FILE) {
+                return next('route')
+            }
+
+            return FileTask.Action(req, res, req.task)
+        })
+
+        return app;
     }
 
     getUrl() {

@@ -3,6 +3,9 @@ import logger from '../Logger';
 import express from 'express'
 import path from 'path'
 import enableShutdown from 'http-shutdown'
+import DirectoryTask from '../TaskManager/Task/DirectoryTask';
+import MBTilesTask from '../TaskManager/Task/MBTilesTask';
+import { Tasks } from '../TaskManager/Task/Index'
 
 export default class MainServer extends ServerBase {
   constructor(manager) {
@@ -22,11 +25,11 @@ export default class MainServer extends ServerBase {
         this._server.set('x-powered-by', false);
         this._server.set('view engine', 'ejs');
 
-        this._server.get('/', function (req, res, next) {
+        this._server.get('*', function (req, res, next) {
           res.setHeader('Access-Control-Allow-Origin', "*")
           next();
         });
-        this._server.use("/:id/", async function (req, res) {
+        this._server.use("/:id/", async function (req, res, next) {
           try {
             let id = req.params.id;
             if (!id) {
@@ -38,27 +41,28 @@ export default class MainServer extends ServerBase {
             }
 
             // ReadFile
-            let filePath = task.path;
             let check = task.check();
             if (!check.next) {
               return res.status(check.code).end(check.message);
             }
 
-            task.Action(req, res).then().catch(error => {
-              logger.error(`[MainServer] ${filePath} is not a directory or file.`, error);
-              return res.status(404).end(JSON.stringify({
-                task: task,
-                message: `${filePath} is not a directory or file.`
-              }))
-            })
+            req["task"] = task;
+
+            return next();
           } catch (error) {
             logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
-            return res.status(404).end(JSON.stringify({
+            res.status(404).end(JSON.stringify({
               task: task,
               message: `${filePath} is not a directory or file.`
             }))
+            next(error)
+            return;
           }
         })
+
+        for (const task in Tasks) {
+          this._server.use("/:id/", Tasks[task].InitRouter())
+        }
 
         var port = this._app.configManager.getSystemConfig('port', "9090");
 

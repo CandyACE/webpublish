@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Event } from '../../../shared/twtools';
 import logger from '../Logger';
-import getTask from './Task/Index';
+import { getTask } from './Task/Index';
 import TaskBase from './Task/TaskBase';
 
 export default class TaskManager {

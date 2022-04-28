@@ -62,6 +62,10 @@ export default class TaskBase {
 
     }
 
+    static InitRouter() {
+
+    }
+
     Action(req, res, stats) {
         return TaskBase.Action(req, res, this, stats)
     }
