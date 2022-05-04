@@ -5,6 +5,7 @@ import url from 'url'
 import AsyncLock from "async-lock";
 import express from 'express'
 import { TASK_STATUS } from "../../../../shared/constants";
+import { createServer } from "../../../utils/serviceUtil";
 
 const asyncLock = new AsyncLock();
 
@@ -41,7 +42,7 @@ export default class ProxyTask extends TaskBase {
     }
 
     static InitRouter() {
-        const app = express().disable('x-powered-by');
+        const app = createServer()
 
         app.get("*", function (req, res, next) {
             if (!req.task || req.task.type !== TASK_STATUS.PROXY) {

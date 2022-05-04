@@ -1,11 +1,8 @@
 import ServerBase from './ServerBase';
 import logger from '../Logger';
 import express from 'express'
-import path from 'path'
-import enableShutdown from 'http-shutdown'
-import DirectoryTask from '../TaskManager/Task/DirectoryTask';
-import MBTilesTask from '../TaskManager/Task/MBTilesTask';
 import { Tasks } from '../TaskManager/Task/Index'
+import { createServer } from '../../utils/serviceUtil';
 
 export default class MainServer extends ServerBase {
   constructor(manager) {
@@ -21,9 +18,7 @@ export default class MainServer extends ServerBase {
         /**
          * @type {express.Express}
          */
-        this._server = express();
-        this._server.set('x-powered-by', false);
-        this._server.set('view engine', 'ejs');
+        this._server = createServer()
 
         this._server.get('*', function (req, res, next) {
           res.setHeader('Access-Control-Allow-Origin', "*")
@@ -73,7 +68,6 @@ export default class MainServer extends ServerBase {
           resolve()
         })
 
-        enableShutdown(this._server)
       } catch (error) {
         console.log('MainServer', error)
       }

@@ -7,6 +7,7 @@ import path from 'path'
 import DirectoryHTML from '../../../helper/DirectoryHtml'
 import FileTask from './FileTask'
 import express from 'express'
+import { createServer } from '../../../utils/serviceUtil'
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -61,7 +62,7 @@ export default class DirectoryTask extends TaskBase {
     }
 
     static InitRouter() {
-        const app = express().disable('x-powered-by');
+        const app = createServer()
 
         app.get('*', function (req, res, next) {
             if (!req.task || req.task.type !== TASK_STATUS.DIRECTORY) {

@@ -4,6 +4,7 @@ import { clone } from 'lodash';
 import path from 'path'
 import logger from '../../../Logger';
 import { validate } from '@mapbox/mapbox-gl-style-spec'
+import { createServer } from '../../../../utils/serviceUtil';
 
 const _styleJSON = JSON.parse(fs.readFileSync(path.join(__static, "styles/styles/osm_liberty.json")));
 
@@ -39,7 +40,7 @@ const fixUrl = (req, url) => {
 
 var StyleRouter = {
   init: function () {
-    const app = express().disable('x-powered-by');
+    const app = createServer()
 
     app.get('/style.json', (req, res, next) => {
       const task = req.task;

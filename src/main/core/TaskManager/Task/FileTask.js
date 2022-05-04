@@ -9,6 +9,7 @@ import AsyncLock from "async-lock";
 import zlib from 'zlib'
 import logger from "../../Logger";
 import express from 'express'
+import { createServer } from "../../../utils/serviceUtil";
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
@@ -76,7 +77,7 @@ export default class FileTask extends TaskBase {
     }
 
     static InitRouter() {
-        const app = express().disable('x-powered-by');
+        const app = createServer()
 
         app.get('*', function (req, res, next) {
             if (!req.task || req.task.type !== TASK_STATUS.FILE) {

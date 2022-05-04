@@ -16,6 +16,7 @@ import { clone } from "lodash";
 import sphericalmercator from "@mapbox/sphericalmercator"
 import express from 'express'
 import StyleRouter from "./MBTilesRouter/style";
+import { createServer } from "../../../utils/serviceUtil";
 
 const mercator = new sphericalmercator();
 
@@ -93,7 +94,7 @@ export default class MBTilesTask extends TaskBase {
   }
 
   static InitRouter() {
-    const app = express().disable('x-powered-by');
+    const app = createServer()
 
     app.get('*', function (req, res, next) {
       if (!req.task || req.task.type !== TASK_STATUS.MBTILES) {
