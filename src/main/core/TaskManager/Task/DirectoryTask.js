@@ -42,7 +42,7 @@ export default class DirectoryTask extends TaskBase {
      * @param {fs.Stats} stats
      */
     static async Action(req, res, taskInfo, stats) {
-        var paramPath = decodeURIComponent(req.url).replace('/' + taskInfo.id, '')
+        var paramPath = decodeURIComponent(req.originalUrl).replace('/' + taskInfo.id, '')
         var filePath = path.join(taskInfo.path, paramPath)
         filePath = filePath.split('?')[0]
         const stats1 = await stat(filePath)

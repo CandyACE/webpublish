@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.5.12",
+  "version": "1.6.0",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -34,12 +34,10 @@
       {
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
-        "description": "MBTiles史诗级更新，支持发布PBF内容的MBTiles，并且支持预览！马上试试吧！",
+        "description": "之前一直支持的二级路径可以添加多级'/'的功能，因为重写消失了，造成了很大的困扰，现在这个回来了！又可以愉快的调试了！另外，此次更新支持了Cesiumlab的CLT紧凑型数据的发布！",
         "updateInfos": [
-          "新增 支持发布PBF格式的MBTiles",
-          "新增 支持预览PBF格式的MBTIles（目前只支持MapBox引擎）",
-          "升级 发布服务从原生的Http升级到Express",
-          "修复 部分问题"
+          "新增 支持发布Cesiumlab的CLT",
+          "修复 二级路径可以自定义多级不可用的问题"
         ]
       }
     ],

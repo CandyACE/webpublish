@@ -1,82 +1,51 @@
 <template>
-  <el-dialog
-    custom-class="task-info-dialog"
-    width="61.8vw"
-    v-if="task"
-    :title="task.name"
-    :show-close="true"
-    :visible.sync="visible"
-    :before-close="handleClose"
-    @closed="handleClosed"
-  >
+  <el-dialog custom-class="task-info-dialog" width="61.8vw" v-if="task" :title="task.name" :show-close="true"
+    :visible.sync="visible" :before-close="handleClose" @closed="handleClosed">
     <el-form ref="taskForm" label-position="left" :model="form">
       <div class="formDiv" v-if="task.type != 'proxy'">
         <el-row :gutter="12">
-          <el-form-item
-            :label="`${$t('task.task-dir-path')}: `"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item :label="`${$t('task.task-dir-path')}: `" :label-width="formLabelWidth">
             <el-dropdown trigger="click" @command="handleDropDownClick">
               <el-link>{{ task.path }}</el-link>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="showInFolder">{{
-                  $t("task.show-in-folder")
+                    $t("task.show-in-folder")
                 }}</el-dropdown-item>
                 <el-dropdown-item command="searchSameTask">{{
-                  $t("task.task-search-same")
+                    $t("task.task-search-same")
                 }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            prop="taskName"
-            :label="`${$t('task.task-name')}: `"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="taskName" :label="`${$t('task.task-name')}: `" :label-width="formLabelWidth">
             <el-input v-model="form.taskName" spellcheck="false"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            prop="id"
-            :label="`${$t('task.task-base-path')}: `"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="id" :label="`${$t('task.task-base-path')}: `" :label-width="formLabelWidth">
             <el-input v-model="form.id" spellcheck="false"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            :label="`${$t('task.task-file-mode')}: `"
-            :label-width="formLabelWidth"
-            v-if="showTypeRadio"
-          >
+          <el-form-item :label="`${$t('task.task-file-mode')}: `" :label-width="formLabelWidth" v-if="showTypeRadio">
             <el-radio v-model="form.selectTaskType" label="file">
               {{ $t("task.task-file-mode-file") }}
             </el-radio>
-            <el-radio v-model="form.selectTaskType" label="mbtiles">
-              {{ $t("task.task-file-mode-mbtiles") }}
+            <el-radio v-model="form.selectTaskType" :label="selectionFileTypeName">
+              {{ $t("task.task-file-mode-service") }}
             </el-radio>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            :label="`${$t('task.task-used-stream')}: `"
-            :label-width="formLabelWidth"
-          >
-            <ts-task-progress
-              :class="[form.limit != 0 ? '' : 'no-limit']"
-              id="taskProgress"
-              :useData="form.use"
-              :limitData="formLimitMax"
-              :type="
+          <el-form-item :label="`${$t('task.task-used-stream')}: `" :label-width="formLabelWidth">
+            <ts-task-progress :class="[form.limit != 0 ? '' : 'no-limit']" id="taskProgress" :useData="form.use"
+              :limitData="formLimitMax" :type="
                 countItems.some((item) => item === form.selectTaskType)
                   ? 'count'
                   : 'size'
-              "
-            ></ts-task-progress>
+              "></ts-task-progress>
             <el-link @click.stop="handleClearUsed">
               {{ $t("task.task-clear-used") }}
             </el-link>
@@ -90,18 +59,14 @@
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <ts-task-limit
-            ref="taskLimit"
-            :showLimit="showLimit"
-            :type="form.selectTaskType"
-            :limitData="formLimitMin"
-          ></ts-task-limit>
+          <ts-task-limit ref="taskLimit" :showLimit="showLimit" :type="form.selectTaskType" :limitData="formLimitMin">
+          </ts-task-limit>
         </el-row>
         <div v-if="form.selectTaskType == 'directory'">
           <el-row :gutter="12">
             <el-form-item :span="24">
               <el-checkbox v-model="form.disenableDirectoryView">{{
-                $t("task.task-disenable-directory")
+                  $t("task.task-disenable-directory")
               }}</el-checkbox>
             </el-form-item>
           </el-row>
@@ -109,48 +74,28 @@
       </div>
       <div class="formDiv" v-else>
         <el-row :gutter="12">
-          <el-form-item
-            prop="taskName"
-            :label="`${$t('task.task-name')}`"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="taskName" :label="`${$t('task.task-name')}`" :label-width="formLabelWidth">
             <el-input v-model="form.taskName" spellcheck="fasle"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            prop="id"
-            :label="`${$t('task.task-base-path')}`"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="id" :label="`${$t('task.task-base-path')}`" :label-width="formLabelWidth">
             <el-input v-model="form.id" spellcheck="false"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            prop="taskPath"
-            :label="`${$t('task.task-proxy-path')}`"
-            :label-width="formLabelWidth"
-          >
+          <el-form-item prop="taskPath" :label="`${$t('task.task-proxy-path')}`" :label-width="formLabelWidth">
             <el-input v-model="form.taskPath" spellcheck="false"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="12">
-          <el-form-item
-            :label="`${$t('task.task-used-stream')}: `"
-            :label-width="formLabelWidth"
-          >
-            <ts-task-progress
-              :class="[form.limit != 0 ? '' : 'no-limit']"
-              id="taskProgress"
-              :useData="form.use"
-              :limitData="formLimitMax"
-              :type="
+          <el-form-item :label="`${$t('task.task-used-stream')}: `" :label-width="formLabelWidth">
+            <ts-task-progress :class="[form.limit != 0 ? '' : 'no-limit']" id="taskProgress" :useData="form.use"
+              :limitData="formLimitMax" :type="
                 countItems.some((item) => item === form.selectTaskType)
                   ? 'count'
                   : 'size'
-              "
-            ></ts-task-progress>
+              "></ts-task-progress>
             <el-link @click.stop="handleClearUsed">
               {{ $t("task.task-clear-used") }}
             </el-link>
@@ -229,7 +174,12 @@ export default {
     return {
       formLabelWidth: "100px",
       showLimit: false,
-      countItems: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY],
+      countItems: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY, TASK_STATUS.CLT],
+      selectionFileTypeName: '',
+      selectionFileType: [
+        TASK_STATUS.MBTILES,
+        TASK_STATUS.CLT
+      ],
       form: {
         gid: "",
         taskName: "",
@@ -251,10 +201,11 @@ export default {
   computed: {
     showTypeRadio() {
       // return false;
-      return path.extname(this.task.path) === ".mbtiles";
+      let ext = path.extname(this.task.path)
+      return this.selectionFileType.some(e => e === ext.slice(1, ext.length));
     },
     formLimitMin() {
-      return this.form.selectTaskType === "mbtiles"
+      return /*this.form.selectTaskType === "mbtiles"*/this.showTypeRadio
         ? Number(this.form.limit).toFixed(1)
         : Number(this.form.limit / 1024 / 1024).toFixed(1);
     },
@@ -273,10 +224,13 @@ export default {
       this.showLimit = Number(val.limitData) !== 0;
       this.form.use = Number(val.useData);
       this.form.selectTaskType = val.type;
+      const ext = path.extname(val.path)
+      this.selectionFileTypeName = ext.slice(1, ext.length)
       this.form.gzip = val.gzip;
       this.form.disenableDirectoryView = val.disenableDirectoryView;
 
-      if (val.type !== "mbtiles") {
+      // if (val.type !== "mbtiles") {
+      if (this.showTypeRadio) {
         this.form.limit = (this.form.limit / 1024 / 1024).toFixed(1);
         // this.form.use = (this.form.use / 1024 / 1024).toFixed(1);
       }
@@ -344,9 +298,11 @@ export default {
   min-width: 380px;
   overflow: hidden;
   border-radius: 10px !important;
+
   .el-dialog__header {
     padding-right: 60px;
   }
+
   .el-dialog__body {
     position: relative;
   }
@@ -362,6 +318,7 @@ export default {
     margin-bottom: 32px;
     margin-right: 200px;
   }
+
   .el-dialog__footer {
     padding-top: 20px;
     background-color: #f5f5f5;

@@ -46,6 +46,8 @@
 - [x] 多语言支持
 - [x] 任务检索
 - [x] 支持Linux
+- [x] 支持MBTiles的png和pbf
+- [x] 支持Cesiumlab的clt
 
 ## 使用文档
 

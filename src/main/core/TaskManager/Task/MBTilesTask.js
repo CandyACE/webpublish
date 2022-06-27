@@ -14,7 +14,6 @@ import VectorTile from "@mapbox/vector-tile/lib/vectortile";
 import Pbf from "pbf";
 import { clone } from "lodash";
 import sphericalmercator from "@mapbox/sphericalmercator"
-import express from 'express'
 import StyleRouter from "./MBTilesRouter/style";
 import { createServer } from "../../../utils/serviceUtil";
 
@@ -100,6 +99,7 @@ export default class MBTilesTask extends TaskBase {
       if (!req.task || req.task.type !== TASK_STATUS.MBTILES) {
         return next('route')
       }
+      req.url = req.originalUrl.replace('/' + req.task.id, '')
       next();
     })
 

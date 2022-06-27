@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="task-type"
-    :class="{ disenabled: isServerRunning }"
-    :style="{ color: taskType[task.type].color }"
-  >
+  <div class="task-type" :class="{ disenabled: isServerRunning }" :style="{ color: taskType[task.type].color }">
     {{ taskType[task.type].text }}
     <div class="task-type-background-1"></div>
     <div class="task-type-background-2"></div>
@@ -38,7 +34,11 @@ export default {
         [TASK_STATUS.PROXY]: {
           text: 'Proxy',
           color: "rgba(204,102,0,.2)",
-        }
+        },
+        [TASK_STATUS.CLT]: {
+          text: 'CLT',
+          color: "rgba(204,102,0,.2)",
+        },
       },
     };
   },
@@ -77,6 +77,7 @@ export default {
       background-color: rgba(239, 92, 92, 0.14);
     }
   }
+
   .task-type-background-2:before {
     content: "";
     width: 200px;

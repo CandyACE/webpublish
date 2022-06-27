@@ -1,62 +1,35 @@
 <template>
-  <el-dialog
-    width="64vw"
-    custom-class="tab-title-dialog add-task-dialog"
-    :visible.sync="visible"
-    :before-close="handleClose"
-    @closed="handleClosed"
-    @open="handleOpen"
-  >
+  <el-dialog width="64vw" custom-class="tab-title-dialog add-task-dialog" :visible.sync="visible"
+    :before-close="handleClose" @closed="handleClosed" @open="handleOpen">
     <el-form ref="taskForm" label-position="left" :model="form" :rules="rules">
       <el-tabs :value="type" @tab-click="handleTabClick">
         <el-tab-pane :label="`${$t('task.new-folder-task')}`" name="default">
           <div v-if="type === 'default'">
             <el-form-item>
-              <ts-select-files
-                v-on:change="handleTaskChange"
-                ref="selectFiles"
-              />
-              <ts-task-grid
-                ref="taskGrid"
-                :files="form.addTaskList"
-                :height="200"
-              ></ts-task-grid>
+              <ts-select-files v-on:change="handleTaskChange" ref="selectFiles" />
+              <ts-task-grid ref="taskGrid" :files="form.addTaskList" :height="200"></ts-task-grid>
             </el-form-item>
             <div v-if="isSingle">
               <el-row :gutter="12">
                 <el-col :span="24" :xs="24">
-                  <el-form-item
-                    prop="taskName"
-                    :label="`${$t('task.task-name')}: `"
-                    :label-width="formLabelWidth"
-                  >
-                    <el-input
-                      v-model="form.taskName"
-                      spellcheck="false"
-                    ></el-input>
+                  <el-form-item prop="taskName" :label="`${$t('task.task-name')}: `" :label-width="formLabelWidth">
+                    <el-input v-model="form.taskName" spellcheck="false"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" :xs="24">
-                  <el-form-item
-                    :label="`${$t('task.task-base-path')}: `"
-                    prop="id"
-                    :label-width="formLabelWidth"
-                  >
+                  <el-form-item :label="`${$t('task.task-base-path')}: `" prop="id" :label-width="formLabelWidth">
                     <el-input v-model="form.id" spellcheck="false"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="12" v-if="showFileTypeSelection">
                 <el-col :span="24" :xs="24">
-                  <el-form-item
-                    :label="`${$t('task.task-file-mode')}： `"
-                    :label-width="formLabelWidth"
-                  >
+                  <el-form-item :label="`${$t('task.task-file-mode')}： `" :label-width="formLabelWidth">
                     <el-radio v-model="form.selectTaskType" label="file">
                       {{ $t("task.task-file-mode-file") }}
                     </el-radio>
-                    <el-radio v-model="form.selectTaskType" label="mbtiles">
-                      {{ $t("task.task-file-mode-mbtiles") }}
+                    <el-radio v-model="form.selectTaskType" :label="selectionFileTypeName">
+                      {{ $t(`task.task-file-mode-service`) }}
                     </el-radio>
                   </el-form-item>
                 </el-col>
@@ -70,18 +43,14 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <ts-task-limit
-                ref="taskLimit"
-                :showLimit="showLimit"
-                :type="form.selectTaskType"
-                :limitData="form.limit"
-              ></ts-task-limit>
+              <ts-task-limit ref="taskLimit" :showLimit="showLimit" :type="form.selectTaskType" :limitData="form.limit">
+              </ts-task-limit>
               <div v-if="taskType == 'directory'">
                 <el-row :gutter="12">
                   <el-col :span="24" :xs="24">
                     <el-form-item>
                       <el-checkbox v-model="form.disenableDirectoryView">{{
-                        $t("task.task-disenable-directory")
+                          $t("task.task-disenable-directory")
                       }}</el-checkbox>
                     </el-form-item>
                   </el-col>
@@ -94,36 +63,18 @@
           <div v-if="type === 'proxy'">
             <el-row :gutter="12">
               <el-col :span="24" :xs="24">
-                <el-form-item
-                  prop="taskName"
-                  :label="`${$t('task.task-name')}`"
-                  :label-width="formLabelWidth"
-                >
-                  <el-input
-                    v-model="form.taskName"
-                    spellcheck="false"
-                  ></el-input>
+                <el-form-item prop="taskName" :label="`${$t('task.task-name')}`" :label-width="formLabelWidth">
+                  <el-input v-model="form.taskName" spellcheck="false"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24" :xs="24">
-                <el-form-item
-                  :label="`${$t('task.task-base-path')}: `"
-                  prop="id"
-                  :label-width="formLabelWidth"
-                >
+                <el-form-item :label="`${$t('task.task-base-path')}: `" prop="id" :label-width="formLabelWidth">
                   <el-input v-model="form.id" spellcheck="false"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24" :xs="24">
-                <el-form-item
-                  :label="`${$t('task.task-proxy-path')}: `"
-                  prop="taskPath"
-                  :label-width="formLabelWidth"
-                >
-                  <el-input
-                    v-model="form.taskPath"
-                    spellcheck="false"
-                  ></el-input>
+                <el-form-item :label="`${$t('task.task-proxy-path')}: `" prop="taskPath" :label-width="formLabelWidth">
+                  <el-input v-model="form.taskPath" spellcheck="false"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -152,7 +103,7 @@ import { bytesToSize } from "../../../shared/utils";
 import { mapState } from "vuex";
 import TaskLimitVue from "./TaskLimit.vue";
 import TaskFileGrid from "./TaskFileGrid.vue";
-import task from "../../store/modules/task";
+import path from 'path'
 
 export default {
   name: "ts-add-task",
@@ -211,6 +162,11 @@ export default {
     return {
       formLabelWidth: "100px",
       showFileTypeSelection: false,
+      selectionFileTypeName: '',
+      selectionFileType: [
+        TASK_STATUS.MBTILES,
+        TASK_STATUS.CLT
+      ],
       showLimit: false,
       taskType: "",
       /**
@@ -261,8 +217,15 @@ export default {
         this.form.taskPath = addTask.path;
         this.form.taskName = addTask.name;
         this.taskType = addTask.type;
-        this.showFileTypeSelection = this.taskType == TASK_STATUS.MBTILES;
-        this.form.selectTaskType = TASK_STATUS.MBTILES;
+        let ext = path.extname(addTask.path)
+        ext = ext.slice(1, ext.length)
+        if (this.selectionFileType.some(e => e === ext)) {
+          this.showFileTypeSelection = true
+          this.selectionFileTypeName = ext;
+          this.form.selectTaskType = ext;
+          this.taskType = ext
+        }
+
         this.form.disenableDirectoryView = addTask.disenableDirectoryView;
         this.form.id = guid();
         this.isSingle = true;
@@ -273,6 +236,7 @@ export default {
         return;
       }
     },
+
     handleClose() {
       this.$store.dispatch("app/hideAddTaskDialog");
       this.$store.dispatch("app/updateAddTaskOptions", {});
@@ -360,23 +324,29 @@ export default {
   min-width: 380px;
   overflow: hidden;
   border-radius: 10px;
+
   .task-advanced-options .el-form-item:last-of-type {
     margin-bottom: 0;
   }
+
   .el-tabs__header {
     user-select: none;
   }
+
   .el-input-number.el-input-number--mini {
     width: 100%;
   }
+
   .help-link {
     font-size: 12px;
     line-height: 14px;
     padding-top: 7px;
-    > a {
+
+    >a {
       color: #909399;
     }
   }
+
   .el-dialog__footer {
     padding-top: 20px;
     background-color: #f5f5f5;

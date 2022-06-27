@@ -3,6 +3,7 @@ export const TASK_STATUS = {
   DIRECTORY: 'directory',
   MBTILES: 'mbtiles',
   PROXY: 'proxy',
+  CLT: 'clt',
   UNKNOW: 'unknow'
 }
 

@@ -49,6 +49,7 @@ export default class ProxyTask extends TaskBase {
                 return next('route')
             }
 
+            req.url = req.originalUrl.replace('/' + req.task.id, '')
             ProxyTask.Action(req, res, req.task)
         })
 

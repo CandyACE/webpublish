@@ -24,31 +24,39 @@ export default class MainServer extends ServerBase {
           res.setHeader('Access-Control-Allow-Origin', "*")
           next();
         });
-        this._server.use("/:id/", async function (req, res, next) {
+        this._server.use("*", async function (req, res, next) {
           try {
-            let id = req.params.id;
-            if (!id) {
-              return res.status(404).end('id is require.');
+            let target = null;
+            for (let i = 0; i < _this._app.taskManager.taskList.length; i++) {
+              const task = _this._app.taskManager.taskList[i];
+              if (req.originalUrl.startsWith(`/${task.id}`)) {
+                target = task
+                break
+              }
             }
-            let task = _this._app.taskManager.taskList.find(f => f.id == id);
-            if (!task) {
+            // let id = req.params.id;
+            // if (!id) {
+            //   return res.status(404).end('id is require.');
+            // }
+            // let task = _this._app.taskManager.taskList.find(f => f.id == id);
+            if (!target) {
               return res.status(404).end('Not Found This ID.');
             }
 
             // ReadFile
-            let check = task.check();
+            let check = target.check();
             if (!check.next) {
               return res.status(check.code).end(check.message);
             }
 
-            req["task"] = task;
+            req["task"] = target;
 
             return next();
           } catch (error) {
-            logger.error(`[MainServer] ${filePath} is not a directory or file.`, error)
+            logger.error(`[MainServer] task error.`, error)
             res.status(404).end(JSON.stringify({
-              task: task,
-              message: `${filePath} is not a directory or file.`
+              task: target,
+              message: `task error.`
             }))
             next(error)
             return;
@@ -56,7 +64,7 @@ export default class MainServer extends ServerBase {
         })
 
         for (const task in Tasks) {
-          this._server.use("/:id/", Tasks[task].InitRouter())
+          this._server.use("*", Tasks[task].InitRouter())
         }
 
         var port = this._app.configManager.getSystemConfig('port', "9090");

@@ -17,7 +17,7 @@
         <el-form-item>
           <span style="margin-left: 10px">
             {{
-              countType.some(item => item === type) ? $t("task.task-count") : "MB"
+                countType.some(item => item === type) ? $t("task.task-count") : "MB"
             }}
           </span>
         </el-form-item>
@@ -32,7 +32,7 @@ export default {
   name: "ts-task-limit",
   data() {
     return {
-      countType: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY]
+      countType: [TASK_STATUS.MBTILES, TASK_STATUS.PROXY, TASK_STATUS.CLT]
     }
   },
   props: {
@@ -61,6 +61,5 @@ export default {
 </script>
 
 <style lang="scss">
-#task-limit {
-}
+#task-limit {}
 </style>
