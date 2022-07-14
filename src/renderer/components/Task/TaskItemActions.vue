@@ -189,7 +189,7 @@ export default {
     },
     onFolderClick() {
       showItemInFolder(this.task.path, {
-        errorMsg: this.$t("task.path-no-exist", { taskPath: this.task.path }),
+        errorMsg: this.$t("task.path-not-exist", { taskPath: this.task.path }),
         errorFun: () => {
           this.task.setEnable(false);
         },

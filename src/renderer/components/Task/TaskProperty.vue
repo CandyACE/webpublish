@@ -240,7 +240,7 @@ export default {
     handleDropDownClick(command) {
       if (command === "showInFolder") {
         showItemInFolder(this.task.path, {
-          errorMsg: this.$t("task.path-no-exist", { taskPath: this.task.path }),
+          errorMsg: this.$t("task.path-not-exist", { taskPath: this.task.path }),
         });
       } else if (command === "searchSameTask") {
         this.application.taskManager.updateSelectTaskList(this.task.path);

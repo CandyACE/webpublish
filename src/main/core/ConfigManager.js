@@ -32,7 +32,7 @@ export default class ConfigManager {
                 'user-experience': true,
                 'locale': app.getLocale(),
                 'api-enabled': false,
-                'api-port': 9100,
+                'api-port': 10110,
                 'view-type': false,
                 'map-engine': 'mapbox'
             }

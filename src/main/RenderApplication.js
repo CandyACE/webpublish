@@ -1,6 +1,7 @@
 import ServerManager from "./core/ServerManager";
 import TaskManager from "./core/TaskManager/TaskManager";
 import Application from "./Application";
+import WebSocketManager from "./core/WebSocketManager";
 
 const remote = require('@electron/remote')
 
@@ -20,6 +21,7 @@ export default class RenderApplication {
         this.configManager = application.configManager;
         this.taskManager = new TaskManager(this.configManager)
         this.serverManager = new ServerManager(this);
+        // this.webSocketManager = new WebSocketManager(this);
     }
 
     stop() {
