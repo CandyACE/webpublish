@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -34,10 +34,10 @@
       {
         "provider": "generic",
         "url": "http://oss.tangweitian.cn/update/webpublish",
-        "description": "之前一直支持的二级路径可以添加多级'/'的功能，因为重写消失了，造成了很大的困扰，现在这个回来了！又可以愉快的调试了！另外，此次更新支持了Cesiumlab的CLT紧凑型数据的发布！",
+        "description": "",
         "updateInfos": [
-          "新增 支持发布Cesiumlab的CLT",
-          "修复 二级路径可以自定义多级不可用的问题"
+          "修复 路径找不到时提示文本的错误",
+          "修复 API不支持跨域的问题"
         ]
       }
     ],
@@ -104,7 +104,6 @@
     "vue-router": "^3.1.6",
     "vuex": "^3.3.0",
     "vuex-router-sync": "^5.0.0",
-    "ws": "^8.8.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
