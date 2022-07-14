@@ -18,7 +18,7 @@ export default {
     'task-used-stream': '使用流量',
     'task-clear-used': '清空流量',
     'task-start-success': '任務 [{{taskName}}] 啟動成功！',
-    'path-not-exist': '目標路徑不存在！',
+    'path-not-exist': '"{{taskPath}}" 目標路徑不存在！',
     'task-stop-success': '任務 [{{taskName}}] 停止成功！',
     'copy-success': '複製成功！',
     'task-path-exist': '[{{taskPath}}] 任務已經存在 【{{count}}】 份',

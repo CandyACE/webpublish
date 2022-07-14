@@ -67,6 +67,7 @@ export default class ApiServer extends ServerBase {
                         var port = _this._app.configManager.getSystemConfig('port', 9090);
                         res.setHeader('Content-Type', 'text/json;charset=UTF-8');//utf8编码，防止中文乱码
                         res.setHeader('Access-Control-Allow-Origin', "*")
+                        res.setHeader('Access-Control-Allow-Headers', "*")
                         res.end(fun(req, url.hostname + ":" + port))
                         return;
                     }

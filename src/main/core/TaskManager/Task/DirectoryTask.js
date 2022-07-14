@@ -6,11 +6,11 @@ import { TASK_STATUS } from '../../../../shared/constants'
 import path from 'path'
 import DirectoryHTML from '../../../helper/DirectoryHtml'
 import FileTask from './FileTask'
-import express from 'express'
 import { createServer } from '../../../utils/serviceUtil'
 
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat)
+const exists = promisify(fs.exists)
 
 export default class DirectoryTask extends TaskBase {
 
@@ -45,19 +45,24 @@ export default class DirectoryTask extends TaskBase {
         var paramPath = decodeURIComponent(req.originalUrl).replace('/' + taskInfo.id, '')
         var filePath = path.join(taskInfo.path, paramPath)
         filePath = filePath.split('?')[0]
-        const stats1 = await stat(filePath)
-        if (stats1.isFile()) {
-            // 地址应该传入拼接后的地址
-            var info = { ...taskInfo, path: filePath }
-            FileTask.Action(req, res, info, stats1)
-            taskInfo.useData += stats1.size;
-        } else if (stats1.isDirectory()) {
-            if (!taskInfo.disenableDirectoryView) {
-                var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
-                DirectoryHTML(filePath, res, { isRoot: isRoot })
-            } else {
-                res.end("This Task disenable directory view.")
+        try {
+            const stats1 = await stat(filePath)
+            if (stats1.isFile()) {
+                // 地址应该传入拼接后的地址
+                var info = { ...taskInfo, path: filePath }
+                FileTask.Action(req, res, info, stats1)
+                taskInfo.useData += stats1.size;
+            } else if (stats1.isDirectory()) {
+                if (!taskInfo.disenableDirectoryView) {
+                    var isRoot = filePath.replaceAll('\\', '') === taskInfo.path.replaceAll('\\', '')
+                    DirectoryHTML(filePath, res, { isRoot: isRoot })
+                } else {
+                    res.end("This Task disenable directory view.")
+                }
             }
+        } catch (error) {
+            res.statusCode = 404
+            res.end("this path is not exist")
         }
     }
 

@@ -18,7 +18,7 @@ export default {
     'task-used-stream': 'Used',
     'task-clear-used': 'Clear used',
     'task-start-success': 'Start [{{taskName}}] Successfully',
-    'path-not-exist': 'Target Path does not exist or has been deleted',
+    'path-not-exist': '"{{taskPath}}" Target Path does not exist or has been deleted',
     'task-stop-success': 'Stop [{{taskName}}] Successfully',
     'copy-success': 'Copy Successfully!',
     'task-path-exist': '[{{taskPath}}] Task is Exist [{{count}}] Tasks',
