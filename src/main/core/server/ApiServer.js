@@ -68,6 +68,8 @@ export default class ApiServer extends ServerBase {
                         res.setHeader('Content-Type', 'text/json;charset=UTF-8');//utf8编码，防止中文乱码
                         res.setHeader('Access-Control-Allow-Origin', "*")
                         res.setHeader('Access-Control-Allow-Headers', "*")
+                        res.setHeader('Access-Control-Allow-Private-Network', "true")
+                        res.setHeader('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS')
                         res.end(fun(req, url.hostname + ":" + port))
                         return;
                     }
