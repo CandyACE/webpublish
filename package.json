@@ -1,6 +1,6 @@
 {
   "name": "webpublish",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "author": "tangweitian <tstwt@qq.com>",
   "description": "一个快速发布文件夹、文件、MBTiles的工具",
   "license": "MIT",
@@ -36,9 +36,7 @@
         "url": "http://oss.tangweitian.cn/update/webpublish",
         "description": "",
         "updateInfos": [
-          "修复 路径找不到时提示文本的错误",
-          "修复 API不支持跨域的问题",
-          "修复 找不到文件的时候，会内部报错的问题"
+          "修复 chrome本地跨域策略无法访问的问题"
         ]
       }
     ],

@@ -22,6 +22,9 @@ export default class MainServer extends ServerBase {
 
         this._server.get('*', function (req, res, next) {
           res.setHeader('Access-Control-Allow-Origin', "*")
+          res.setHeader('Access-Control-Allow-Private-Network', "true")
+          res.setHeader('Access-COntrol-Request-Private-Network', 'true')
+          res.setHeader('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
           next();
         });
         this._server.use("*", async function (req, res, next) {
